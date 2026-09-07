@@ -14,7 +14,7 @@
 
 **Required Fidelity Surfaces**
 - Fonts and typography: existing Lemon Mind fonts are reused (`Anton` for display, `Manrope` for body). Desktop H1 was corrected to two lines. No cut text or negative letter spacing found.
-- Spacing and layout rhythm: page follows the maquette sections and Lemon Mind page rhythm. The footer is taller than the maquette because the global Footer component is reused as requested.
+- Spacing and layout rhythm: page follows the maquette sections and Lemon Mind page rhythm. The Careers footer is compacted with page-scoped CSS so the FAQ remains fully visible and the footer no longer overlaps the final section.
 - Colors and visual tokens: Lemon yellow, dark hero, off-white sections, pastel cards, mint process band, and multicolor application gradient are present using site tokens.
 - Image quality and asset fidelity: only existing Lemon Mind assets are used. The illustrative fake team/offers in the mock were not published as real content.
 - Copy and content: requested page copy, FAQ copy, process copy, no-offer empty state, and form labels are present. No invented offers, dates, testimonials, clients, numbers, or team photos were added.
@@ -35,6 +35,7 @@
 - FAQ accordion with one question open at a time.
 - Header active state: `L’agence` and submenu `Carrières`.
 - Console warnings/errors checked: none reported.
+- Footer/FAQ overlap check: desktop and mobile measurements confirm `footerOverlapsLastFaq: false`.
 
 **Open Questions**
 - Real job cards are intentionally absent until confirmed offers are added to `src/data/careers-data.ts`.
