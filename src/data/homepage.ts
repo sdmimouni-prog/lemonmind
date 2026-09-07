@@ -401,7 +401,7 @@ export const testimonial = {
   quote: 'Nous ne créons pas simplement des campagnes. Nous construisons des stratégies qui donnent aux marques les moyens de se démarquer, d’inspirer et de grandir durablement.',
   author: 'Amal AMAZOUZ',
   role: 'CEO & co-fondatrice',
-  image: '/assets/lemon/leader-portrait.webp',
+  image: '/assets/lemon/amal-amazouz-testimonial.webp',
 };
 
 export const finalCta = {
