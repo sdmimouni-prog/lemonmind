@@ -7,8 +7,10 @@ import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
   <div class="lm-shell ct-hero__grid">
     <div class="ct-hero__copy">
       <p class="ct-eyebrow" data-ct-reveal>{contactHero.eyebrow}</p>
-      <h1 id="contact-hero-title" data-ct-reveal>
-        Une idée, un lancement ou une campagne en tête ? Construisons la suite
+      <h1 id="contact-hero-title" aria-label={contactHero.title} data-ct-reveal>
+        Une idée, un lancement<br />
+        ou une campagne en tête ?<br />
+        Construisons la suite{' '}
         <span>{contactHero.highlight}</span>
       </h1>
       <p class="ct-hero__text" data-ct-reveal>{contactHero.text}</p>

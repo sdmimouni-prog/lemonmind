@@ -1,8 +1,6 @@
 ---
 import { contact } from '../../data/homepage';
 import { platformIcons, socialHero } from '../../data/socialMediaManagement';
-
-const titleParts = socialHero.title.split(socialHero.highlight);
 ---
 <section class="sm-hero" aria-labelledby="sm-hero-title" data-sm-scene data-sm-parallax>
   <div class="sm-hero__glow sm-hero__glow--violet" aria-hidden="true"></div>
@@ -11,9 +9,10 @@ const titleParts = socialHero.title.split(socialHero.highlight);
   <div class="lm-shell sm-hero__grid">
     <div class="sm-hero__copy">
       <p class="lm-eyebrow lm-eyebrow--yellow" data-sm-reveal>{socialHero.eyebrow}</p>
-      <h1 id="sm-hero-title" data-sm-reveal>
-        {titleParts[0]}
-        <span>{socialHero.highlight}</span>
+      <h1 id="sm-hero-title" aria-label={socialHero.title} data-sm-reveal>
+        Des réseaux sociaux<br />
+        qui créent une vraie valeur<br />
+        pour <span>{socialHero.highlight}</span>
       </h1>
       <p class="sm-hero__text" data-sm-reveal>{socialHero.text}</p>
       <div class="sm-actions" data-sm-reveal>

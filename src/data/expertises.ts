@@ -3,8 +3,7 @@ export const expertisesHero = {
   titleLines: [
     { text: 'De l’idée à l’impact,', tone: 'white' },
     { text: 'toutes les expertises', tone: 'yellow' },
-    { text: 'pour faire grandir', tone: 'white' },
-    { text: 'votre marque.', tone: 'white' },
+    { text: 'pour faire grandir votre marque.', tone: 'white' },
   ],
   text: 'Lemon Mind réunit stratégie, influence, production, social media, amplification et data pour concevoir des campagnes cohérentes, créatives et orientées résultats.',
   primaryCta: 'Parler de votre projet',

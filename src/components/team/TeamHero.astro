@@ -41,7 +41,11 @@ const titleLines = ['Les talents derrière', 'les idées, les contenus'];
     <div class="team-hero__visual" data-team-depth>
       <div class="team-hero__mosaic" aria-label="Mosaïque de portraits officiels Lemon Mind">
         {heroProfiles.map((profile, index) => profile && (
-          <figure class={`team-hero__portrait team-hero__portrait--${index + 1}`} style={`--team-item-index: ${index};`}>
+          <figure
+            class={`team-hero__portrait team-hero__portrait--${index + 1}`}
+            data-team-profile={profile.id}
+            style={`--team-item-index: ${index};`}
+          >
             <img
               src={profile.image}
               alt={profile.imageAlt}

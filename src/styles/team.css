@@ -174,27 +174,28 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(520px, 0.78fr) minmax(0, 1.22fr);
-  gap: 48px;
+  grid-template-columns: minmax(600px, 0.9fr) minmax(0, 1.1fr);
+  gap: 42px;
   align-items: center;
   min-height: 662px;
   padding: 104px 0 40px;
 }
 
 .team-hero__copy {
-  max-width: 610px;
+  max-width: 660px;
 }
 
 .team-hero h1 {
-  max-width: 620px;
+  max-width: 660px;
   color: #fff;
-  font-size: clamp(44px, 3.85vw, 60px);
-  line-height: 0.95;
+  font-size: clamp(39px, 3.18vw, 52px);
+  line-height: 0.98;
   text-transform: none;
 }
 
 .team-hero h1 span {
   display: block;
+  white-space: nowrap;
 }
 
 .team-hero h1 mark {
@@ -239,7 +240,7 @@
 
 .team-hero__visual {
   position: relative;
-  min-height: 498px;
+  min-height: 536px;
   transform:
     translate3d(calc(var(--team-mx, 0) * 8px), calc(var(--team-my, 0) * 7px), 0)
     rotateX(var(--team-tilt-x, 0deg))
@@ -250,11 +251,11 @@
 
 .team-hero__mosaic {
   position: absolute;
-  inset: 0;
+  inset: 0 0 118px;
   display: grid;
-  grid-template-columns: 1.08fr 0.86fr 0.78fr;
-  grid-template-rows: 1fr 0.88fr;
-  gap: 14px;
+  grid-template-columns: minmax(230px, 1.05fr) minmax(150px, 0.78fr) minmax(150px, 0.78fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .team-hero__portrait {
@@ -269,11 +270,28 @@
 }
 
 .team-hero__portrait--1 {
+  grid-column: 1;
   grid-row: 1 / 3;
 }
 
+.team-hero__portrait--2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.team-hero__portrait--3 {
+  grid-column: 3;
+  grid-row: 1;
+}
+
 .team-hero__portrait--4 {
-  grid-column: 2 / 4;
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.team-hero__portrait--5 {
+  grid-column: 3;
+  grid-row: 2;
 }
 
 .team-hero__portrait img {
@@ -285,9 +303,29 @@
   transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), filter 520ms ease;
 }
 
+.team-hero__portrait[data-team-profile="amal-amazouz"] img {
+  object-position: 50% 12%;
+}
+
+.team-hero__portrait[data-team-profile="salah-eddine-mimouni"] img {
+  object-position: 50% 10%;
+}
+
+.team-hero__portrait[data-team-profile="tarik-el-abbadi"] img {
+  object-position: 50% 12%;
+}
+
+.team-hero__portrait[data-team-profile="ikram-dehiri"] img {
+  object-position: 50% 10%;
+}
+
+.team-hero__portrait[data-team-profile="marwane-jouay"] img {
+  object-position: 50% 8%;
+}
+
 .team-hero__portrait::after {
   position: absolute;
-  inset: 52% 0 0;
+  inset: 48% 0 0;
   background: linear-gradient(180deg, transparent, rgba(5, 6, 8, 0.76));
   content: "";
 }
@@ -323,12 +361,12 @@
 
 .team-hero__hand {
   position: absolute;
-  right: 16px;
-  bottom: 38px;
+  right: 10px;
+  bottom: 8px;
   z-index: 2;
-  width: 156px;
+  width: 178px;
   color: #fff;
-  font-size: 34px;
+  font-size: 30px;
   text-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
@@ -346,12 +384,14 @@
 
 .team-hero__logo-card {
   position: absolute;
-  top: 38px;
-  right: 48px;
+  top: auto;
+  right: auto;
+  bottom: 10px;
+  left: 0;
   z-index: 2;
   display: grid;
-  width: 132px;
-  height: 82px;
+  width: 112px;
+  height: 68px;
   place-items: center;
   border-radius: 18px;
   background: rgba(0, 0, 0, 0.56);
@@ -359,10 +399,9 @@
 }
 
 .team-hero__logo-card img {
-  width: 96px;
-  height: 55px;
-  object-fit: cover;
-  object-position: left top;
+  width: 84px;
+  height: auto;
+  object-fit: contain;
 }
 
 .team-section {
@@ -958,12 +997,22 @@
 
 @media (max-width: 1280px) {
   .team-hero__grid {
-    grid-template-columns: minmax(450px, 0.82fr) minmax(0, 1fr);
-    gap: 34px;
+    grid-template-columns: minmax(540px, 0.94fr) minmax(0, 1.06fr);
+    gap: 30px;
   }
 
   .team-hero h1 {
-    font-size: clamp(42px, 4vw, 58px);
+    max-width: 560px;
+    font-size: clamp(36px, 3.1vw, 44px);
+  }
+
+  .team-hero__visual {
+    min-height: 500px;
+  }
+
+  .team-hero__mosaic {
+    bottom: 112px;
+    gap: 12px;
   }
 
   .team-departments__grid {
@@ -999,6 +1048,11 @@
 
   .team-hero__copy {
     max-width: 760px;
+  }
+
+  .team-hero h1 {
+    max-width: 760px;
+    font-size: clamp(42px, 6.2vw, 58px);
   }
 
   .team-hero__visual {
@@ -1066,6 +1120,10 @@
     font-size: clamp(38px, 12vw, 54px);
   }
 
+  .team-hero h1 span {
+    white-space: normal;
+  }
+
   .team-hero__reassurance {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1076,27 +1134,44 @@
 
   .team-hero__mosaic {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1.1fr 0.8fr 0.8fr;
+    grid-template-rows: 1.05fr 0.9fr 0.9fr;
+    inset: 0 0 92px;
   }
 
   .team-hero__portrait--1 {
-    grid-column: 1 / 3;
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+
+  .team-hero__portrait--2 {
+    grid-column: 2;
     grid-row: 1;
   }
 
+  .team-hero__portrait--3 {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
   .team-hero__portrait--4 {
-    grid-column: 1 / 3;
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .team-hero__portrait--5 {
+    grid-column: 2;
+    grid-row: 3;
   }
 
   .team-hero__hand {
     right: 20px;
-    bottom: 34px;
-    font-size: 27px;
+    bottom: 6px;
+    font-size: 25px;
   }
 
   .team-hero__logo-card {
-    top: 18px;
-    right: 18px;
+    bottom: 8px;
+    left: 0;
   }
 
   .team-section {
@@ -1165,6 +1240,7 @@
 
   .team-hero__mosaic {
     gap: 10px;
+    bottom: 84px;
   }
 
   .team-hero__portrait {
@@ -1233,5 +1309,37 @@
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+.team-hero h1 {
+  max-width: 650px;
+  font-size: clamp(34px, 2.75vw, 44px);
+  line-height: 1.08;
+}
+
+.team-hero__hand {
+  width: 150px;
+  font-size: clamp(18px, 1.45vw, 22px);
+  line-height: 1.16;
+}
+
+.team-hero__hand::after {
+  width: 58px;
+  height: 5px;
+  margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+  .team-hero h1 {
+    font-size: clamp(30px, 7.8vw, 39px);
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 430px) {
+  .team-hero h1 {
+    font-size: clamp(25px, 7vw, 29px);
+    line-height: 1.12;
   }
 }

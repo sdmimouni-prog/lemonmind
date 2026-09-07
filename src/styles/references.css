@@ -458,41 +458,13 @@
   min-height: 98px;
   overflow: hidden;
   place-items: center;
-  border: 1px solid rgba(17, 24, 39, 0.08);
+  border: 1px solid rgba(17, 24, 39, 0.1);
   border-radius: 8px;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.74);
-  box-shadow: 0 16px 36px rgba(17, 24, 39, 0.05);
+  background: #fff;
+  box-shadow: 0 16px 36px rgba(17, 24, 39, 0.055);
   outline: none;
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease, background 180ms ease;
-}
-
-.rf-reference-card--dark {
-  border-color: rgba(255, 255, 255, 0.1);
-  background:
-    radial-gradient(circle at 20% 20%, rgba(253, 199, 0, 0.1), transparent 42%),
-    linear-gradient(135deg, #111315, #050608);
-}
-
-.rf-reference-card--dark:hover,
-.rf-reference-card--dark:focus-visible {
-  background:
-    radial-gradient(circle at 20% 20%, rgba(253, 199, 0, 0.14), transparent 42%),
-    linear-gradient(135deg, #151719, #050608);
-}
-
-.rf-reference-card--dark .rf-reference-card__details {
-  background: rgba(255, 255, 255, 0.92);
-  color: #050608;
-}
-
-.rf-reference-card--dark .rf-reference-card__details h3 {
-  color: #050608;
-}
-
-.rf-reference-card--dark .rf-reference-card__details p,
-.rf-reference-card--dark .rf-reference-card__details span {
-  color: #4b5563;
 }
 
 .rf-reference-card[hidden] {
@@ -512,6 +484,13 @@
   max-width: 138px;
   max-height: 48px;
   object-fit: contain;
+  filter: grayscale(1) contrast(1.16) brightness(0.9);
+  opacity: 0.92;
+}
+
+.rf-reference-card--white-logo .rf-reference-card__logo img {
+  filter: brightness(0);
+  opacity: 0.84;
 }
 
 .rf-reference-card__details {
@@ -546,7 +525,7 @@
 
 .rf-reference-card:hover,
 .rf-reference-card:focus-visible {
-  border-color: rgba(253, 199, 0, 0.54);
+  border-color: rgba(5, 6, 8, 0.22);
   background: #fff;
   box-shadow: 0 18px 46px rgba(17, 24, 39, 0.1);
   transform: translateY(-3px);
@@ -1392,5 +1371,31 @@
   .is-motion-ready .rf-hero__photo,
   .is-motion-ready .rf-collaboration-card figure {
     clip-path: none;
+  }
+}
+
+.rf-hero h1 {
+  max-width: 700px;
+  font-size: clamp(37px, 3vw, 50px);
+  line-height: 1.08;
+}
+
+.rf-hand--hero {
+  max-width: 155px;
+  font-size: clamp(18px, 1.45vw, 22px);
+  line-height: 1.16;
+}
+
+@media (max-width: 768px) {
+  .rf-hero h1 {
+    font-size: clamp(32px, 8vw, 42px);
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 430px) {
+  .rf-hero h1 {
+    font-size: clamp(27px, 7.4vw, 31px);
+    line-height: 1.12;
   }
 }

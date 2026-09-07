@@ -66,7 +66,7 @@ export const teamMembers: TeamMember[] = [
   member('amal-amazouz', 'Amal Amazouz', 'COO & CDO', 'Direction', 'direction-strategie', 'amal.webp', 2, true),
   member('tarik-el-abbadi', 'Tarik El Abbadi', 'Directeur Communication & Event', 'Direction', 'direction-strategie', 'tarik.webp', 3, true),
   member('elhoussine-essmami', 'Elhoussine Essmami', 'Planneur stratégique', 'Stratégie', 'direction-strategie', 'elhoussine-bw.webp', 4),
-  member('ikram-dehiri', 'Ikram Dehiri', 'Responsable de compte senior', 'Gestion de compte', 'client-service', 'ikram-bw.webp', 5),
+  member('ikram-dehiri', 'Ikram Dehiri', 'Responsable de compte senior', 'Gestion de compte', 'client-service', 'ikram.webp', 5),
   member('oussama-tahtah', 'Oussama TAHTAH', 'Senior Account Manager', 'Gestion de compte', 'client-service', 'oussama.webp', 6),
   member('oumaima-lassri', 'Oumaima LASSRI', 'Senior Account Manager', 'Gestion de compte', 'client-service', 'oumaima-lassri.webp', 7),
   member('fellioui-halima', 'FELLIOUI Halima', 'Account Manager', 'Gestion de compte', 'client-service', 'halima-felloui.webp', 8),

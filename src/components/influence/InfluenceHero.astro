@@ -1,8 +1,6 @@
 ---
 import { contact } from '../../data/homepage';
 import { influenceMarketingHero } from '../../data/influenceMarketing';
-
-const titleParts = influenceMarketingHero.title.split(influenceMarketingHero.highlight);
 ---
 <section class="im-hero" aria-labelledby="im-hero-title" data-im-hero data-im-scene>
   <div class="im-pixels im-pixels--hero" aria-hidden="true">
@@ -11,10 +9,10 @@ const titleParts = influenceMarketingHero.title.split(influenceMarketingHero.hig
   <div class="lm-shell im-hero__grid">
     <div class="im-hero__copy">
       <p class="lm-eyebrow lm-eyebrow--yellow" data-im-reveal>{influenceMarketingHero.eyebrow}</p>
-      <h1 id="im-hero-title" data-im-reveal>
-        {titleParts[0]}
+      <h1 id="im-hero-title" aria-label={influenceMarketingHero.title} data-im-reveal>
+        Agence de marketing<br />
+        d’influence et de<br />
         <span>{influenceMarketingHero.highlight}</span>
-        {titleParts[1]}
       </h1>
       <p class="im-hero__lead" data-im-reveal>{influenceMarketingHero.lead}</p>
       <p class="im-hero__text" data-im-reveal>{influenceMarketingHero.text}</p>

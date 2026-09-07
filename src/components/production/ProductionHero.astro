@@ -1,8 +1,6 @@
 ---
 import { contact } from '../../data/homepage';
 import { productionHero } from '../../data/productionContent';
-
-const titleParts = productionHero.title.split(productionHero.highlight);
 ---
 <section class="pc-hero" aria-labelledby="pc-hero-title" data-pc-scene data-pc-parallax>
   <div class="pc-pixels pc-pixels--hero" aria-hidden="true">
@@ -11,10 +9,10 @@ const titleParts = productionHero.title.split(productionHero.highlight);
   <div class="lm-shell pc-hero__grid">
     <div class="pc-hero__copy">
       <p class="lm-eyebrow lm-eyebrow--yellow" data-pc-reveal>{productionHero.eyebrow}</p>
-      <h1 id="pc-hero-title" data-pc-reveal>
-        {titleParts[0]}
+      <h1 id="pc-hero-title" aria-label={productionHero.title} data-pc-reveal>
+        Agence de production<br />
+        de contenu, vidéo et UGC<br />
         <span>{productionHero.highlight}</span>
-        {titleParts[1]}
       </h1>
       <p class="pc-hero__lead" data-pc-reveal>
         {productionHero.lead.map((line) => <span>{line}</span>)}

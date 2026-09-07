@@ -11,7 +11,7 @@ const filterCounts = referenceFilters.map((filter) => ({
   count: filter.id === 'all' ? references.length : countReferencesByGroup(filter.id),
 }));
 
-const darkLogoIds = new Set([
+const whiteLogoIds = new Set([
   'hem',
   'tbs-education',
   'euromed',
@@ -68,7 +68,7 @@ const darkLogoIds = new Set([
           id={reference.id}
           class:list={[
             'rf-reference-card',
-            darkLogoIds.has(reference.id) && 'rf-reference-card--dark',
+            whiteLogoIds.has(reference.id) && 'rf-reference-card--white-logo',
           ]}
           data-rf-reference
           data-group={reference.sectorGroup}

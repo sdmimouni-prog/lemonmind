@@ -1723,3 +1723,50 @@
     transition: none;
   }
 }
+
+.ugc-hero__title {
+  max-width: 720px;
+  font-size: clamp(36px, 2.95vw, 46px);
+  line-height: 1.08;
+}
+
+.ugc-hand--hero-left,
+.ugc-hand--hero-right {
+  font-size: clamp(18px, 1.35vw, 21px);
+  line-height: 1.16;
+}
+
+.ugc-hand--hero-left {
+  width: 170px;
+}
+
+.ugc-hand--hero-right {
+  width: 150px;
+}
+
+.ugc-hand--hero-left::after,
+.ugc-hand--hero-right::after {
+  height: 5px;
+  margin-top: 5px;
+}
+
+@media (min-width: 1025px) {
+  .ugc-hero__grid {
+    grid-template-columns: minmax(590px, 0.92fr) minmax(0, 1.08fr);
+    gap: 44px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ugc-hero__title {
+    font-size: clamp(31px, 8vw, 40px);
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 430px) {
+  .ugc-hero__title {
+    font-size: clamp(27px, 7.4vw, 31px);
+    line-height: 1.12;
+  }
+}
