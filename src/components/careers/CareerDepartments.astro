@@ -1,0 +1,33 @@
+---
+import { careerDepartments, careerDepartmentsIntro } from '../../data/careers-data';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="cr-section cr-departments" aria-labelledby="career-departments-title" data-cr-scene>
+  <div class="lm-shell">
+    <div class="cr-section__head cr-section__head--split">
+      <div>
+        <p class="cr-eyebrow" data-cr-reveal>{careerDepartmentsIntro.eyebrow}</p>
+        <h2 id="career-departments-title" data-cr-reveal>{careerDepartmentsIntro.title}</h2>
+      </div>
+      <p data-cr-reveal>{careerDepartmentsIntro.text}</p>
+    </div>
+
+    <div class="cr-departments__grid" aria-label="Familles de métiers Lemon Mind">
+      {careerDepartments.map((department, index) => (
+        <button
+          class={`cr-department-card cr-tone--${department.tone}`}
+          type="button"
+          data-career-dept-jump={department.id}
+          aria-pressed="false"
+          style={`--cr-item-index: ${index};`}
+          data-cr-stagger
+        >
+          <span class="cr-department-card__icon" aria-hidden="true">
+            <ExpertiseIcon name={department.icon} className="cr-icon__svg" />
+          </span>
+          <span class="cr-department-card__label">{department.label}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+</section>

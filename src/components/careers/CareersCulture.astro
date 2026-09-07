@@ -1,0 +1,34 @@
+---
+import { careersCulture } from '../../data/careers-data';
+---
+<section class="cr-section cr-culture" aria-labelledby="careers-culture-title" data-cr-scene>
+  <div class="lm-shell cr-culture__head">
+    <div>
+      <p class="cr-eyebrow" data-cr-reveal>{careersCulture.eyebrow}</p>
+      <h2 id="careers-culture-title" data-cr-reveal>{careersCulture.title}</h2>
+    </div>
+    <div class="cr-culture__side" data-cr-reveal>
+      <p>{careersCulture.text}</p>
+      <div class="cr-gallery-controls" aria-label="Navigation de la galerie">
+        <button class="cr-round-button" type="button" aria-label="Image précédente" data-gallery-prev>←</button>
+        <button class="cr-round-button" type="button" aria-label="Image suivante" data-gallery-next>→</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cr-culture__gallery" aria-label="Coulisses Lemon Mind" tabindex="0" data-careers-gallery>
+    {careersCulture.gallery.map((item, index) => (
+      <figure class="cr-culture__photo" style={`--cr-item-index: ${index};`} data-cr-stagger>
+        <img
+          src={item.src}
+          alt={item.alt}
+          width={item.width}
+          height={item.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>{item.caption}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>

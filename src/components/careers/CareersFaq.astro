@@ -1,0 +1,40 @@
+---
+import { careersFaq } from '../../data/careers-data';
+---
+<div class="cr-faq" data-cr-scene>
+  <p class="cr-eyebrow" data-cr-reveal>{careersFaq.eyebrow}</p>
+  <h2 data-cr-reveal>{careersFaq.title}</h2>
+
+  <div class="cr-faq__list" data-careers-faq-list>
+    {careersFaq.questions.map((item, index) => {
+      const buttonId = `careers-faq-button-${index + 1}`;
+      const panelId = `careers-faq-panel-${index + 1}`;
+
+      return (
+        <article class="cr-faq-item" data-cr-stagger style={`--cr-item-index: ${index};`}>
+          <h3>
+            <button
+              id={buttonId}
+              type="button"
+              aria-expanded="false"
+              aria-controls={panelId}
+              data-careers-faq-button
+            >
+              <span>{item.question}</span>
+              <span aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div
+            class="cr-faq-item__panel"
+            id={panelId}
+            role="region"
+            aria-labelledby={buttonId}
+            data-careers-faq-panel
+          >
+            <p>{item.answer}</p>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+</div>

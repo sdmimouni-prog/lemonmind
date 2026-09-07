@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import CareerDepartments from '../../components/careers/CareerDepartments.astro';
+import CareersBenefits from '../../components/careers/CareersBenefits.astro';
+import CareersCulture from '../../components/careers/CareersCulture.astro';
+import CareersFaq from '../../components/careers/CareersFaq.astro';
+import CareersHero from '../../components/careers/CareersHero.astro';
+import CareersInteractions from '../../components/careers/CareersInteractions.astro';
+import OpenPositions from '../../components/careers/OpenPositions.astro';
+import RecruitmentProcess from '../../components/careers/RecruitmentProcess.astro';
+import SpontaneousApplication from '../../components/careers/SpontaneousApplication.astro';
+import { contact } from '../../data/homepage';
+import {
+  careersFaq,
+  careersMeta,
+  getActiveCareerPositions,
+  type CareerPosition,
+} from '../../data/careers-data';
+import '../../styles/careers.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(careersMeta.canonical, siteUrl).toString();
+const organizationId = `${siteUrl}#organization`;
+const activePositions = getActiveCareerPositions();
+
+const getJobPostingSchema = (position: CareerPosition) => {
+  const hasRequiredDetails =
+    position.title &&
+    position.summary &&
+    position.publishedAt &&
+    position.location &&
+    position.contractType &&
+    position.id;
+
+  if (!hasRequiredDetails) {
+    return null;
+  }
+
+  return {
+    '@type': 'JobPosting',
+    '@id': `${pageUrl}#job-${position.slug}`,
+    identifier: {
+      '@type': 'PropertyValue',
+      name: 'Lemon Mind Digital',
+      value: position.id,
+    },
+    title: position.title,
+    description: [
+      position.summary,
+      position.responsibilities.join(' '),
+      position.requirements.join(' '),
+      position.benefits.join(' '),
+    ]
+      .filter(Boolean)
+      .join(' '),
+    datePosted: position.publishedAt,
+    validThrough: position.validThrough,
+    employmentType: position.contractType,
+    hiringOrganization: {
+      '@id': organizationId,
+    },
+    jobLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: position.location,
+        addressCountry: 'MA',
+      },
+    },
+    directApply: Boolean(position.applicationUrl),
+  };
+};
+
+const jobPostingNodes = activePositions.map((position) => getJobPostingSchema(position)).filter(Boolean);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: 'Lemon Mind Digital',
+      url: siteUrl,
+      telephone: contact.phone,
+      email: contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Casablanca',
+        addressCountry: 'MA',
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+    },
+    {
+      '@type': 'CollectionPage',
+      '@id': `${pageUrl}#page`,
+      name: careersMeta.title,
+      description: careersMeta.description,
+      url: pageUrl,
+      inLanguage: 'fr-MA',
+      isPartOf: {
+        '@id': siteUrl,
+      },
+      about: {
+        '@id': organizationId,
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'L’agence',
+          item: new URL('/agence', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Carrières',
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${pageUrl}#faq`,
+      mainEntity: careersFaq.questions.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+    ...jobPostingNodes,
+  ],
+};
+---
+<BaseLayout
+  title={careersMeta.title}
+  description={careersMeta.description}
+  canonical={careersMeta.canonical}
+  ogImage={careersMeta.ogImage}
+  schema={schema}
+  bodyClass="careers-page"
+>
+  <Header ctaLabel="Réservez un appel" ctaHref={contact.bookingHref} />
+  <main>
+    <CareersHero />
+    <CareersBenefits />
+    <CareersCulture />
+    <CareerDepartments />
+    <OpenPositions />
+    <RecruitmentProcess />
+    <section class="cr-apply-faq" id="candidature-spontanee" aria-label="Candidature spontanée et questions fréquentes">
+      <div class="lm-shell cr-apply-faq__grid">
+        <SpontaneousApplication />
+        <CareersFaq />
+      </div>
+    </section>
+  </main>
+  <CareersInteractions />
+  <Footer />
+</BaseLayout>

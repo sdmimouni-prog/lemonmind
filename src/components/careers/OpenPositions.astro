@@ -1,0 +1,172 @@
+---
+import {
+  careerDepartments,
+  getActiveCareerPositions,
+  opportunitiesContent,
+  type CareerPosition,
+} from '../../data/careers-data';
+
+const activePositions = getActiveCareerPositions();
+const hasMoreThanFirstView = activePositions.length > 4;
+
+const dateFormatter = new Intl.DateTimeFormat('fr-MA', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const formatDate = (value: string) => {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return dateFormatter.format(date);
+};
+
+const getJobDescription = (position: CareerPosition) =>
+  [
+    position.summary,
+    position.responsibilities.join(' '),
+    position.requirements.join(' '),
+    position.benefits.join(' '),
+  ]
+    .filter(Boolean)
+    .join(' ');
+---
+<section class="cr-section cr-opportunities" id="opportunites" aria-labelledby="careers-opportunities-title" data-cr-scene data-careers-opportunities>
+  <div class="lm-shell">
+    <div class="cr-section__head cr-section__head--split cr-opportunities__head">
+      <div>
+        <p class="cr-eyebrow" data-cr-reveal>{opportunitiesContent.eyebrow}</p>
+        <h2 id="careers-opportunities-title" data-cr-reveal>{opportunitiesContent.title}</h2>
+      </div>
+      <div class="cr-opportunities__intro" data-cr-reveal>
+        <p>{opportunitiesContent.text}</p>
+        {hasMoreThanFirstView && (
+          <button class="cr-text-button" type="button" data-careers-show-all>
+            {opportunitiesContent.viewAllLabel}
+            <span aria-hidden="true">→</span>
+          </button>
+        )}
+      </div>
+    </div>
+
+    <div class="cr-filter-bar" aria-label="Filtrer les offres par métier" data-cr-reveal>
+      <button class="cr-filter" type="button" data-career-filter="all" aria-pressed="true">Tous</button>
+      {careerDepartments.map((department) => (
+        <button class="cr-filter" type="button" data-career-filter={department.id} aria-pressed="false">
+          {department.label}
+        </button>
+      ))}
+    </div>
+
+    <div class="cr-jobs-grid" data-careers-jobs>
+      {activePositions.map((position, index) => (
+        <article
+          class="cr-job-card"
+          data-career-card
+          data-department={position.departmentId}
+          style={`--cr-item-index: ${index};`}
+          data-cr-stagger
+        >
+          <div class="cr-job-card__head">
+            <h3>{position.title}</h3>
+            <span>{position.location}</span>
+          </div>
+          <div class="cr-job-card__tags" aria-label={`Informations sur ${position.title}`}>
+            <span>{position.department}</span>
+            <span>{position.contractType}</span>
+            <span>{position.experienceLevel}</span>
+            <span>{position.workMode}</span>
+          </div>
+          <p>{position.summary}</p>
+          <div class="cr-job-card__foot">
+            <span>
+              Publié le <time datetime={position.publishedAt}>{formatDate(position.publishedAt)}</time>
+            </span>
+            <button class="cr-job-card__button" type="button" data-job-open={position.id}>
+              Voir l’offre <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div
+      class="cr-empty-state"
+      data-careers-empty
+      data-default-title={opportunitiesContent.emptyTitle}
+      data-default-text={opportunitiesContent.emptyText}
+      data-filtered-text={opportunitiesContent.filteredEmptyText}
+      hidden={activePositions.length > 0}
+    >
+      <h3 data-careers-empty-title>{opportunitiesContent.emptyTitle}</h3>
+      <p data-careers-empty-text>{opportunitiesContent.emptyText}</p>
+      <button class="lm-button lm-button--yellow" type="button" data-application-open>
+        {opportunitiesContent.emptyCta}
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </div>
+
+  {activePositions.length > 0 && (
+    <dialog class="cr-dialog cr-dialog--job" aria-label="Détail de l’offre" data-careers-job-dialog>
+      <button class="cr-dialog__close" type="button" aria-label="Fermer l’offre" data-dialog-close>×</button>
+      {activePositions.map((position) => (
+        <article class="cr-job-detail" data-job-panel={position.id} hidden>
+          <p class="cr-eyebrow">{position.department}</p>
+          <h2 tabindex="-1">{position.title}</h2>
+          <p>{position.summary}</p>
+          <dl class="cr-job-detail__meta">
+            <div>
+              <dt>Localisation</dt>
+              <dd>{position.location}</dd>
+            </div>
+            <div>
+              <dt>Contrat</dt>
+              <dd>{position.contractType}</dd>
+            </div>
+            <div>
+              <dt>Niveau</dt>
+              <dd>{position.experienceLevel}</dd>
+            </div>
+            <div>
+              <dt>Mode</dt>
+              <dd>{position.workMode}</dd>
+            </div>
+          </dl>
+          <div class="cr-job-detail__columns">
+            <section aria-label="Mission">
+              <h3>Mission</h3>
+              <p>{getJobDescription(position)}</p>
+            </section>
+            <section aria-label="Responsabilités">
+              <h3>Responsabilités</h3>
+              <ul>{position.responsibilities.map((item) => <li>{item}</li>)}</ul>
+            </section>
+            <section aria-label="Profil recherché">
+              <h3>Profil recherché</h3>
+              <ul>{position.requirements.map((item) => <li>{item}</li>)}</ul>
+            </section>
+            <section aria-label="Modalités">
+              <h3>Modalités</h3>
+              <ul>{position.benefits.map((item) => <li>{item}</li>)}</ul>
+            </section>
+          </div>
+          <button
+            class="lm-button lm-button--yellow"
+            type="button"
+            data-application-open
+            data-application-position={position.title}
+            data-application-domain-value={position.department}
+          >
+            Candidater
+            <span aria-hidden="true">→</span>
+          </button>
+        </article>
+      ))}
+    </dialog>
+  )}
+</section>

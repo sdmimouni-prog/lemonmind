@@ -1,0 +1,58 @@
+---
+import { careersHero } from '../../data/careers-data';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="cr-hero" aria-labelledby="careers-hero-title" data-cr-scene data-cr-parallax>
+  <div class="cr-hero__wash cr-hero__wash--yellow" aria-hidden="true"></div>
+  <div class="cr-hero__wash cr-hero__wash--violet" aria-hidden="true"></div>
+
+  <div class="lm-shell cr-hero__grid">
+    <div class="cr-hero__copy">
+      <p class="cr-eyebrow cr-eyebrow--light" data-cr-reveal>{careersHero.eyebrow}</p>
+      <h1 id="careers-hero-title" aria-label={careersHero.title}>
+        <span data-cr-title-line style="--cr-line-index: 0;">Créez, apprenez</span>
+        <span data-cr-title-line style="--cr-line-index: 1;">et grandissez <mark>avec nous.</mark></span>
+      </h1>
+      <div class="cr-hero__text" data-cr-reveal>
+        {careersHero.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <div class="cr-actions" data-cr-reveal>
+        <a class="lm-button lm-button--yellow" href={careersHero.primaryHref}>
+          {careersHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark cr-button--ghost" href={careersHero.secondaryHref}>
+          {careersHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ul class="cr-hero__reassurance" aria-label="Repères de l’environnement Lemon Mind">
+        {careersHero.reassurance.map((item, index) => (
+          <li style={`--cr-item-index: ${index};`} data-cr-stagger>
+            <span class="cr-hero__reassurance-icon" aria-hidden="true">
+              <ExpertiseIcon name={item.icon} className="cr-icon__svg" />
+            </span>
+            <span>{item.label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="cr-hero__media" data-cr-depth>
+      <figure class="cr-hero__photo">
+        <img
+          src={careersHero.image}
+          alt={careersHero.imageAlt}
+          width="1280"
+          height="720"
+          sizes="(max-width: 768px) 92vw, 760px"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+      <p class="cr-hand cr-hand--hero">{careersHero.annotation}</p>
+      <p class="cr-hand cr-hand--join">{careersHero.sideAnnotation}</p>
+    </div>
+  </div>
+</section>

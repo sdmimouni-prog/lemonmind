@@ -1,0 +1,27 @@
+---
+import { careersBenefits } from '../../data/careers-data';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="cr-section cr-benefits" aria-labelledby="careers-benefits-title" data-cr-scene>
+  <div class="lm-shell">
+    <div class="cr-section__head cr-section__head--split">
+      <div>
+        <p class="cr-eyebrow" data-cr-reveal>{careersBenefits.eyebrow}</p>
+        <h2 id="careers-benefits-title" data-cr-reveal>{careersBenefits.title}</h2>
+      </div>
+      <p data-cr-reveal>{careersBenefits.text}</p>
+    </div>
+
+    <div class="cr-benefits__grid">
+      {careersBenefits.items.map((item, index) => (
+        <article class={`cr-benefit-card cr-tone--${item.tone}`} style={`--cr-item-index: ${index};`} data-cr-stagger>
+          <span class="cr-benefit-card__icon" aria-hidden="true">
+            <ExpertiseIcon name={item.icon} className="cr-icon__svg" />
+          </span>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

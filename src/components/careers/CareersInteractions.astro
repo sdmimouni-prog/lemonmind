@@ -1,0 +1,497 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const scenes = Array.from(document.querySelectorAll('[data-cr-scene]'));
+
+    scenes.forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '12% 0px 8% 0px' },
+      );
+
+      observer.observe(scene);
+    });
+
+    window.setTimeout(() => {
+      scenes.forEach((scene) => scene.classList.add('is-visible'));
+    }, 1300);
+
+    if (finePointer && !prefersReducedMotion.matches) {
+      document.querySelectorAll('[data-cr-parallax]').forEach((scene) => {
+        scene.addEventListener('pointermove', (event) => {
+          const rect = scene.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          scene.style.setProperty('--cr-mx', x.toFixed(3));
+          scene.style.setProperty('--cr-my', y.toFixed(3));
+        });
+
+        scene.addEventListener('pointerleave', () => {
+          scene.style.setProperty('--cr-mx', '0');
+          scene.style.setProperty('--cr-my', '0');
+        });
+      });
+
+      document.querySelectorAll('[data-cr-depth]').forEach((item) => {
+        item.addEventListener('pointermove', (event) => {
+          const rect = item.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          item.style.setProperty('--cr-depth-x', `${(x * 8).toFixed(2)}px`);
+          item.style.setProperty('--cr-depth-y', `${(y * 7).toFixed(2)}px`);
+          item.style.setProperty('--cr-tilt-x', `${(y * -2.5).toFixed(2)}deg`);
+          item.style.setProperty('--cr-tilt-y', `${(x * 3.5).toFixed(2)}deg`);
+        });
+
+        item.addEventListener('pointerleave', () => {
+          item.style.setProperty('--cr-depth-x', '0px');
+          item.style.setProperty('--cr-depth-y', '0px');
+          item.style.setProperty('--cr-tilt-x', '0deg');
+          item.style.setProperty('--cr-tilt-y', '0deg');
+        });
+      });
+    }
+
+    const gallery = document.querySelector('[data-careers-gallery]');
+    const prevButton = document.querySelector('[data-gallery-prev]');
+    const nextButton = document.querySelector('[data-gallery-next]');
+
+    const updateGalleryButtons = () => {
+      if (!gallery || !prevButton || !nextButton) {
+        return;
+      }
+
+      const maxScroll = gallery.scrollWidth - gallery.clientWidth - 2;
+      prevButton.toggleAttribute('disabled', gallery.scrollLeft <= 2);
+      nextButton.toggleAttribute('disabled', gallery.scrollLeft >= maxScroll);
+    };
+
+    const scrollGallery = (direction) => {
+      if (!gallery) {
+        return;
+      }
+
+      gallery.scrollBy({
+        left: direction * Math.max(gallery.clientWidth * 0.72, 260),
+        behavior: prefersReducedMotion.matches ? 'auto' : 'smooth',
+      });
+    };
+
+    prevButton?.addEventListener('click', () => scrollGallery(-1));
+    nextButton?.addEventListener('click', () => scrollGallery(1));
+    gallery?.addEventListener('scroll', updateGalleryButtons, { passive: true });
+    gallery?.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        scrollGallery(event.key === 'ArrowLeft' ? -1 : 1);
+      }
+    });
+    window.addEventListener('resize', updateGalleryButtons);
+    updateGalleryButtons();
+
+    const opportunities = document.querySelector('[data-careers-opportunities]');
+    const filterButtons = Array.from(document.querySelectorAll('[data-career-filter]'));
+    const departmentButtons = Array.from(document.querySelectorAll('[data-career-dept-jump]'));
+    const jobCards = Array.from(document.querySelectorAll('[data-career-card]'));
+    const emptyState = document.querySelector('[data-careers-empty]');
+    const emptyTitle = emptyState?.querySelector('[data-careers-empty-title]');
+    const emptyText = emptyState?.querySelector('[data-careers-empty-text]');
+
+    const setEmptyContent = (filter) => {
+      if (!emptyState || !emptyTitle || !emptyText) {
+        return;
+      }
+
+      const hasVisibleJob = jobCards.some((card) => !card.hidden);
+      emptyState.hidden = hasVisibleJob;
+
+      if (hasVisibleJob) {
+        return;
+      }
+
+      emptyTitle.textContent = filter === 'all'
+        ? emptyState.dataset.defaultTitle || 'Aucune opportunité ouverte pour le moment.'
+        : 'Aucune offre ouverte dans ce domaine pour le moment.';
+      emptyText.textContent = filter === 'all'
+        ? emptyState.dataset.defaultText || ''
+        : emptyState.dataset.filteredText || '';
+    };
+
+    const applyCareerFilter = (filter, { scroll = false, focus = false } = {}) => {
+      const normalizedFilter = filter || 'all';
+
+      filterButtons.forEach((button) => {
+        const isActive = button.getAttribute('data-career-filter') === normalizedFilter;
+        button.setAttribute('aria-pressed', String(isActive));
+
+        if (isActive && focus) {
+          button.focus({ preventScroll: true });
+        }
+      });
+
+      departmentButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.getAttribute('data-career-dept-jump') === normalizedFilter));
+      });
+
+      jobCards.forEach((card, index) => {
+        const shouldShow = normalizedFilter === 'all' || card.getAttribute('data-department') === normalizedFilter;
+        card.hidden = !shouldShow;
+        card.classList.remove('is-filtered-in');
+
+        if (shouldShow) {
+          card.style.setProperty('--cr-item-index', String(index % 4));
+          window.requestAnimationFrame(() => card.classList.add('is-filtered-in'));
+        }
+      });
+
+      setEmptyContent(normalizedFilter);
+
+      if (scroll) {
+        opportunities?.scrollIntoView({ block: 'start', behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
+      }
+    };
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        applyCareerFilter(button.getAttribute('data-career-filter') || 'all');
+      });
+    });
+
+    departmentButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        applyCareerFilter(button.getAttribute('data-career-dept-jump') || 'all', { scroll: true, focus: true });
+      });
+    });
+
+    applyCareerFilter('all');
+
+    const openDialog = (dialog) => {
+      if (!dialog) {
+        return;
+      }
+
+      if (typeof dialog.showModal === 'function') {
+        dialog.showModal();
+      } else {
+        dialog.setAttribute('open', '');
+      }
+    };
+
+    const closeDialog = (dialog) => {
+      if (!dialog) {
+        return;
+      }
+
+      if (typeof dialog.close === 'function') {
+        dialog.close();
+      } else {
+        dialog.removeAttribute('open');
+      }
+    };
+
+    document.querySelectorAll('dialog').forEach((dialog) => {
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) {
+          closeDialog(dialog);
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-dialog-close]').forEach((button) => {
+      button.addEventListener('click', () => {
+        closeDialog(button.closest('dialog'));
+      });
+    });
+
+    const jobDialog = document.querySelector('[data-careers-job-dialog]');
+    const jobPanels = Array.from(document.querySelectorAll('[data-job-panel]'));
+
+    document.querySelectorAll('[data-job-open]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const jobId = button.getAttribute('data-job-open');
+        let activePanel = null;
+
+        jobPanels.forEach((panel) => {
+          const isActive = panel.getAttribute('data-job-panel') === jobId;
+          panel.hidden = !isActive;
+
+          if (isActive) {
+            activePanel = panel;
+          }
+        });
+
+        openDialog(jobDialog);
+        activePanel?.querySelector('h2')?.focus?.({ preventScroll: true });
+      });
+    });
+
+    const applicationDialog = document.querySelector('[data-application-dialog]');
+    const applicationForm = document.querySelector('[data-application-form]');
+    const applicationStatus = applicationForm?.querySelector('[data-application-status]');
+    const applicationSubmit = applicationForm?.querySelector('[data-application-submit]');
+    const applicationSubmitLabel = applicationForm?.querySelector('[data-application-submit-label]');
+    const applicationSource = applicationForm?.querySelector('[data-application-source]');
+    const applicationDomain = applicationForm?.querySelector('[data-application-domain]');
+    const cvInput = applicationForm?.querySelector('[data-cv-input]');
+    const cvLabel = applicationForm?.querySelector('[data-cv-label]');
+    const acceptedCvExtensions = ['pdf', 'doc', 'docx'];
+    const maxCvSize = 10 * 1024 * 1024;
+
+    const setApplicationStatus = (message, tone = '') => {
+      if (!applicationStatus) {
+        return;
+      }
+
+      applicationStatus.textContent = message;
+      applicationStatus.dataset.tone = tone;
+    };
+
+    const setApplicationError = (fieldName, message = '') => {
+      const error = applicationForm?.querySelector(`[data-application-error-for="${fieldName}"]`);
+      const field = applicationForm?.querySelector(`[name="${fieldName}"]`);
+
+      if (error) {
+        error.textContent = message;
+      }
+
+      if (field) {
+        field.setAttribute('aria-invalid', message ? 'true' : 'false');
+        if (error?.id) {
+          field.setAttribute('aria-describedby', error.id);
+        }
+      }
+    };
+
+    const clearApplicationErrors = () => {
+      applicationForm?.querySelectorAll('[data-application-error-for]').forEach((node) => {
+        node.textContent = '';
+      });
+      applicationForm?.querySelectorAll('[aria-invalid]').forEach((node) => {
+        node.setAttribute('aria-invalid', 'false');
+      });
+    };
+
+    const getApplicationValue = (name) => {
+      const field = applicationForm?.querySelector(`[name="${name}"]`);
+      return field && 'value' in field ? field.value.trim() : '';
+    };
+
+    const isValidHttpUrl = (value) => {
+      if (!value) {
+        return true;
+      }
+
+      try {
+        const url = new URL(value);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+      } catch {
+        return false;
+      }
+    };
+
+    const validateCv = (file) => {
+      if (!file || file.size === 0) {
+        return 'Ajoutez votre CV au format PDF, DOC ou DOCX.';
+      }
+
+      const extension = file.name.split('.').pop()?.toLowerCase() || '';
+
+      if (!acceptedCvExtensions.includes(extension)) {
+        return 'Format accepté : PDF, DOC ou DOCX.';
+      }
+
+      if (file.size > maxCvSize) {
+        return 'Le CV ne doit pas dépasser 10 Mo.';
+      }
+
+      return '';
+    };
+
+    const validateApplication = () => {
+      clearApplicationErrors();
+      const errors = {};
+
+      if (getApplicationValue('website')) {
+        errors.website = 'Votre candidature n’a pas pu être validée.';
+      }
+
+      if (getApplicationValue('fullName').length < 2) {
+        errors.fullName = 'Indiquez votre nom complet.';
+      }
+
+      const email = getApplicationValue('email');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.email = 'Indiquez un email valide.';
+      }
+
+      const phone = getApplicationValue('phone');
+      if (phone && phone.replace(/[^\d+]/g, '').length < 8) {
+        errors.phone = 'Indiquez un numéro de téléphone valide.';
+      }
+
+      if (!getApplicationValue('domain')) {
+        errors.domain = 'Sélectionnez un métier ou un domaine.';
+      }
+
+      if (!isValidHttpUrl(getApplicationValue('linkedinUrl'))) {
+        errors.linkedinUrl = 'Indiquez une URL LinkedIn valide.';
+      }
+
+      if (!isValidHttpUrl(getApplicationValue('portfolioUrl'))) {
+        errors.portfolioUrl = 'Indiquez une URL de portfolio valide.';
+      }
+
+      const cvError = validateCv(cvInput?.files?.[0]);
+      if (cvError) {
+        errors.cv = cvError;
+      }
+
+      if (!applicationForm?.querySelector('[name="consent"]')?.checked) {
+        errors.consent = 'Votre accord est requis pour étudier votre candidature.';
+      }
+
+      Object.entries(errors).forEach(([field, message]) => setApplicationError(field, message));
+      return errors;
+    };
+
+    const openApplication = (trigger) => {
+      const position = trigger?.getAttribute('data-application-position') || '';
+      const domainValue = trigger?.getAttribute('data-application-domain-value') || '';
+
+      if (applicationSource) {
+        applicationSource.value = position ? `Offre : ${position}` : 'Candidature spontanée';
+      }
+
+      if (domainValue && applicationDomain) {
+        const option = Array.from(applicationDomain.options || []).find((item) => item.value === domainValue);
+
+        if (option) {
+          applicationDomain.value = option.value;
+        }
+      }
+
+      closeDialog(jobDialog);
+      openDialog(applicationDialog);
+
+      window.setTimeout(() => {
+        applicationForm?.querySelector('[name="fullName"]')?.focus({ preventScroll: true });
+      }, 60);
+    };
+
+    document.querySelectorAll('[data-application-open]').forEach((button) => {
+      button.addEventListener('click', () => openApplication(button));
+    });
+
+    cvInput?.addEventListener('change', () => {
+      const file = cvInput.files?.[0];
+      const error = validateCv(file);
+      setApplicationError('cv', error);
+
+      if (cvLabel) {
+        cvLabel.textContent = file && !error ? file.name : 'Ajouter votre CV *';
+      }
+    });
+
+    applicationForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const errors = validateApplication();
+
+      if (Object.keys(errors).length) {
+        setApplicationStatus('Merci de corriger les champs indiqués.', 'error');
+        applicationForm.querySelector('[aria-invalid="true"]')?.focus();
+        return;
+      }
+
+      setApplicationStatus('Validation de la candidature en cours...', 'loading');
+      applicationSubmit?.setAttribute('disabled', 'true');
+
+      if (applicationSubmitLabel) {
+        applicationSubmitLabel.textContent = 'Envoi en cours';
+      }
+
+      try {
+        const response = await fetch(applicationForm.action, {
+          method: 'POST',
+          body: new FormData(applicationForm),
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || !data.ok) {
+          if (data.errors) {
+            Object.entries(data.errors).forEach(([field, message]) => setApplicationError(field, String(message)));
+          }
+          throw new Error(data.message || 'La candidature n’a pas pu être validée.');
+        }
+
+        setApplicationStatus(data.message || 'Votre candidature est prête à être envoyée.', 'success');
+
+        if (data.mailto) {
+          window.setTimeout(() => {
+            window.location.href = data.mailto;
+          }, 480);
+        }
+      } catch (error) {
+        setApplicationStatus(
+          error instanceof Error ? error.message : 'Un problème est survenu. Vous pouvez aussi nous écrire par email.',
+          'error',
+        );
+      } finally {
+        applicationSubmit?.removeAttribute('disabled');
+
+        if (applicationSubmitLabel) {
+          applicationSubmitLabel.textContent = 'Envoyer ma candidature';
+        }
+      }
+    });
+
+    document.querySelectorAll('[data-careers-faq-list]').forEach((list) => {
+      const buttons = Array.from(list.querySelectorAll('[data-careers-faq-button]'));
+
+      const setOpen = (button) => {
+        buttons.forEach((currentButton) => {
+          const isSelected = currentButton === button;
+          const panelId = currentButton.getAttribute('aria-controls');
+          const panel = panelId ? document.getElementById(panelId) : null;
+
+          currentButton.setAttribute('aria-expanded', String(isSelected));
+          panel?.setAttribute('data-open', String(isSelected));
+        });
+      };
+
+      buttons.forEach((button) => {
+        const panelId = button.getAttribute('aria-controls');
+        document.getElementById(panelId || '')?.setAttribute('data-open', 'false');
+
+        button.addEventListener('click', () => {
+          if (button.getAttribute('aria-expanded') === 'true') {
+            button.setAttribute('aria-expanded', 'false');
+            document.getElementById(panelId || '')?.setAttribute('data-open', 'false');
+            return;
+          }
+
+          setOpen(button);
+        });
+      });
+    });
+  })();
+</script>

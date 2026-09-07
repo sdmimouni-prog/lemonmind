@@ -1,0 +1,27 @@
+---
+import { recruitmentProcess } from '../../data/careers-data';
+
+const visibleSteps = recruitmentProcess.steps.filter((step) => step.isVisible);
+---
+<section class="cr-process" aria-labelledby="careers-process-title" data-cr-scene>
+  <div class="lm-shell">
+    <div class="cr-section__head cr-section__head--split">
+      <div>
+        <p class="cr-eyebrow" data-cr-reveal>{recruitmentProcess.eyebrow}</p>
+        <h2 id="careers-process-title" data-cr-reveal>{recruitmentProcess.title}</h2>
+      </div>
+      <p data-cr-reveal>{recruitmentProcess.text}</p>
+    </div>
+
+    <ol class="cr-process__timeline" style={`--cr-step-count: ${visibleSteps.length};`}>
+      {visibleSteps.map((step, index) => (
+        <li class={`cr-process-step cr-process-step--${step.tone}`} style={`--cr-item-index: ${index};`} data-cr-stagger>
+          <span class="cr-process-step__number">{step.number}</span>
+          <span class="cr-process-step__line" aria-hidden="true"></span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

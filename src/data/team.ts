@@ -102,7 +102,7 @@ export const teamHero = {
   primaryCta: 'Découvrir notre culture',
   primaryHref: '#notre-culture',
   secondaryCta: 'Nous rejoindre',
-  secondaryHref: '/contact?projet=candidature',
+  secondaryHref: '/agence/carrieres',
   reassurance: [
     'Une équipe pluridisciplinaire',
     'Des expertises complémentaires',
@@ -267,6 +267,6 @@ export const teamRecruitment = {
   text:
     'Nous recherchons des profils curieux, responsables et passionnés par les marques, les contenus et les nouvelles cultures digitales.',
   secondaryCta: 'Envoyer une candidature',
-  secondaryHref: '/contact?projet=candidature',
+  secondaryHref: '/agence/carrieres#candidature-spontanee',
   annotation: 'Create. Learn. Grow. Together.',
 };

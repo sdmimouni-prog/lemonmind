@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 import { loadEnv } from 'vite';
 
@@ -22,7 +23,7 @@ const site = process.env.PUBLIC_SITE_URL || fileEnv.PUBLIC_SITE_URL || 'https://
 export default defineConfig({
   site,
   output: 'server',
-  adapter: node({
+  adapter: process.env.VERCEL ? vercel() : node({
     mode: 'standalone',
   }),
   devToolbar: { enabled: false },

@@ -28,7 +28,7 @@ export const agencyMenuItems = [
   { label: "L'équipe", href: '/agence/equipe' },
   { label: 'Références', href: '/agence/references' },
   { label: 'Certifications', href: '/agence#certifications' },
-  { label: 'Carrières', href: '/contact?objet=carrieres' },
+  { label: 'Carrières', href: '/agence/carrieres' },
 ];
 
 export const megaExpertiseItems = [
@@ -414,9 +414,12 @@ export const footerColumns = [
   {
     title: 'Agence',
     links: [
-      { label: 'À propos', href: '/agence' },
-      { label: 'Notre équipe', href: '/agence/equipe' },
-      { label: 'Carrières', href: '/contact?objet=carrieres' },
+      { label: 'Accueil', href: '/' },
+      { label: "L'agence", href: '/agence' },
+      { label: "L'équipe", href: '/agence/equipe' },
+      { label: 'Références', href: '/agence/references' },
+      { label: 'Certifications', href: '/agence#certifications' },
+      { label: 'Carrières', href: '/agence/carrieres' },
     ],
   },
   {

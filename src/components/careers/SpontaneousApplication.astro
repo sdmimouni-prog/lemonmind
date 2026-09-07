@@ -1,0 +1,122 @@
+---
+import { spontaneousApplication } from '../../data/careers-data';
+---
+<div class="cr-spontaneous" data-cr-scene>
+  <div class="cr-spontaneous__content">
+    <p class="cr-eyebrow" data-cr-reveal>{spontaneousApplication.eyebrow}</p>
+    <h2 data-cr-reveal>{spontaneousApplication.title}</h2>
+    <p data-cr-reveal>{spontaneousApplication.text}</p>
+    <button class="lm-button lm-button--dark cr-spontaneous__cta" type="button" data-application-open>
+      {spontaneousApplication.cta}
+      <span aria-hidden="true">→</span>
+    </button>
+  </div>
+  <p class="cr-hand cr-hand--apply" data-cr-reveal>{spontaneousApplication.annotation}</p>
+</div>
+
+<dialog class="cr-dialog cr-dialog--application" aria-labelledby="careers-application-title" data-application-dialog>
+  <button class="cr-dialog__close" type="button" aria-label="Fermer le formulaire" data-dialog-close>×</button>
+  <form class="cr-application-form" action="/api/careers-application" method="post" enctype="multipart/form-data" novalidate data-application-form>
+    <div class="cr-application-form__head">
+      <div>
+        <p class="cr-eyebrow">{spontaneousApplication.eyebrow}</p>
+        <h2 id="careers-application-title">{spontaneousApplication.formTitle}</h2>
+      </div>
+      <p id="careers-application-status" class="cr-form-status" role="status" aria-live="polite" data-application-status>
+        {spontaneousApplication.statusIdle}
+      </p>
+    </div>
+
+    <div class="cr-form-honeypot" aria-hidden="true">
+      <label for="careerWebsite">Site web</label>
+      <input id="careerWebsite" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <input id="careerSource" name="source" type="hidden" value="Candidature spontanée" data-application-source />
+
+    <div class="cr-form-grid">
+      <label class="cr-field" for="careerFullName">
+        <span>Nom et prénom *</span>
+        <input id="careerFullName" name="fullName" type="text" autocomplete="name" placeholder="Votre nom" required />
+        <em id="careerFullName-error" data-application-error-for="fullName"></em>
+      </label>
+
+      <label class="cr-field" for="careerEmail">
+        <span>Email *</span>
+        <input id="careerEmail" name="email" type="email" autocomplete="email" placeholder="vous@email.com" required />
+        <em id="careerEmail-error" data-application-error-for="email"></em>
+      </label>
+
+      <label class="cr-field" for="careerPhone">
+        <span>Téléphone</span>
+        <input id="careerPhone" name="phone" type="tel" autocomplete="tel" placeholder="+212 6 12 34 56 78" />
+        <em id="careerPhone-error" data-application-error-for="phone"></em>
+      </label>
+
+      <label class="cr-field" for="careerCity">
+        <span>Ville</span>
+        <input id="careerCity" name="city" type="text" autocomplete="address-level2" placeholder="Casablanca" />
+        <em id="careerCity-error" data-application-error-for="city"></em>
+      </label>
+
+      <label class="cr-field" for="careerDomain">
+        <span>Métier ou domaine recherché *</span>
+        <select id="careerDomain" name="domain" required data-application-domain>
+          <option value="">Sélectionner</option>
+          {spontaneousApplication.departments.map((department) => <option value={department}>{department}</option>)}
+        </select>
+        <em id="careerDomain-error" data-application-error-for="domain"></em>
+      </label>
+
+      <label class="cr-field" for="careerExperience">
+        <span>Niveau d’expérience</span>
+        <select id="careerExperience" name="experienceLevel">
+          <option value="">Sélectionner</option>
+          {spontaneousApplication.experienceLevels.map((level) => <option value={level}>{level}</option>)}
+        </select>
+        <em id="careerExperience-error" data-application-error-for="experienceLevel"></em>
+      </label>
+
+      <label class="cr-field" for="careerLinkedin">
+        <span>URL LinkedIn</span>
+        <input id="careerLinkedin" name="linkedinUrl" type="url" inputmode="url" placeholder="https://linkedin.com/in/..." />
+        <em id="careerLinkedin-error" data-application-error-for="linkedinUrl"></em>
+      </label>
+
+      <label class="cr-field" for="careerPortfolio">
+        <span>URL portfolio</span>
+        <input id="careerPortfolio" name="portfolioUrl" type="url" inputmode="url" placeholder="https://..." />
+        <em id="careerPortfolio-error" data-application-error-for="portfolioUrl"></em>
+      </label>
+
+      <label class="cr-field cr-field--wide" for="careerMessage">
+        <span>Message ou lettre de motivation</span>
+        <textarea id="careerMessage" name="message" rows="4" placeholder="Parlez-nous de votre parcours, de vos envies et de ce que vous aimez créer."></textarea>
+        <em id="careerMessage-error" data-application-error-for="message"></em>
+      </label>
+    </div>
+
+    <label class="cr-upload" for="careerCv">
+      <span>
+        <strong data-cv-label>Ajouter votre CV *</strong>
+        <small>PDF, DOC ou DOCX - max 10 Mo</small>
+      </span>
+      <input id="careerCv" name="cv" type="file" accept=".pdf,.doc,.docx" required data-cv-input />
+      <em id="careerCv-error" data-application-error-for="cv"></em>
+    </label>
+
+    <label class="cr-consent" for="careerConsent">
+      <input id="careerConsent" name="consent" type="checkbox" required />
+      <span>
+        J’accepte que mes informations soient utilisées pour étudier ma candidature, conformément à la
+        <a href={spontaneousApplication.privacyHref}>{spontaneousApplication.privacyLabel}</a>. *
+      </span>
+      <em id="careerConsent-error" data-application-error-for="consent"></em>
+    </label>
+
+    <button class="cr-submit" type="submit" data-application-submit>
+      <span data-application-submit-label>{spontaneousApplication.submitLabel}</span>
+      <span aria-hidden="true">→</span>
+    </button>
+  </form>
+</dialog>
