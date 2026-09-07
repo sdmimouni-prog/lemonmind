@@ -1,0 +1,516 @@
+---
+import ExpertiseIcon from './expertises/ExpertiseIcon.astro';
+import { agencyMenuItems, contact, megaApproachChecks, megaExpertiseItems, navItems } from '../data/homepage';
+
+interface Props {
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const { ctaLabel = 'Réservez un appel', ctaHref = contact.bookingHref } = Astro.props;
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const isActiveLink = (href: string) => {
+  if (href.includes('#')) {
+    return false;
+  }
+
+  const hrefPath = href.split('#')[0] || '/';
+  const normalizedHref = hrefPath.replace(/\/$/, '') || '/';
+
+  if (normalizedHref === '/nos-expertises' && currentPath.startsWith('/expertises')) {
+    return true;
+  }
+
+  return normalizedHref === currentPath;
+};
+
+const isExpertisesLink = (item: { href: string; menu?: string }) =>
+  item.menu === 'expertises' || item.href.replace(/\/$/, '') === '/nos-expertises';
+const isAgencyLink = (item: { menu?: string }) => item.menu === 'agency';
+const isAgencyActive = currentPath === '/agence' || currentPath.startsWith('/agence/');
+---
+<header class="site-header" aria-label="Navigation principale" data-mega-root>
+  <button
+    class="mega-menu-overlay"
+    type="button"
+    aria-label="Fermer le menu"
+    tabindex="-1"
+    data-mega-overlay
+    hidden
+  ></button>
+
+  <div class="site-header__inner">
+    <a class="brand-link" href="/" aria-label="Lemon Mind Digital">
+      <img src="/assets/lemon-mind-logo.png" alt="Lemon Mind Digital" width="560" height="320" />
+    </a>
+
+    <nav class="primary-nav" aria-label="Sections de la page">
+      {navItems.map((item) => (
+        isAgencyLink(item) ? (
+          <div class="nav-dropdown" data-agency-dropdown>
+            <button
+              class="primary-nav__link nav-submenu-trigger agency-menu-trigger"
+              type="button"
+              aria-current={isAgencyActive ? 'page' : undefined}
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="site-agency-menu"
+              data-agency-trigger
+            >
+              {item.label}
+            </button>
+            <div
+              class="agency-menu-panel"
+              id="site-agency-menu"
+              role="menu"
+              aria-label="Menu L’agence"
+              aria-hidden="true"
+              data-agency-panel
+              hidden
+            >
+              {agencyMenuItems.map((agencyItem, index) => (
+                <a
+                  class={`agency-menu-link${isActiveLink(agencyItem.href) ? ' is-current' : ''}`}
+                  href={agencyItem.href}
+                  role="menuitem"
+                  aria-current={isActiveLink(agencyItem.href) ? 'page' : undefined}
+                  data-agency-link
+                  style={`--agency-link-index: ${index};`}
+                >
+                  <span>{agencyItem.label}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : isExpertisesLink(item) ? (
+          <button
+            class="primary-nav__link mega-menu-trigger"
+            type="button"
+            aria-current={isActiveLink(item.href) ? 'page' : undefined}
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="site-mega-expertises"
+            data-mega-trigger
+          >
+            {item.label}
+          </button>
+        ) : (
+          <a class="primary-nav__link" href={item.href} aria-current={isActiveLink(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        )
+      ))}
+    </nav>
+
+    <div class="header-actions">
+      <span class="language-switch" aria-label="Langue actuelle: français">FR</span>
+      <a class="lm-button lm-button--yellow header-cta" href={ctaHref}>
+        {ctaLabel}
+        <span aria-hidden="true">↗</span>
+      </a>
+      <details class="mobile-menu" data-mobile-menu>
+        <summary aria-label="Ouvrir le menu de navigation">Menu</summary>
+        <nav aria-label="Navigation mobile">
+          {navItems.map((item) => (
+            isAgencyLink(item) ? (
+              <details class="mobile-expertise-accordion mobile-nav-accordion">
+                <summary aria-current={isAgencyActive ? 'page' : undefined}>
+                  <span>{item.label}</span>
+                  <span aria-hidden="true">⌄</span>
+                </summary>
+                <div class="mobile-agency-list">
+                  {agencyMenuItems.map((agencyItem) => (
+                    <a
+                      class={`mobile-submenu-link${isActiveLink(agencyItem.href) ? ' is-current' : ''}`}
+                      href={agencyItem.href}
+                      aria-current={isActiveLink(agencyItem.href) ? 'page' : undefined}
+                    >
+                      <span>{agencyItem.label}</span>
+                      <span aria-hidden="true">→</span>
+                    </a>
+                  ))}
+                </div>
+              </details>
+            ) : isExpertisesLink(item) ? (
+              <details class="mobile-expertise-accordion">
+                <summary aria-current={isActiveLink(item.href) ? 'page' : undefined}>
+                  <span>{item.label}</span>
+                  <span aria-hidden="true">⌄</span>
+                </summary>
+                <div class="mobile-expertise-list">
+                  {megaExpertiseItems.map((expertise) => (
+                    <a class="mobile-expertise-link" href={expertise.href}>
+                      <span class={`mobile-expertise-link__icon mobile-expertise-link__icon--${expertise.tone}`}>
+                        <ExpertiseIcon name={expertise.icon} className="mobile-expertise-link__svg" />
+                      </span>
+                      <span>{expertise.title}</span>
+                      <span aria-hidden="true">→</span>
+                    </a>
+                  ))}
+                </div>
+              </details>
+            ) : (
+              <a href={item.href} aria-current={isActiveLink(item.href) ? 'page' : undefined}>{item.label}</a>
+            )
+          ))}
+          <span>FR</span>
+          <a href={ctaHref}>{ctaLabel}</a>
+        </nav>
+      </details>
+    </div>
+  </div>
+
+  <div
+    class="mega-menu-panel"
+    id="site-mega-expertises"
+    role="region"
+    aria-label="Nos expertises"
+    aria-hidden="true"
+    data-mega-panel
+    hidden
+  >
+    <div class="mega-menu__main">
+      <div class="mega-menu__intro">
+        <div>
+          <p class="mega-menu__eyebrow">Nos expertises</p>
+          <h2>Des expertises complémentaires<br />pour faire grandir votre marque.</h2>
+        </div>
+        <p>
+          Stratégie, création, contenu, amplification.<br />
+          Nous activons les bons leviers pour transformer<br />
+          vos objectifs en résultats concrets.
+        </p>
+      </div>
+
+      <div class="mega-menu__cards">
+        {megaExpertiseItems.map((expertise, index) => (
+          <a
+            class={`mega-card mega-card--${expertise.tone}`}
+            href={expertise.href}
+            aria-label={`En savoir plus sur ${expertise.title}`}
+            data-mega-link
+            style={`--mega-card-index: ${index};`}
+          >
+            <span class="mega-card__media">
+              <img src={expertise.image} alt={expertise.alt} width="320" height="190" loading="lazy" decoding="async" />
+            </span>
+            <span class={`mega-card__icon mega-card__icon--${expertise.tone}`}>
+              <ExpertiseIcon name={expertise.icon} className="mega-card__svg" />
+            </span>
+            <span class="mega-card__body">
+              <span class="mega-card__title">{expertise.title}</span>
+              <span class="mega-card__link">En savoir plus <span aria-hidden="true">→</span></span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <aside class="mega-menu__side" aria-label="Approche globale Lemon Mind">
+      <p class="mega-menu__handwritten">Ideas<br />Content<br />Growth</p>
+      <div class="mega-menu__side-copy">
+        <p class="mega-menu__side-eyebrow">Une approche globale</p>
+        <h2>De l’idée<br />à la performance.</h2>
+        <ul>
+          {megaApproachChecks.map((item, index) => (
+            <li style={`--mega-check-index: ${index};`}>
+              <span aria-hidden="true">
+                <ExpertiseIcon name="check" className="mega-menu__check-svg" />
+              </span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <a class="mega-menu__cta" href="/contact?projet=accompagnement-global" data-mega-link>
+        <span aria-hidden="true">↗</span>
+        <span>
+          Un projet en tête ?
+          <strong>Parlons-en →</strong>
+        </span>
+      </a>
+    </aside>
+  </div>
+</header>
+
+<script is:inline>
+  (() => {
+    const root = document.querySelector('[data-mega-root]');
+
+    if (!root) {
+      return;
+    }
+
+    const trigger = root.querySelector('[data-mega-trigger]');
+    const panel = root.querySelector('[data-mega-panel]');
+    const overlay = root.querySelector('[data-mega-overlay]');
+    const agencyDropdown = root.querySelector('[data-agency-dropdown]');
+    const agencyTrigger = root.querySelector('[data-agency-trigger]');
+    const agencyPanel = root.querySelector('[data-agency-panel]');
+    const mobileMenu = root.querySelector('[data-mobile-menu]');
+    const desktopQuery = window.matchMedia('(min-width: 1024px)');
+    let closeTimer = 0;
+    let hideTimer = 0;
+    let clickPinned = false;
+    let agencyCloseTimer = 0;
+    let agencyHideTimer = 0;
+    let agencyPinned = false;
+
+    if (!trigger || !panel || !overlay || !agencyDropdown || !agencyTrigger || !agencyPanel) {
+      return;
+    }
+
+    const clearTimers = () => {
+      window.clearTimeout(closeTimer);
+      window.clearTimeout(hideTimer);
+    };
+
+    const clearAgencyTimers = () => {
+      window.clearTimeout(agencyCloseTimer);
+      window.clearTimeout(agencyHideTimer);
+    };
+
+    const hasIntent = () => {
+      const activeElement = document.activeElement;
+      return (
+        trigger.matches(':hover') ||
+        panel.matches(':hover') ||
+        activeElement === trigger ||
+        panel.contains(activeElement)
+      );
+    };
+
+    const hasAgencyIntent = () => {
+      const activeElement = document.activeElement;
+      return (
+        agencyTrigger.matches(':hover') ||
+        agencyPanel.matches(':hover') ||
+        activeElement === agencyTrigger ||
+        agencyPanel.contains(activeElement)
+      );
+    };
+
+    const openMenu = () => {
+      if (!desktopQuery.matches) {
+        return;
+      }
+
+      clearTimers();
+      closeAgency({ immediate: true });
+      panel.hidden = false;
+      overlay.hidden = false;
+      panel.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+      root.classList.add('is-mega-ready');
+
+      window.requestAnimationFrame(() => {
+        root.classList.add('is-mega-open');
+      });
+    };
+
+    const closeMenu = ({ restoreFocus = false, immediate = false } = {}) => {
+      clearTimers();
+      clickPinned = false;
+      root.classList.remove('is-mega-open');
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.setAttribute('aria-hidden', 'true');
+
+      const hide = () => {
+        if (root.classList.contains('is-mega-open')) {
+          return;
+        }
+
+        panel.hidden = true;
+        overlay.hidden = true;
+        root.classList.remove('is-mega-ready');
+      };
+
+      if (immediate) {
+        hide();
+      } else {
+        hideTimer = window.setTimeout(hide, 260);
+      }
+
+      if (restoreFocus) {
+        trigger.focus({ preventScroll: true });
+      }
+    };
+
+    const openAgency = () => {
+      if (!desktopQuery.matches) {
+        return;
+      }
+
+      closeMenu({ immediate: true });
+      clearAgencyTimers();
+      agencyPanel.hidden = false;
+      agencyPanel.setAttribute('aria-hidden', 'false');
+      agencyTrigger.setAttribute('aria-expanded', 'true');
+      root.classList.add('is-agency-ready');
+
+      window.requestAnimationFrame(() => {
+        root.classList.add('is-agency-open');
+        agencyDropdown.classList.add('is-open');
+      });
+    };
+
+    const closeAgency = ({ restoreFocus = false, immediate = false } = {}) => {
+      clearAgencyTimers();
+      agencyPinned = false;
+      root.classList.remove('is-agency-open');
+      agencyDropdown.classList.remove('is-open');
+      agencyTrigger.setAttribute('aria-expanded', 'false');
+      agencyPanel.setAttribute('aria-hidden', 'true');
+
+      const hide = () => {
+        if (root.classList.contains('is-agency-open')) {
+          return;
+        }
+
+        agencyPanel.hidden = true;
+        root.classList.remove('is-agency-ready');
+      };
+
+      if (immediate) {
+        hide();
+      } else {
+        agencyHideTimer = window.setTimeout(hide, 220);
+      }
+
+      if (restoreFocus) {
+        agencyTrigger.focus({ preventScroll: true });
+      }
+    };
+
+    const scheduleClose = () => {
+      if (clickPinned) {
+        return;
+      }
+
+      window.clearTimeout(closeTimer);
+      closeTimer = window.setTimeout(() => {
+        if (!hasIntent()) {
+          closeMenu();
+        }
+      }, 150);
+    };
+
+    const scheduleAgencyClose = () => {
+      if (agencyPinned) {
+        return;
+      }
+
+      window.clearTimeout(agencyCloseTimer);
+      agencyCloseTimer = window.setTimeout(() => {
+        if (!hasAgencyIntent()) {
+          closeAgency();
+        }
+      }, 150);
+    };
+
+    agencyTrigger.addEventListener('pointerenter', openAgency);
+    agencyTrigger.addEventListener('pointerleave', scheduleAgencyClose);
+    agencyTrigger.addEventListener('focus', openAgency);
+    agencyTrigger.addEventListener('blur', scheduleAgencyClose);
+    agencyTrigger.addEventListener('click', () => {
+      if (agencyPinned) {
+        closeAgency();
+      } else {
+        agencyPinned = true;
+        openAgency();
+      }
+    });
+
+    agencyPanel.addEventListener('pointerenter', () => {
+      window.clearTimeout(agencyCloseTimer);
+    });
+    agencyPanel.addEventListener('pointerleave', scheduleAgencyClose);
+    agencyPanel.addEventListener('focusin', () => {
+      window.clearTimeout(agencyCloseTimer);
+    });
+    agencyPanel.addEventListener('focusout', () => {
+      window.setTimeout(() => {
+        if (!hasAgencyIntent()) {
+          closeAgency();
+        }
+      }, 0);
+    });
+
+    trigger.addEventListener('pointerenter', openMenu);
+    trigger.addEventListener('pointerleave', scheduleClose);
+    trigger.addEventListener('focus', openMenu);
+    trigger.addEventListener('blur', scheduleClose);
+    trigger.addEventListener('click', () => {
+      if (clickPinned) {
+        closeMenu();
+      } else {
+        clickPinned = true;
+        openMenu();
+      }
+    });
+
+    panel.addEventListener('pointerenter', () => {
+      window.clearTimeout(closeTimer);
+    });
+    panel.addEventListener('pointerleave', scheduleClose);
+    panel.addEventListener('focusin', () => {
+      window.clearTimeout(closeTimer);
+    });
+    panel.addEventListener('focusout', () => {
+      window.setTimeout(() => {
+        if (!hasIntent()) {
+          closeMenu();
+        }
+      }, 0);
+    });
+
+    overlay.addEventListener('click', () => {
+      closeMenu();
+      closeAgency();
+    });
+
+    root.querySelectorAll('[data-mega-link]').forEach((link) => {
+      link.addEventListener('click', () => closeMenu({ immediate: true }));
+    });
+
+    root.querySelectorAll('[data-agency-link]').forEach((link) => {
+      link.addEventListener('click', () => closeAgency({ immediate: true }));
+    });
+
+    root.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && (!panel.hidden || !agencyPanel.hidden)) {
+        event.preventDefault();
+        if (!panel.hidden) {
+          closeMenu({ restoreFocus: true });
+        }
+        if (!agencyPanel.hidden) {
+          closeAgency({ restoreFocus: true });
+        }
+      }
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+      if ((!panel.hidden || !agencyPanel.hidden) && !root.contains(event.target)) {
+        closeMenu();
+        closeAgency();
+      }
+    });
+
+    desktopQuery.addEventListener('change', () => {
+      if (!desktopQuery.matches) {
+        closeMenu({ immediate: true });
+        closeAgency({ immediate: true });
+      }
+    });
+
+    mobileMenu?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        if (!desktopQuery.matches) {
+          mobileMenu.open = false;
+        }
+      });
+    });
+  })();
+</script>

@@ -1,0 +1,62 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { strategyCaseStudies } from '../../data/strategyConsulting';
+---
+<section class="sc-cases sc-section-light" aria-labelledby="sc-cases-title" data-sc-scene>
+  <div class="lm-shell">
+    <div class="sc-section-heading sc-section-heading--split sc-cases__heading">
+      <div>
+        <p class="lm-eyebrow" data-sc-line>{strategyCaseStudies.eyebrow}</p>
+        <h2 id="sc-cases-title" data-sc-title>{strategyCaseStudies.title}</h2>
+      </div>
+      <div data-sc-reveal>
+        <p>{strategyCaseStudies.text}</p>
+        <a class="sc-text-link" href={strategyCaseStudies.href}>
+          {strategyCaseStudies.cta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sc-cases__grid">
+      <div class="sc-case-cards">
+        {strategyCaseStudies.projects.map((project, index) => (
+          <article class="sc-case-card" style={`--sc-order: ${index};`} data-sc-card data-sc-reveal>
+            <a href={project.href}>
+              <figure>
+                <img
+                  src={project.image}
+                  alt={project.alt}
+                  width="1024"
+                  height="640"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+              <span class="sc-case-card__body">
+                <span>{project.sector}</span>
+                <h3>{project.title}</h3>
+                <span class="sc-case-card__tags">
+                  {project.tags.map((tag) => <small>{tag}</small>)}
+                </span>
+              </span>
+              <b aria-hidden="true">→</b>
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <aside class="sc-lessons" data-sc-reveal>
+        <p>{strategyCaseStudies.lessonsEyebrow}</p>
+        <ul>
+          {strategyCaseStudies.lessons.map((lesson, index) => (
+            <li style={`--sc-order: ${index};`}>
+              <span aria-hidden="true"><ExpertiseIcon name="check" className="sc-icon" /></span>
+              {lesson}
+            </li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>

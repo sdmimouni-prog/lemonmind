@@ -1,0 +1,33 @@
+---
+import { ugcFormats, ugcRealisationHref } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-formats ugc-section-light" aria-labelledby="ugc-formats-title" data-ugc-scene>
+  <div class="lm-shell">
+    <div class="ugc-section-head ugc-section-head--inline">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--red" data-ugc-reveal>{ugcFormats.eyebrow}</p>
+        <h2 id="ugc-formats-title" data-ugc-reveal>{ugcFormats.title}</h2>
+      </div>
+      <a class="ugc-text-link" href={ugcRealisationHref} data-ugc-reveal>
+        {ugcFormats.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="ugc-format-grid" aria-label="Formats UGC">
+      {ugcFormats.cards.map((card, index) => (
+        <article class="ugc-format-card" style={`--ugc-order: ${index};`} data-ugc-reveal data-ugc-hover-card>
+          <figure>
+            <img src={card.image} alt={card.alt} width="620" height="380" sizes="(max-width: 768px) 78vw, 31vw" loading="lazy" decoding="async" />
+          </figure>
+          <div>
+            <h3>{card.title}</h3>
+            <ul aria-label={`Formats ${card.title}`}>
+              {card.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+            <span class="ugc-arrow" aria-hidden="true">→</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

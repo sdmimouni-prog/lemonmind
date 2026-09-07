@@ -1,0 +1,53 @@
+---
+import { agencyLinks, agencyTeamPreview } from '../../data/agency';
+---
+<section class="ag-team ag-section-light" id="equipe" aria-labelledby="agency-team-title" data-ag-scene>
+  <div class="lm-shell ag-team__grid">
+    <div class="ag-team__copy">
+      <p class="lm-eyebrow" data-ag-line>{agencyTeamPreview.eyebrow}</p>
+      <h2 id="agency-team-title" data-ag-title>{agencyTeamPreview.title}</h2>
+      <p data-ag-reveal>{agencyTeamPreview.text}</p>
+      <a class="lm-button lm-button--dark ag-team__cta" href={agencyLinks.team} data-ag-reveal>
+        {agencyTeamPreview.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="ag-team__profiles" aria-label="Aperçu de l’équipe Lemon Mind">
+      {agencyTeamPreview.profiles.map((profile, index) => (
+        <article class:list={['ag-profile', !profile.documented && 'ag-profile--placeholder']} style={`--ag-order: ${index};`} data-ag-reveal data-ag-depth>
+          {profile.documented ? (
+            <figure>
+              <img
+                src={profile.image}
+                alt={profile.alt}
+                width="360"
+                height="450"
+                sizes="(max-width: 768px) 42vw, 160px"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+          ) : (
+            <div class="ag-profile__empty" aria-label={`Profil ${profile.keyword} à documenter`}>
+              <span>{profile.keyword?.slice(0, 1)}</span>
+            </div>
+          )}
+          <div class="ag-profile__body">
+            {profile.documented ? (
+              <>
+                <h3>{profile.name}</h3>
+                <p>{profile.role}</p>
+              </>
+            ) : (
+              <>
+                <h3>Profil à documenter</h3>
+                <p>Portrait, nom et fonction à fournir.</p>
+              </>
+            )}
+            <strong>{profile.keyword}</strong>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

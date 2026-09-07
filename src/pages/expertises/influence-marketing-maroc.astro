@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import InfluenceHero from '../../components/influence/InfluenceHero.astro';
+import InfluenceVision from '../../components/influence/InfluenceVision.astro';
+import InfluenceProcess from '../../components/influence/InfluenceProcess.astro';
+import CreatorCasting from '../../components/influence/CreatorCasting.astro';
+import CreatorProduction from '../../components/influence/CreatorProduction.astro';
+import CampaignFormats from '../../components/influence/CampaignFormats.astro';
+import AmplificationReporting from '../../components/influence/AmplificationReporting.astro';
+import InfluenceProjects from '../../components/influence/InfluenceProjects.astro';
+import InfluenceFaq from '../../components/influence/InfluenceFaq.astro';
+import InfluenceFinalCta from '../../components/influence/InfluenceFinalCta.astro';
+import InfluenceInteractions from '../../components/influence/InfluenceInteractions.astro';
+import { influenceFaq, influenceMarketingMeta } from '../../data/influenceMarketing';
+import '../../styles/influence-marketing.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(influenceMarketingMeta.canonical, siteUrl).toString();
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      '@id': `${pageUrl}#service`,
+      name: 'Marketing d’influence et production UGC',
+      serviceType: 'Marketing d’influence et production UGC',
+      provider: {
+        '@type': 'Organization',
+        name: 'Lemon Mind',
+        url: siteUrl,
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+      url: pageUrl,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Nos expertises',
+          item: new URL('/nos-expertises', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Influence marketing',
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${pageUrl}#faq`,
+      mainEntity: influenceFaq.questions.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+<BaseLayout
+  title={influenceMarketingMeta.title}
+  description={influenceMarketingMeta.description}
+  canonical={influenceMarketingMeta.canonical}
+  ogImage={influenceMarketingMeta.ogImage}
+  schema={schema}
+  bodyClass="influence-marketing-page"
+>
+  <Header />
+  <main>
+    <InfluenceHero />
+    <InfluenceVision />
+    <InfluenceProcess />
+    <CreatorCasting />
+    <CreatorProduction />
+    <CampaignFormats />
+    <AmplificationReporting />
+    <InfluenceProjects />
+    <InfluenceFaq />
+    <InfluenceFinalCta />
+  </main>
+  <InfluenceInteractions />
+  <Footer />
+</BaseLayout>

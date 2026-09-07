@@ -1,0 +1,30 @@
+---
+import { integratedApproach } from '../../data/expertises';
+import ExpertiseIcon from './ExpertiseIcon.astro';
+---
+<section class="xp-approach" id="approche" aria-labelledby="approach-title" data-xp-reveal>
+  <div class="lm-shell xp-approach__grid">
+    <div class="xp-approach__copy">
+      <p class="lm-eyebrow lm-eyebrow--red">{integratedApproach.eyebrow}</p>
+      <h2 id="approach-title">
+        {integratedApproach.titleLines.map((line, index) => (
+          <span class:list={[index === 2 && 'xp-text-muted']}>{line}</span>
+        ))}
+      </h2>
+    </div>
+    <div class="xp-approach__text">
+      {integratedApproach.text.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+    <div class="xp-approach__cards">
+      {integratedApproach.cards.map((card, index) => (
+        <article class={`xp-purpose-card xp-purpose-card--${card.tone}`} style={`--xp-order: ${index};`}>
+          <ExpertiseIcon name={card.icon} />
+          <h3>{card.title}</h3>
+          <p>{card.text}</p>
+          <a href="#contact" aria-label={`Parler de ${card.title}`}>→</a>
+        </article>
+      ))}
+    </div>
+    <p class="xp-hand xp-hand--approach">Plus<br />qu’une agence.<br />Un accélérateur<br />de marques.</p>
+  </div>
+</section>

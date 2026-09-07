@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import CreatorCasting from '../../components/ugc/CreatorCasting.astro';
+import UgcActivation from '../../components/ugc/UgcActivation.astro';
+import UgcBenefits from '../../components/ugc/UgcBenefits.astro';
+import UgcExplanation from '../../components/ugc/UgcExplanation.astro';
+import UgcFaq from '../../components/ugc/UgcFaq.astro';
+import UgcFinalCta from '../../components/ugc/UgcFinalCta.astro';
+import UgcFormats from '../../components/ugc/UgcFormats.astro';
+import UgcHero from '../../components/ugc/UgcHero.astro';
+import UgcInteractions from '../../components/ugc/UgcInteractions.astro';
+import UgcProcess from '../../components/ugc/UgcProcess.astro';
+import UgcProjects from '../../components/ugc/UgcProjects.astro';
+import { contact } from '../../data/homepage';
+import { ugcContactHref, ugcFaq, ugcMeta, ugcRelatedLinks } from '../../data/ugcCreatorContent';
+import '../../styles/ugc-creator-content.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(ugcMeta.canonical, siteUrl).toString();
+const organizationId = `${siteUrl}#organization`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: 'Lemon Mind',
+      url: siteUrl,
+      telephone: contact.phone,
+      email: contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Casablanca',
+        addressCountry: 'MA',
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+    },
+    {
+      '@type': 'Service',
+      '@id': `${pageUrl}#service`,
+      name: 'Agence UGC au Maroc',
+      serviceType: 'Production UGC et Creator Content',
+      provider: {
+        '@id': organizationId,
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+      url: pageUrl,
+      relatedLink: ugcRelatedLinks.map((link) => new URL(link.href, siteUrl).toString()),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Nos expertises',
+          item: new URL('/nos-expertises', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'UGC & Creator Content',
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${pageUrl}#faq`,
+      mainEntity: ugcFaq.questions.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+<BaseLayout
+  title={ugcMeta.title}
+  description={ugcMeta.description}
+  canonical={ugcMeta.canonical}
+  ogImage={ugcMeta.ogImage}
+  schema={schema}
+  bodyClass="ugc-page"
+>
+  <Header ctaLabel="Parler de votre projet" ctaHref={ugcContactHref} />
+  <main>
+    <UgcHero />
+    <UgcExplanation />
+    <UgcBenefits />
+    <UgcProcess />
+    <CreatorCasting />
+    <UgcFormats />
+    <UgcActivation />
+    <UgcProjects />
+    <UgcFaq />
+    <UgcFinalCta />
+  </main>
+  <UgcInteractions />
+  <Footer />
+</BaseLayout>

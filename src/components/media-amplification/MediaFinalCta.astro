@@ -1,0 +1,29 @@
+---
+import { mediaFinalCta, mediaRelatedLinks } from '../../data/mediaAmplification';
+---
+<section class="sm-final-cta ma-final-cta" aria-labelledby="ma-final-title" data-sm-scene>
+  <div class="lm-shell sm-final-cta__grid ma-final-cta__grid">
+    <div>
+      <p class="lm-eyebrow" data-sm-reveal>{mediaFinalCta.eyebrow}</p>
+      <h2 id="ma-final-title" data-sm-reveal>{mediaFinalCta.title}</h2>
+      <p class="ma-final-cta__subtitle" data-sm-reveal>{mediaFinalCta.subtitle}</p>
+    </div>
+    <div class="sm-final-cta__content ma-final-cta__content">
+      <p data-sm-reveal>{mediaFinalCta.text}</p>
+      <div class="sm-actions" data-sm-reveal>
+        <a class="lm-button sm-button--dark-fill" href={mediaFinalCta.primaryHref}>
+          {mediaFinalCta.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button sm-button--light-outline" href={mediaFinalCta.secondaryHref}>
+          {mediaFinalCta.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <nav class="ma-related-links" aria-label="Pages Lemon Mind liées" data-sm-reveal>
+        {mediaRelatedLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+    </div>
+    <p class="sm-hand sm-hand--final ma-hand--final" data-sm-reveal>{mediaFinalCta.annotation}</p>
+  </div>
+</section>

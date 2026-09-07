@@ -1,0 +1,188 @@
+---
+interface Props {
+  name: string;
+  className?: string;
+}
+
+const { name, className = 'xp-icon' } = Astro.props;
+
+const icons: Record<string, string> = {
+  people: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M22 30c-7 0-12 5-12 11v6h24v-6c0-6-5-11-12-11Z" />
+      <path d="M22 24a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" />
+      <path d="M42 31c6 1 10 5 10 11v5H40" />
+      <path d="M40 24a7 7 0 1 0-3-13" />
+    </svg>
+  `,
+  heart: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M32 53S12 41 12 25c0-8 5-13 12-13 4 0 7 2 8 5 2-3 5-5 9-5 7 0 12 5 12 13 0 16-21 28-21 28Z" />
+    </svg>
+  `,
+  bars: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M14 48V34h8v14h-8Z" />
+      <path d="M28 48V24h8v24h-8Z" />
+      <path d="M42 48V14h8v34h-8Z" />
+    </svg>
+  `,
+  creator: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M32 35c-8 0-15 5-15 13v4h30v-4c0-8-7-13-15-13Z" />
+      <path d="M32 29a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" />
+      <path d="M49 12v10" />
+      <path d="M44 17h10" />
+    </svg>
+  `,
+  bulb: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M22 31c0-8 4-15 10-15s10 7 10 15c0 5-3 8-5 11H27c-2-3-5-6-5-11Z" />
+      <path d="M27 49h10" />
+      <path d="M29 55h6" />
+      <path d="M32 7v5" />
+      <path d="m16 14 4 4" />
+      <path d="m48 14-4 4" />
+    </svg>
+  `,
+  'chart-box': `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <rect x="10" y="12" width="44" height="40" rx="8" />
+      <path d="M20 42 30 32l7 6 9-14" />
+      <path d="M43 24h5v5" />
+    </svg>
+  `,
+  image: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <rect x="10" y="14" width="44" height="36" rx="6" />
+      <path d="m16 44 11-12 8 8 6-7 7 11" />
+      <path d="M42 25h.1" />
+    </svg>
+  `,
+  video: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <rect x="10" y="18" width="34" height="28" rx="5" />
+      <path d="m44 29 10-6v18l-10-6V29Z" />
+      <path d="m24 27 10 5-10 5V27Z" />
+    </svg>
+  `,
+  clapper: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M12 24h40v28H12V24Z" />
+      <path d="M12 24 19 11h40l-7 13" />
+      <path d="m24 11-7 13" />
+      <path d="m37 11-7 13" />
+      <path d="m50 11-7 13" />
+    </svg>
+  `,
+  camera: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M18 22h8l4-6h8l4 6h4a8 8 0 0 1 8 8v14a8 8 0 0 1-8 8H18a8 8 0 0 1-8-8V30a8 8 0 0 1 8-8Z" />
+      <path d="M32 43a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" />
+    </svg>
+  `,
+  motion: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M15 48 31 16l18 32" />
+      <path d="M22 35h20" />
+      <path d="M13 18c6 0 6 8 12 8s6-8 12-8 6 8 14 8" />
+    </svg>
+  `,
+  calendar: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <rect x="12" y="16" width="40" height="36" rx="6" />
+      <path d="M20 10v10" />
+      <path d="M44 10v10" />
+      <path d="M12 27h40" />
+      <path d="M23 37h6" />
+      <path d="M36 37h6" />
+    </svg>
+  `,
+  doc: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M18 10h22l8 8v36H18V10Z" />
+      <path d="M40 10v10h8" />
+      <path d="M25 32h16" />
+      <path d="M25 42h16" />
+    </svg>
+  `,
+  megaphone: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M14 35h10l24 10V17L24 27H14v8Z" />
+      <path d="m24 35 4 14h8" />
+      <path d="M52 26h6" />
+      <path d="m50 17 5-4" />
+    </svg>
+  `,
+  stack: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="m32 10 23 12-23 12L9 22l23-12Z" />
+      <path d="m14 34 18 10 18-10" />
+      <path d="m14 44 18 10 18-10" />
+    </svg>
+  `,
+  target: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M32 54a22 22 0 1 0 0-44 22 22 0 0 0 0 44Z" />
+      <path d="M32 44a12 12 0 1 0 0-24 12 12 0 0 0 0 24Z" />
+      <path d="m32 32 18-18" />
+      <path d="M45 14h7v7" />
+    </svg>
+  `,
+  search: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M29 45a16 16 0 1 0 0-32 16 16 0 0 0 0 32Z" />
+      <path d="m41 41 12 12" />
+    </svg>
+  `,
+  paperplane: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M53 12 10 31l18 6 6 17 19-42Z" />
+      <path d="m28 37 11-12" />
+    </svg>
+  `,
+  phone: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M21 12 15 18c-2 2-3 6-1 10 6 12 16 22 28 28 4 2 8 1 10-1l6-6-11-10-6 5c-6-3-14-11-17-17l5-6-8-9Z" />
+    </svg>
+  `,
+  mail: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <rect x="10" y="16" width="44" height="32" rx="6" />
+      <path d="m14 21 18 14 18-14" />
+    </svg>
+  `,
+  pin: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M32 56S16 41 16 27a16 16 0 1 1 32 0c0 14-16 29-16 29Z" />
+      <path d="M32 32a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" />
+    </svg>
+  `,
+  clock: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M32 54a22 22 0 1 0 0-44 22 22 0 0 0 0 44Z" />
+      <path d="M32 22v12l9 5" />
+    </svg>
+  `,
+  upload: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M14 44v5a5 5 0 0 0 5 5h26a5 5 0 0 0 5-5v-5" />
+      <path d="M32 40V10" />
+      <path d="m21 22 11-12 11 12" />
+    </svg>
+  `,
+  lock: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <rect x="14" y="28" width="36" height="26" rx="6" />
+      <path d="M22 28v-7a10 10 0 0 1 20 0v7" />
+      <path d="M32 39v6" />
+    </svg>
+  `,
+  check: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M52 18 27 45 14 33" />
+    </svg>
+  `,
+};
+---
+<span class={className} aria-hidden="true" set:html={icons[name] ?? icons.target} />

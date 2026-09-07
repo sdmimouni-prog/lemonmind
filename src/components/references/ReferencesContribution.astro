@@ -1,0 +1,34 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { contributionCards, contributionIntro } from '../../data/references';
+---
+<section class="rf-contribution rf-section-light" aria-labelledby="references-contribution-title" data-rf-scene>
+  <div class="lm-shell">
+    <div class="rf-section-head rf-section-head--split">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--red" data-rf-reveal>{contributionIntro.eyebrow}</p>
+        <h2 id="references-contribution-title" data-rf-title>{contributionIntro.title}</h2>
+      </div>
+      <p data-rf-reveal style="--rf-order: 1;">{contributionIntro.text}</p>
+    </div>
+
+    <div class="rf-contribution-grid">
+      {contributionCards.map((card, index) => (
+        <a
+          class={`rf-contribution-card rf-contribution-card--${card.tone}`}
+          href={card.href}
+          data-rf-reveal
+          data-rf-hover
+          style={`--rf-order: ${index};`}
+        >
+          <span class="rf-icon">
+            <ExpertiseIcon name={card.icon} className="rf-icon__svg" />
+          </span>
+          <h3>{card.title}</h3>
+          <p>{card.text}</p>
+          <span class="rf-card-arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

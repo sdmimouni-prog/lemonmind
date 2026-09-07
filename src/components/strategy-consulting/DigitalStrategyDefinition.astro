@@ -1,0 +1,44 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { strategyDefinition } from '../../data/strategyConsulting';
+---
+<section class="sc-definition sc-section-light" id="notre-approche" aria-labelledby="sc-definition-title" data-sc-scene>
+  <div class="lm-shell sc-definition__grid">
+    <div class="sc-definition__copy">
+      <p class="lm-eyebrow" data-sc-line>{strategyDefinition.eyebrow}</p>
+      <h2 id="sc-definition-title" data-sc-title>{strategyDefinition.title}</h2>
+      <div class="sc-rich-text" data-sc-reveal>
+        {strategyDefinition.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <p class="sc-definition__strong" data-sc-reveal>
+        <ExpertiseIcon name="check" className="sc-icon" />
+        <span>{strategyDefinition.strongLine}</span>
+      </p>
+    </div>
+
+    <figure class="sc-definition__media" data-sc-image>
+      <img
+        src={strategyDefinition.image}
+        alt={strategyDefinition.alt}
+        width="1536"
+        height="1024"
+        sizes="(max-width: 768px) 92vw, 310px"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+
+    <div class="sc-principles">
+      {strategyDefinition.principles.map((principle, index) => (
+        <article class={`sc-principle sc-principle--${principle.tone}`} style={`--sc-order: ${index};`} data-sc-reveal>
+          <span class="sc-principle__number">{principle.number}</span>
+          <span class="sc-principle__icon" aria-hidden="true"><ExpertiseIcon name={principle.icon} className="sc-icon" /></span>
+          <div>
+            <h3>{principle.title}</h3>
+            <p>{principle.text}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

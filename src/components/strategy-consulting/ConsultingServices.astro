@@ -1,0 +1,53 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { consultingServices } from '../../data/strategyConsulting';
+---
+<section class="sc-consulting sc-section-light" aria-labelledby="sc-consulting-title" data-sc-scene>
+  <div class="lm-shell">
+    <div class="sc-section-heading sc-section-heading--split">
+      <div>
+        <p class="lm-eyebrow" data-sc-line>{consultingServices.eyebrow}</p>
+        <h2 id="sc-consulting-title" data-sc-title>{consultingServices.title}</h2>
+      </div>
+      <p data-sc-reveal>{consultingServices.text}</p>
+    </div>
+
+    <div class="sc-mission-list" data-sc-mission-list>
+      {consultingServices.missions.map((mission, index) => (
+        <article class={`sc-mission sc-mission--${mission.tone}`} style={`--sc-order: ${index};`} data-sc-reveal>
+          <div class="sc-mission__summary">
+            <span class="sc-card-icon" aria-hidden="true"><ExpertiseIcon name={mission.icon} className="sc-icon" /></span>
+            <div>
+              <h3>{mission.title}</h3>
+              <p>{mission.text}</p>
+            </div>
+            <button
+              type="button"
+              aria-expanded="false"
+              aria-controls={`sc-mission-panel-${index + 1}`}
+              data-sc-mission-button
+            >
+              <span>Voir les livrables</span>
+              <span aria-hidden="true">+</span>
+            </button>
+          </div>
+          <div
+            class="sc-mission__panel"
+            id={`sc-mission-panel-${index + 1}`}
+            role="region"
+            aria-label={`${mission.detailsTitle} - ${mission.title}`}
+            data-sc-mission-panel
+            data-open="false"
+          >
+            <div>
+              <strong>{mission.detailsTitle}</strong>
+              <ul>
+                {mission.details.map((detail) => <li>{detail}</li>)}
+              </ul>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

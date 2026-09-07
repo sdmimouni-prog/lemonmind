@@ -1,0 +1,72 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const scenes = Array.from(document.querySelectorAll('[data-ag-scene]'));
+
+    scenes.forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.11, rootMargin: '10% 0px 8% 0px' },
+      );
+
+      observer.observe(scene);
+    });
+
+    window.setTimeout(() => {
+      scenes.forEach((scene) => scene.classList.add('is-visible'));
+    }, 1400);
+
+    if (finePointer && !prefersReducedMotion.matches) {
+      document.querySelectorAll('[data-ag-parallax]').forEach((scene) => {
+        scene.addEventListener('pointermove', (event) => {
+          const rect = scene.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          scene.style.setProperty('--ag-mx', x.toFixed(3));
+          scene.style.setProperty('--ag-my', y.toFixed(3));
+        });
+
+        scene.addEventListener('pointerleave', () => {
+          scene.style.setProperty('--ag-mx', '0');
+          scene.style.setProperty('--ag-my', '0');
+        });
+      });
+
+      document.querySelectorAll('[data-ag-depth]').forEach((item) => {
+        item.addEventListener('pointermove', (event) => {
+          const rect = item.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          item.style.setProperty('--ag-tilt-x', `${(y * -3).toFixed(2)}deg`);
+          item.style.setProperty('--ag-tilt-y', `${(x * 4).toFixed(2)}deg`);
+          item.style.setProperty('--ag-depth-x', `${(x * 8).toFixed(2)}px`);
+          item.style.setProperty('--ag-depth-y', `${(y * 7).toFixed(2)}px`);
+        });
+
+        item.addEventListener('pointerleave', () => {
+          item.style.setProperty('--ag-tilt-x', '0deg');
+          item.style.setProperty('--ag-tilt-y', '0deg');
+          item.style.setProperty('--ag-depth-x', '0px');
+          item.style.setProperty('--ag-depth-y', '0px');
+        });
+      });
+    }
+  })();
+</script>

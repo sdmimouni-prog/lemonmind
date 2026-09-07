@@ -1,0 +1,74 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { strategyHero } from '../../data/strategyConsulting';
+---
+<section class="sc-hero" aria-labelledby="sc-hero-title" data-sc-scene data-sc-parallax>
+  <div class="sc-hero__glow sc-hero__glow--yellow" aria-hidden="true"></div>
+  <div class="sc-hero__glow sc-hero__glow--violet" aria-hidden="true"></div>
+
+  <div class="lm-shell sc-hero__grid">
+    <div class="sc-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-sc-line>{strategyHero.eyebrow}</p>
+      <h1 id="sc-hero-title" aria-label={strategyHero.title} data-sc-title>
+        <span>Agence de stratégie digitale</span>
+        <span>et conseil marketing</span>
+        <span><strong>au Maroc</strong></span>
+      </h1>
+      <div class="sc-hero__lead" data-sc-reveal>
+        {strategyHero.lead.map((line) => <span>{line}</span>)}
+      </div>
+      <div class="sc-hero__text" data-sc-reveal>
+        {strategyHero.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <div class="sc-actions" data-sc-reveal>
+        <a class="lm-button lm-button--yellow" href={strategyHero.primaryHref}>
+          {strategyHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href={strategyHero.secondaryHref}>
+          {strategyHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ul class="sc-hero__tags" aria-label="Périmètre de stratégie digitale" data-sc-reveal>
+        {strategyHero.tags.map((tag, index) => <li style={`--sc-order: ${index};`}>{tag}</li>)}
+      </ul>
+    </div>
+
+    <div class="sc-hero__stage" aria-label="Stratégie et conseil digital Lemon Mind" data-sc-stage>
+      <figure class="sc-hero__image" data-sc-layer="image">
+        <img
+          src={strategyHero.mainImage}
+          alt={strategyHero.alt}
+          width="1280"
+          height="720"
+          sizes="(max-width: 768px) 92vw, 700px"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+      <figure class="sc-hero__note-card" data-sc-layer="note">
+        <img
+          src={strategyHero.supportImage}
+          alt="Presentation de donnees et de recommandations strategiques"
+          width="640"
+          height="360"
+          sizes="(max-width: 768px) 48vw, 220px"
+          loading="eager"
+          decoding="async"
+        />
+        <figcaption>{strategyHero.sideNote}</figcaption>
+      </figure>
+      <div class="sc-hero__levers" aria-label="Leviers stratégiques" data-sc-layer="card">
+        {strategyHero.levers.map((lever, index) => (
+          <span class={`sc-lever sc-lever--${lever.tone}`} style={`--sc-order: ${index};`}>
+            <span aria-hidden="true"><ExpertiseIcon name={lever.icon} className="sc-icon" /></span>
+            {lever.label}
+          </span>
+        ))}
+      </div>
+      <p class="sc-hand sc-hand--hero" data-sc-layer="hand">{strategyHero.annotation}</p>
+    </div>
+  </div>
+</section>

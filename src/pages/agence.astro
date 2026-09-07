@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import AgencyDifferentiators from '../components/agency/AgencyDifferentiators.astro';
+import AgencyFinalCta from '../components/agency/AgencyFinalCta.astro';
+import AgencyGroupStrength from '../components/agency/AgencyGroupStrength.astro';
+import AgencyHero from '../components/agency/AgencyHero.astro';
+import AgencyIntegratedModel from '../components/agency/AgencyIntegratedModel.astro';
+import AgencyInteractions from '../components/agency/AgencyInteractions.astro';
+import AgencyPurpose from '../components/agency/AgencyPurpose.astro';
+import AgencyTeamPreview from '../components/agency/AgencyTeamPreview.astro';
+import AgencyTrust from '../components/agency/AgencyTrust.astro';
+import { contact } from '../data/homepage';
+import { agencyLinks, agencyMeta } from '../data/agency';
+import '../styles/agency.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(agencyMeta.canonical, siteUrl).toString();
+const organizationId = `${siteUrl}#organization`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: 'Lemon Mind Digital',
+      url: siteUrl,
+      telephone: contact.phone,
+      email: contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Casablanca',
+        addressCountry: 'MA',
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+    },
+    {
+      '@type': 'AboutPage',
+      '@id': `${pageUrl}#page`,
+      name: agencyMeta.title,
+      description: agencyMeta.description,
+      url: pageUrl,
+      inLanguage: 'fr-MA',
+      isPartOf: {
+        '@id': siteUrl,
+      },
+      about: {
+        '@id': organizationId,
+      },
+      mainEntity: {
+        '@id': organizationId,
+      },
+      relatedLink: Object.values(agencyLinks).map((href) => new URL(href, siteUrl).toString()),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'L’agence',
+          item: pageUrl,
+        },
+      ],
+    },
+  ],
+};
+---
+<BaseLayout
+  title={agencyMeta.title}
+  description={agencyMeta.description}
+  canonical={agencyMeta.canonical}
+  ogImage={agencyMeta.ogImage}
+  schema={schema}
+  bodyClass="agency-page"
+>
+  <Header ctaLabel="Réservez un appel" ctaHref={contact.bookingHref} />
+  <main>
+    <AgencyHero />
+    <AgencyPurpose />
+    <AgencyDifferentiators />
+    <AgencyIntegratedModel />
+    <AgencyGroupStrength />
+    <AgencyTeamPreview />
+    <AgencyTrust />
+    <AgencyFinalCta />
+  </main>
+  <AgencyInteractions />
+  <Footer />
+</BaseLayout>

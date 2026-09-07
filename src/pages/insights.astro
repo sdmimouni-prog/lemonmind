@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { contact } from '../data/homepage';
+
+const title = 'Insights | Lemon Mind Digital';
+const description = 'Insights Lemon Mind Digital, contenus et ressources autour de l’influence, de la production et de la stratégie digitale au Maroc.';
+---
+<BaseLayout title={title} description={description} canonical="/insights" bodyClass="insights-page">
+  <Header ctaLabel="Réservez un appel" ctaHref={contact.bookingHref} />
+  <main class="insights-placeholder" aria-labelledby="insights-title">
+    <div class="lm-shell insights-placeholder__inner">
+      <p class="lm-eyebrow">Insights</p>
+      <h1 id="insights-title">Insights Lemon Mind</h1>
+      <p>Les contenus éditoriaux seront publiés prochainement.</p>
+      <a class="lm-button lm-button--yellow" href="/contact">
+        Parler de votre projet
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .insights-page {
+    background: #050608;
+  }
+
+  .insights-placeholder {
+    min-height: 58vh;
+    padding: 170px 0 90px;
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      radial-gradient(circle at 80% 12%, rgba(253, 199, 0, 0.2), transparent 28%),
+      #050608;
+    background-size: 64px 64px, 64px 64px, auto, auto;
+    color: #fff;
+  }
+
+  .insights-placeholder__inner {
+    display: grid;
+    max-width: 780px;
+    gap: 22px;
+  }
+
+  .insights-placeholder h1 {
+    color: #fff;
+    font-size: clamp(58px, 8vw, 118px);
+    line-height: 0.9;
+  }
+
+  .insights-placeholder p:not(.lm-eyebrow) {
+    max-width: 560px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 18px;
+    font-weight: 760;
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+import { socialMethod } from '../../data/socialMediaManagement';
+---
+<section class="sm-method" aria-labelledby="sm-method-title" data-sm-scene>
+  <div class="lm-shell sm-method__grid">
+    <div class="sm-method__intro">
+      <p class="lm-eyebrow" data-sm-reveal>{socialMethod.eyebrow}</p>
+      <h2 id="sm-method-title" data-sm-reveal>{socialMethod.title}</h2>
+    </div>
+    <p class="sm-method__text" data-sm-reveal>{socialMethod.text}</p>
+    <p class="sm-hand sm-hand--method" data-sm-reveal>{socialMethod.annotation}</p>
+
+    <div class="sm-method__timeline" data-sm-reveal>
+      {socialMethod.steps.map((step, index) => (
+        <article class={`sm-method-step sm-method-step--${step.tone}`} style={`--sm-order: ${index};`}>
+          <span>{step.number}</span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { digitalAudit } from '../../data/strategyConsulting';
+---
+<section class="sc-audit sc-section-dark" aria-labelledby="sc-audit-title" data-sc-scene>
+  <div class="lm-shell sc-audit__grid">
+    <div class="sc-audit__intro">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-sc-line>{digitalAudit.eyebrow}</p>
+      <h2 id="sc-audit-title" data-sc-title>{digitalAudit.title}</h2>
+      <div class="sc-rich-text sc-rich-text--dark" data-sc-reveal>
+        {digitalAudit.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+
+    <div class="sc-audit__cards">
+      {digitalAudit.dimensions.map((dimension, index) => (
+        <article class={`sc-audit-card sc-audit-card--${dimension.tone}`} style={`--sc-order: ${index};`} data-sc-card data-sc-reveal>
+          <span class="sc-card-icon" aria-hidden="true"><ExpertiseIcon name={dimension.icon} className="sc-icon" /></span>
+          <h3>{dimension.title}</h3>
+          <p>{dimension.text}</p>
+        </article>
+      ))}
+    </div>
+
+    <aside class="sc-audit__checklist" data-sc-reveal>
+      <p>{digitalAudit.checklistEyebrow}</p>
+      <ul>
+        {digitalAudit.checklist.map((item, index) => (
+          <li style={`--sc-order: ${index};`}>
+            <span aria-hidden="true"><ExpertiseIcon name="check" className="sc-icon" /></span>
+            {item}
+          </li>
+        ))}
+      </ul>
+      <a class="lm-button lm-button--yellow" href={digitalAudit.href}>
+        {digitalAudit.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </aside>
+  </div>
+</section>

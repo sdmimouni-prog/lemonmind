@@ -1,0 +1,48 @@
+---
+import { amplificationReporting } from '../../data/influenceMarketing';
+---
+<section class="im-amplification im-section-dark" aria-labelledby="im-amplification-title" data-im-scene>
+  <div class="lm-shell im-amplification__grid">
+    <div class="im-amplification__copy">
+      <p class="lm-eyebrow lm-eyebrow--mint" data-im-reveal>{amplificationReporting.eyebrow}</p>
+      <h2 id="im-amplification-title" data-im-reveal>{amplificationReporting.title}</h2>
+      <p data-im-reveal>{amplificationReporting.text}</p>
+      <ul class="im-levers" aria-label="Leviers d'amplification média" data-im-reveal>
+        {amplificationReporting.levers.map((lever) => (
+          <li>{lever}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="im-dashboard" aria-label="Dashboard de reporting influence" data-im-depth data-im-reveal>
+      <div class="im-dashboard__chart">
+        <span>Performance</span>
+        <div class="im-chart-bars" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+      <div class="im-dashboard__metrics" aria-label="Indicateurs de performance">
+        {amplificationReporting.metrics.map((metric, index) => (
+          <span style={`--im-order: ${index};`}>
+            <strong>{metric}</strong>
+            <small>À qualifier</small>
+          </span>
+        ))}
+      </div>
+      <ul class="im-dashboard__kpis" aria-label="KPI suivis sans valeurs temporaires">
+        {amplificationReporting.kpis.map((kpi) => (
+          <li>{kpi}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="im-amplification__report">
+      <h3 data-im-reveal>{amplificationReporting.reportingTitle}</h3>
+      <p data-im-reveal>{amplificationReporting.reportingText}</p>
+      <a class="lm-button lm-button--dark" href="/nos-expertises" data-im-reveal>
+        {amplificationReporting.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>

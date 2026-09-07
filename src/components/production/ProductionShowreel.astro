@@ -1,0 +1,31 @@
+---
+import { productionShowreel } from '../../data/productionContent';
+---
+<section class="pc-showreel pc-section-dark" id="production-coulisses" aria-labelledby="pc-showreel-title" data-pc-scene>
+  <div class="lm-shell pc-showreel__grid">
+    <div class="pc-showreel__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-pc-reveal>{productionShowreel.eyebrow}</p>
+      <h2 id="pc-showreel-title" data-pc-reveal>{productionShowreel.title}</h2>
+      <p data-pc-reveal>{productionShowreel.text}</p>
+      <div class="pc-actions" data-pc-reveal>
+        <a class="lm-button lm-button--yellow" href="/realisations">
+          {productionShowreel.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href="/realisations">
+          {productionShowreel.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+    <div class="pc-showreel__strip" aria-label="Coulisses de production Lemon Mind">
+      {productionShowreel.frames.map((frame, index) => (
+        <figure style={`--pc-order: ${index};`} data-pc-reveal>
+          <img src={frame.image} alt={frame.alt} width="520" height="420" loading="lazy" decoding="async" />
+          <figcaption>{frame.label}</figcaption>
+        </figure>
+      ))}
+      <p class="pc-hand pc-hand--showreel">{productionShowreel.annotation}</p>
+    </div>
+  </div>
+</section>

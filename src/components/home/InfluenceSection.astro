@@ -1,0 +1,202 @@
+---
+import { contact, influence } from '../../data/homepage';
+
+const creatorLoop = [...influence.creatorSlots, ...influence.creatorSlots];
+---
+<section class="lm-influence" aria-labelledby="influence-title">
+  <div class="lm-shell lm-influence__grid">
+    <div class="lm-influence__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow">{influence.eyebrow}</p>
+      <h2 id="influence-title">{influence.title}</h2>
+      <p>{influence.text}</p>
+      <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+        {influence.cta}
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="lm-creator-row" aria-label="Univers de créateurs Lemon Mind">
+      <div
+        class="lm-creator-slider"
+        data-influence-slider
+        data-slide-count={influence.creatorSlots.length}
+      >
+        <div class="lm-creator-slider__viewport">
+          <div class="lm-creator-slider__track">
+            {creatorLoop.map((creator, index) => (
+              <article
+                class="lm-creator-card"
+                data-creator-slide
+                data-slide-index={index % influence.creatorSlots.length}
+                aria-hidden={index >= influence.creatorSlots.length ? 'true' : 'false'}
+                aria-label={index < influence.creatorSlots.length ? creator.title : undefined}
+              >
+                <img src={creator.image} alt="" width="560" height="996" loading="lazy" />
+                <div class="lm-creator-card__content">
+                  <span>{creator.meta}</span>
+                  <h3>{creator.title}</h3>
+                  <p>{creator.note}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div class="lm-creator-slider__nav" aria-label="Navigation du slider influence">
+          <button type="button" data-influence-prev aria-label="Voir le contenu précédent">‹</button>
+          <div class="lm-creator-slider__dots">
+            {influence.creatorSlots.map((_, index) => (
+              <button
+                type="button"
+                data-influence-dot
+                data-slide-index={index}
+                aria-label={`Voir le contenu ${index + 1}`}
+              ></button>
+            ))}
+          </div>
+          <button type="button" data-influence-next aria-label="Voir le contenu suivant">›</button>
+        </div>
+      </div>
+      <article class="lm-creator-summary">
+        <a href={contact.phoneHref} aria-label="Contacter Lemon Mind pour découvrir les talents">↗</a>
+        <strong>+350</strong>
+        <p>Créateurs activés pour vos campagnes</p>
+        <div class="lm-creator-summary__avatars" aria-hidden="true">
+          {influence.creatorSlots.map((creator) => (
+            <img src={creator.image} alt="" width="48" height="48" loading="lazy" />
+          ))}
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const slider = document.querySelector('[data-influence-slider]');
+
+    if (!slider) {
+      return;
+    }
+
+    const track = slider.querySelector('.lm-creator-slider__track');
+    const viewport = slider.querySelector('.lm-creator-slider__viewport');
+    const slides = Array.from(slider.querySelectorAll('[data-creator-slide]'));
+    const dots = Array.from(slider.querySelectorAll('[data-influence-dot]'));
+    const prev = slider.querySelector('[data-influence-prev]');
+    const next = slider.querySelector('[data-influence-next]');
+    const total = Number(slider.getAttribute('data-slide-count') || '0');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let index = 0;
+    let timer = 0;
+
+    if (!track || !viewport || !total) {
+      return;
+    }
+
+    const getStep = () => {
+      const first = slides[0]?.getBoundingClientRect();
+      const second = slides[1]?.getBoundingClientRect();
+
+      if (!first || !second) {
+        return 0;
+      }
+
+      return second.left - first.left;
+    };
+
+    const setActive = () => {
+      const active = ((index % total) + total) % total;
+
+      slides.forEach((slide) => {
+        const isActive = Number(slide.getAttribute('data-slide-index')) === active;
+        slide.classList.toggle('is-active', isActive);
+      });
+
+      dots.forEach((dot) => {
+        dot.classList.toggle('is-active', Number(dot.getAttribute('data-slide-index')) === active);
+      });
+    };
+
+    const moveTo = (nextIndex, animated = true) => {
+      const step = getStep();
+
+      if (!step) {
+        return;
+      }
+
+      track.classList.toggle('is-resetting', !animated);
+      track.style.transform = `translate3d(${-nextIndex * step}px, 0, 0)`;
+      index = nextIndex;
+      setActive();
+    };
+
+    const start = () => {
+      window.clearInterval(timer);
+
+      if (!prefersReducedMotion.matches) {
+        timer = window.setInterval(() => moveTo(index + 1), 3000);
+      }
+    };
+
+    const stop = () => window.clearInterval(timer);
+
+    track.addEventListener('transitionend', () => {
+      if (index >= total) {
+        moveTo(0, false);
+        window.requestAnimationFrame(() => track.classList.remove('is-resetting'));
+      }
+    });
+
+    next?.addEventListener('click', () => {
+      stop();
+      moveTo(index + 1);
+      start();
+    });
+
+    prev?.addEventListener('click', () => {
+      stop();
+
+      if (index <= 0) {
+        moveTo(total, false);
+        window.requestAnimationFrame(() => moveTo(total - 1));
+      } else {
+        moveTo(index - 1);
+      }
+
+      start();
+    });
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        stop();
+        moveTo(Number(dot.getAttribute('data-slide-index') || '0'));
+        start();
+      });
+    });
+
+    slides.forEach((slide) => {
+      const resetSlide = () => {
+        slide.style.setProperty('--creator-x', '50%');
+        slide.style.setProperty('--creator-y', '50%');
+      };
+
+      slide.addEventListener('pointermove', (event) => {
+        const rect = slide.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+        slide.style.setProperty('--creator-x', `${x.toFixed(2)}%`);
+        slide.style.setProperty('--creator-y', `${y.toFixed(2)}%`);
+      });
+
+      slide.addEventListener('pointerleave', resetSlide);
+      resetSlide();
+    });
+
+    viewport.addEventListener('mouseenter', stop);
+    viewport.addEventListener('mouseleave', start);
+    window.addEventListener('resize', () => moveTo(index, false));
+    setActive();
+    start();
+  })();
+</script>

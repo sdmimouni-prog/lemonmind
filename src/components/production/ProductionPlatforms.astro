@@ -1,0 +1,30 @@
+---
+import { productionPlatforms } from '../../data/productionContent';
+---
+<section class="pc-platforms pc-section-light" aria-labelledby="pc-platforms-title" data-pc-scene>
+  <div class="lm-shell">
+    <div class="pc-section-head">
+      <div>
+        <p class="lm-eyebrow" data-pc-reveal>{productionPlatforms.eyebrow}</p>
+        <h2 id="pc-platforms-title" data-pc-reveal>{productionPlatforms.title}</h2>
+      </div>
+      <p class="pc-section-head__copy" data-pc-reveal>{productionPlatforms.text}</p>
+    </div>
+    <div class="pc-platform-grid">
+      {productionPlatforms.cards.map((card, index) => (
+        <article class={`pc-platform-card pc-platform-card--${card.tone}`} style={`--pc-order: ${index};`} data-pc-reveal data-pc-depth>
+          <div>
+            <h3>{card.title}</h3>
+            <ul>
+              {card.bullets.map((bullet) => <li>{bullet}</li>)}
+            </ul>
+          </div>
+          <figure>
+            <img src={card.image} alt={card.alt} width="460" height="520" loading="lazy" decoding="async" />
+          </figure>
+          <span class="pc-arrow" aria-hidden="true">→</span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

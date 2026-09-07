@@ -1,0 +1,39 @@
+---
+import { agencyLinks, agencyTrust } from '../../data/agency';
+---
+<section class="ag-trust ag-section-light" id="references" aria-labelledby="agency-trust-title" data-ag-scene>
+  <div class="lm-shell ag-trust__grid">
+    <div class="ag-trust__copy">
+      <p class="lm-eyebrow" data-ag-line>{agencyTrust.eyebrow}</p>
+      <h2 id="agency-trust-title" data-ag-title>{agencyTrust.title}</h2>
+      <p data-ag-reveal>{agencyTrust.text}</p>
+      <a class="ag-text-link" href={agencyLinks.references} data-ag-reveal>
+        {agencyTrust.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="ag-trust__logos" aria-label="Références Lemon Mind">
+      {agencyTrust.references.map((reference, index) => (
+        <a class="ag-logo" href={agencyLinks.references} style={`--ag-order: ${index};`} data-ag-reveal>
+          <img src={reference.src} alt={reference.name} width="180" height="86" loading="lazy" decoding="async" />
+        </a>
+      ))}
+    </div>
+    <aside class="ag-certifications" id="certifications" aria-label="Certifications Lemon Mind" data-ag-reveal>
+      <p class="lm-eyebrow">{agencyTrust.certificationEyebrow}</p>
+      {agencyTrust.certifications.length ? (
+        <div class="ag-certifications__grid">
+          {agencyTrust.certifications.map((certification) => (
+            <img src={certification.src} alt={certification.name} width="150" height="80" loading="lazy" decoding="async" />
+          ))}
+        </div>
+      ) : (
+        <p class="ag-certifications__empty">{agencyTrust.missingCertificationsLabel}</p>
+      )}
+      <a class="ag-text-link" href={agencyLinks.certifications}>
+        {agencyTrust.certificationCta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </aside>
+  </div>
+</section>

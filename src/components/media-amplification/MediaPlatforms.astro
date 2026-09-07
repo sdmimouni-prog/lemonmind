@@ -1,0 +1,35 @@
+---
+import { mediaPlatforms } from '../../data/mediaAmplification';
+---
+<section class="sm-platforms sm-section-dark ma-platforms" aria-labelledby="ma-platforms-title" data-sm-scene>
+  <div class="lm-shell">
+    <div class="sm-section-heading sm-section-heading--split">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--yellow" data-sm-reveal>{mediaPlatforms.eyebrow}</p>
+        <h2 id="ma-platforms-title" data-sm-reveal>{mediaPlatforms.title}</h2>
+      </div>
+      <p data-sm-reveal>{mediaPlatforms.text}</p>
+    </div>
+
+    <div class="sm-platform-grid ma-platform-grid" aria-label="Plateformes media">
+      {mediaPlatforms.cards.map((platform, index) => (
+        <article
+          class={`sm-platform-card sm-platform-card--${platform.logo.slug} ma-platform-card`}
+          style={`--sm-card-color: ${platform.logo.tone}; --sm-order: ${index};`}
+          data-sm-reveal
+          data-sm-depth
+        >
+          <div class="sm-platform-card__head">
+            <span>
+              <img src={platform.logo.src} alt={`${platform.name} logo`} width="30" height="30" loading="lazy" decoding="async" />
+            </span>
+            <h3>{platform.name}</h3>
+          </div>
+          <ul>
+            {platform.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

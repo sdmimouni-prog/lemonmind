@@ -1,0 +1,26 @@
+---
+import { contact } from '../../data/homepage';
+import { socialFinalCta } from '../../data/socialMediaManagement';
+---
+<section class="sm-final-cta" aria-labelledby="sm-final-title" data-sm-scene>
+  <div class="lm-shell sm-final-cta__grid">
+    <div>
+      <p class="lm-eyebrow" data-sm-reveal>{socialFinalCta.eyebrow}</p>
+      <h2 id="sm-final-title" data-sm-reveal>{socialFinalCta.title}</h2>
+    </div>
+    <div class="sm-final-cta__content">
+      <p data-sm-reveal>{socialFinalCta.text}</p>
+      <div class="sm-actions" data-sm-reveal>
+        <a class="lm-button sm-button--dark-fill" href={contact.contactHref}>
+          {socialFinalCta.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button sm-button--light-outline" href="/realisations">
+          {socialFinalCta.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+    <p class="sm-hand sm-hand--final" data-sm-reveal>{socialFinalCta.annotation}</p>
+  </div>
+</section>

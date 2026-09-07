@@ -1,0 +1,32 @@
+---
+import { realisationsTestimonial } from '../../data/realisations';
+---
+<section class="rs-testimonial" aria-labelledby="realisations-testimonial-title" data-rs-scene data-rs-testimonial>
+  <div class="lm-shell rs-testimonial__grid">
+    <div class="rs-testimonial__copy">
+      <p class="rs-label">{realisationsTestimonial.eyebrow}</p>
+      <h2 id="realisations-testimonial-title">{realisationsTestimonial.title}</h2>
+      <blockquote>
+        <span aria-hidden="true">“</span>
+        <p>{realisationsTestimonial.quote}</p>
+      </blockquote>
+      <div class="rs-testimonial__author">
+        <img src={realisationsTestimonial.avatar} alt="" width="80" height="80" loading="lazy" />
+        <p>
+          <strong>{realisationsTestimonial.author}</strong>
+          <span>{realisationsTestimonial.role}</span>
+        </p>
+      </div>
+    </div>
+    <figure class="rs-testimonial__portrait">
+      <img src={realisationsTestimonial.image} alt="Portrait client Lemon Mind" width="360" height="450" loading="lazy" />
+    </figure>
+    <div class="rs-testimonial__aside">
+      <p class="rs-hand">{realisationsTestimonial.hand}</p>
+      <div class="rs-testimonial__controls" aria-label="Contrôles témoignage">
+        <button type="button" data-rs-testimonial-prev aria-label="Témoignage précédent">←</button>
+        <button type="button" data-rs-testimonial-next aria-label="Témoignage suivant">→</button>
+      </div>
+    </div>
+  </div>
+</section>

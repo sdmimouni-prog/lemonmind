@@ -1,0 +1,217 @@
+---
+import { projects } from '../../data/homepage';
+
+const projectSlides = [...projects, ...projects];
+---
+<section class="lm-projects" id="realisations" aria-labelledby="projects-title" data-project-slider data-project-count={projects.length}>
+  <div class="lm-shell">
+    <div class="lm-projects__head">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--yellow">Nos réalisations</p>
+        <h2 id="projects-title">Des projets qui parlent d’eux-mêmes</h2>
+      </div>
+      <a class="lm-button lm-button--yellow" href="#contact">
+        Voir toutes nos réalisations
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="lm-project-carousel" aria-label="Réalisations Lemon Mind en slider">
+      <button class="lm-project-carousel__control lm-project-carousel__control--prev" type="button" data-project-prev aria-label="Voir les réalisations précédentes">‹</button>
+
+      <div class="lm-project-carousel__viewport">
+        <div class="lm-project-carousel__track">
+          {projectSlides.map((project, index) => (
+            <article
+              class="lm-project-card"
+              data-project-slide
+              data-project-index={index % projects.length}
+              aria-hidden={index >= projects.length ? 'true' : 'false'}
+              style={`--project-order: ${index % projects.length}; --project-image-position: ${project.imagePosition};`}
+            >
+              <img
+                src={project.image}
+                alt={`${project.client} — ${project.title}`}
+                width="1600"
+                height="900"
+                loading={index < 4 ? 'eager' : 'lazy'}
+              />
+              <div class="lm-project-card__shade" aria-hidden="true"></div>
+              <div class="lm-project-card__client">{project.client}</div>
+              <div class="lm-project-card__content">
+                <span>{project.note}</span>
+                <h3>{project.title}</h3>
+                <p><strong>{project.result}</strong> {project.resultLabel}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <button class="lm-project-carousel__control lm-project-carousel__control--next" type="button" data-project-next aria-label="Voir les réalisations suivantes">›</button>
+    </div>
+
+    <div class="lm-project-dots" aria-label="Navigation du slider réalisations">
+      {projects.map((_, index) => (
+        <button type="button" data-project-dot data-project-index={index} aria-label={`Voir la réalisation ${index + 1}`}></button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const slider = document.querySelector('[data-project-slider]');
+
+    if (!slider) {
+      return;
+    }
+
+    const track = slider.querySelector('.lm-project-carousel__track');
+    const viewport = slider.querySelector('.lm-project-carousel__viewport');
+    const slides = Array.from(slider.querySelectorAll('[data-project-slide]'));
+    const dots = Array.from(slider.querySelectorAll('[data-project-dot]'));
+    const prev = slider.querySelector('[data-project-prev]');
+    const next = slider.querySelector('[data-project-next]');
+    const total = Number(slider.getAttribute('data-project-count') || '0');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let index = 0;
+    let timer = 0;
+
+    if (!track || !viewport || !total) {
+      return;
+    }
+
+    const getStep = () => {
+      const first = slides[0]?.getBoundingClientRect();
+      const second = slides[1]?.getBoundingClientRect();
+
+      if (!first || !second) {
+        return 0;
+      }
+
+      return second.left - first.left;
+    };
+
+    const setActive = () => {
+      const active = ((index % total) + total) % total;
+
+      slides.forEach((slide) => {
+        const slideIndex = Number(slide.getAttribute('data-project-index') || '0');
+        slide.classList.toggle('is-active', slideIndex === active);
+        slide.classList.toggle('is-next-active', slideIndex === (active + 1) % total);
+      });
+
+      dots.forEach((dot) => {
+        const isActive = Number(dot.getAttribute('data-project-index') || '0') === active;
+
+        dot.classList.toggle('is-active', isActive);
+        dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+      });
+    };
+
+    const moveTo = (nextIndex, animated = true) => {
+      const step = getStep();
+
+      if (!step) {
+        return;
+      }
+
+      track.classList.toggle('is-resetting', !animated);
+      track.style.transform = `translate3d(${-nextIndex * step}px, 0, 0)`;
+      index = nextIndex;
+      setActive();
+    };
+
+    const start = () => {
+      window.clearInterval(timer);
+
+      if (!prefersReducedMotion.matches) {
+        timer = window.setInterval(() => moveTo(index + 1), 3000);
+      }
+    };
+
+    const restart = () => {
+      window.clearInterval(timer);
+      start();
+    };
+
+    track.addEventListener('transitionend', () => {
+      if (index >= total) {
+        moveTo(0, false);
+        window.requestAnimationFrame(() => track.classList.remove('is-resetting'));
+      }
+    });
+
+    next?.addEventListener('click', () => {
+      moveTo(index + 1);
+      restart();
+    });
+
+    prev?.addEventListener('click', () => {
+      if (index <= 0) {
+        moveTo(total, false);
+        window.requestAnimationFrame(() => moveTo(total - 1));
+      } else {
+        moveTo(index - 1);
+      }
+
+      restart();
+    });
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        moveTo(Number(dot.getAttribute('data-project-index') || '0'));
+        restart();
+      });
+    });
+
+    slides.forEach((slide) => {
+      const resetPointer = () => {
+        slide.style.setProperty('--project-x', '50%');
+        slide.style.setProperty('--project-y', '50%');
+      };
+
+      slide.addEventListener('pointermove', (event) => {
+        const rect = slide.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+        slide.style.setProperty('--project-x', `${x.toFixed(2)}%`);
+        slide.style.setProperty('--project-y', `${y.toFixed(2)}%`);
+      });
+
+      slide.addEventListener('pointerenter', () => slide.classList.add('is-hovered'));
+      slide.addEventListener('pointerleave', () => {
+        slide.classList.remove('is-hovered');
+        resetPointer();
+      });
+
+      resetPointer();
+    });
+
+    slider.classList.add('is-motion-ready');
+
+    if ('IntersectionObserver' in window && !prefersReducedMotion.matches) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              slider.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.32 },
+      );
+
+      observer.observe(slider);
+    } else {
+      slider.classList.add('is-visible');
+    }
+
+    window.addEventListener('resize', () => moveTo(index, false));
+    setActive();
+    start();
+  })();
+</script>

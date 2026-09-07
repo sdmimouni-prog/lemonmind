@@ -1,0 +1,56 @@
+---
+import { referencesHero } from '../../data/references';
+---
+<section class="rf-hero" aria-labelledby="references-hero-title" data-rf-scene data-rf-parallax>
+  <div class="rf-hero__glow rf-hero__glow--yellow" aria-hidden="true"></div>
+  <div class="rf-hero__glow rf-hero__glow--violet" aria-hidden="true"></div>
+
+  <div class="lm-shell rf-hero__grid">
+    <div class="rf-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-rf-reveal>{referencesHero.eyebrow}</p>
+      <h1 id="references-hero-title" aria-label={referencesHero.titleLines.join(' ')}>
+        {referencesHero.titleLines.map((line, index) => (
+          <span class:list={[index === 2 && 'is-highlight']} style={`--rf-order: ${index};`} data-rf-title-line>
+            {line}
+          </span>
+        ))}
+      </h1>
+      <p class="rf-hero__text" data-rf-reveal style="--rf-order: 3;">{referencesHero.text}</p>
+      <div class="rf-actions" data-rf-reveal style="--rf-order: 4;">
+        <a class="lm-button lm-button--yellow" href={referencesHero.primaryHref}>
+          {referencesHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href={referencesHero.secondaryHref}>
+          {referencesHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ul class="rf-hero__reassurance" aria-label="Points forts des références Lemon Mind" data-rf-stagger>
+        {referencesHero.reassurance.map((item, index) => (
+          <li style={`--rf-order: ${index + 5};`} data-rf-reveal>{item}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="rf-hero__visual" aria-label="Univers références Lemon Mind" data-rf-depth>
+      <figure class="rf-hero__photo">
+        <img
+          src={referencesHero.image}
+          alt={referencesHero.imageAlt}
+          width="1280"
+          height="720"
+          sizes="(max-width: 768px) 92vw, 680px"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+      <p class="rf-hand rf-hand--hero">{referencesHero.annotation}</p>
+      <p class="rf-hero__caption">{referencesHero.caption}</p>
+      <span class="rf-pixel rf-pixel--one" aria-hidden="true"></span>
+      <span class="rf-pixel rf-pixel--two" aria-hidden="true"></span>
+      <span class="rf-pixel rf-pixel--three" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>

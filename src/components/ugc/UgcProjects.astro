@@ -1,0 +1,46 @@
+---
+import { ugcProjects, ugcRealisationHref } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-projects ugc-section-light" aria-labelledby="ugc-projects-title" data-ugc-scene>
+  <div class="lm-shell ugc-projects__layout">
+    <div class="ugc-section-head ugc-projects__head">
+      <div class="ugc-projects__copy">
+        <p class="lm-eyebrow lm-eyebrow--red" data-ugc-reveal>{ugcProjects.eyebrow}</p>
+        <h2 id="ugc-projects-title" data-ugc-reveal>{ugcProjects.title}</h2>
+        <p>{ugcProjects.text}</p>
+      </div>
+      <a class="ugc-text-link" href={ugcRealisationHref} data-ugc-reveal>
+        {ugcProjects.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="ugc-project-grid" aria-label="Productions UGC">
+      {ugcProjects.cards.map((card, index) => (
+        <article class="ugc-project-card" style={`--ugc-order: ${index};`} data-ugc-reveal data-ugc-hover-card>
+          <figure>
+            <img src={card.image} alt={card.alt} width="620" height="300" sizes="(max-width: 768px) 92vw, 31vw" loading="lazy" decoding="async" />
+          </figure>
+          <div class="ugc-project-card__body">
+            <span>{card.sector}</span>
+            <h3>{card.objective}</h3>
+            <dl>
+              <div>
+                <dt>Formats</dt>
+                <dd>{card.formats}</dd>
+              </div>
+              <div>
+                <dt>Expertises</dt>
+                <dd>{card.expertises}</dd>
+              </div>
+            </dl>
+            <ul>
+              {card.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          </div>
+          <a class="ugc-arrow ugc-project-card__link" href={ugcRealisationHref} aria-label={`Voir les réalisations UGC ${card.sector}`}>→</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

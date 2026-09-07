@@ -1,0 +1,26 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { strategyFramework } from '../../data/strategyConsulting';
+---
+<section class="sc-framework sc-section-light" aria-labelledby="sc-framework-title" data-sc-scene>
+  <div class="lm-shell">
+    <div class="sc-section-heading sc-section-heading--split">
+      <div>
+        <p class="lm-eyebrow" data-sc-line>{strategyFramework.eyebrow}</p>
+        <h2 id="sc-framework-title" data-sc-title>{strategyFramework.title}</h2>
+      </div>
+      <p data-sc-reveal>{strategyFramework.text}</p>
+    </div>
+
+    <div class="sc-framework-flow" aria-label="Cinq décisions stratégiques">
+      {strategyFramework.decisions.map((decision, index) => (
+        <article class={`sc-decision sc-decision--${decision.tone}`} style={`--sc-order: ${index};`} data-sc-card data-sc-reveal>
+          <span class="sc-decision__number">{decision.number}</span>
+          <span class="sc-card-icon" aria-hidden="true"><ExpertiseIcon name={decision.icon} className="sc-icon" /></span>
+          <h3>{decision.title}</h3>
+          <p>{decision.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,29 @@
+---
+import { contactFaq } from '../../data/contactContent';
+---
+<section class="ct-faq" aria-labelledby="contact-faq-title" data-ct-scene>
+  <div class="lm-shell ct-faq__grid">
+    <div class="ct-faq__copy">
+      <p class="ct-eyebrow ct-eyebrow--red" data-ct-reveal>{contactFaq.eyebrow}</p>
+      <h2 id="contact-faq-title" data-ct-reveal>{contactFaq.title}</h2>
+    </div>
+    <div class="ct-faq__list" data-contact-faq-list data-ct-reveal>
+      {contactFaq.questions.map((item, index) => {
+        const panelId = `contact-faq-${index + 1}`;
+        return (
+          <article class="ct-faq-row">
+            <h3>
+              <button type="button" id={`${panelId}-button`} aria-expanded="false" aria-controls={panelId} data-contact-faq-button>
+                <span>{item.question}</span>
+                <span aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div id={panelId} role="region" aria-labelledby={`${panelId}-button`} data-contact-faq-panel data-open="false">
+              <p>{item.answer}</p>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>

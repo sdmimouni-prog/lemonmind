@@ -1,0 +1,30 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { teamValues } from '../../data/team';
+---
+<section class="team-section team-values" aria-labelledby="team-values-title" data-team-scene>
+  <div class="lm-shell">
+    <div class="team-section__head team-section__head--split">
+      <div>
+        <p class="team-eyebrow team-eyebrow--coral" data-team-line>{teamValues.eyebrow}</p>
+        <h2 id="team-values-title" data-team-title>{teamValues.title}</h2>
+      </div>
+      <div class="team-section__copy" data-team-reveal>
+        {teamValues.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <p class="team-hand team-values__hand">{teamValues.annotation}</p>
+    </div>
+
+    <div class="team-values__grid">
+      {teamValues.items.map((value, index) => (
+        <article class={`team-value-card team-tone--${value.tone}`} style={`--team-item-index: ${index};`} data-team-stagger>
+          <span class="team-icon" aria-hidden="true">
+            <ExpertiseIcon name={value.icon} className="team-icon__svg" />
+          </span>
+          <h3>{value.title}</h3>
+          <p>{value.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

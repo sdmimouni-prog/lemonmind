@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BehindScenes from '../components/realisations/BehindScenes.astro';
+import ContributionSection from '../components/realisations/ContributionSection.astro';
+import FeaturedRealisation from '../components/realisations/FeaturedRealisation.astro';
+import ImpactNumbers from '../components/realisations/ImpactNumbers.astro';
+import RealisationsFilters from '../components/realisations/RealisationsFilters.astro';
+import RealisationsFinalCta from '../components/realisations/RealisationsFinalCta.astro';
+import RealisationsGrid from '../components/realisations/RealisationsGrid.astro';
+import RealisationsHero from '../components/realisations/RealisationsHero.astro';
+import RealisationsInteractions from '../components/realisations/RealisationsInteractions.astro';
+import RealisationsTestimonial from '../components/realisations/RealisationsTestimonial.astro';
+import { realisationProjects, realisationsMeta } from '../data/realisations';
+import '../styles/realisations.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(realisationsMeta.canonical, siteUrl).toString();
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${pageUrl}#page`,
+      name: realisationsMeta.title,
+      description: realisationsMeta.description,
+      url: pageUrl,
+      inLanguage: 'fr-MA',
+    },
+    {
+      '@type': 'ItemList',
+      '@id': `${pageUrl}#projects`,
+      itemListElement: realisationProjects.map((project, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: project.title,
+        description: project.subtitle,
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Nos réalisations',
+          item: pageUrl,
+        },
+      ],
+    },
+  ],
+};
+---
+<BaseLayout
+  title={realisationsMeta.title}
+  description={realisationsMeta.description}
+  canonical={realisationsMeta.canonical}
+  ogImage={realisationsMeta.ogImage}
+  schema={schema}
+  bodyClass="realisations-page"
+>
+  <Header />
+  <main>
+    <RealisationsHero />
+    <RealisationsFilters />
+    <FeaturedRealisation />
+    <RealisationsGrid />
+    <ImpactNumbers />
+    <BehindScenes />
+    <ContributionSection />
+    <RealisationsTestimonial />
+    <RealisationsFinalCta />
+  </main>
+  <RealisationsInteractions />
+  <Footer />
+</BaseLayout>

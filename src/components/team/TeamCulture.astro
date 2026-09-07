@@ -1,0 +1,20 @@
+---
+import { teamCulture } from '../../data/team';
+---
+<section class="team-culture" id="notre-culture" aria-labelledby="team-culture-title" data-team-scene>
+  <div class="lm-shell team-culture__grid">
+    <div class="team-culture__copy">
+      <p class="team-eyebrow team-eyebrow--yellow" data-team-line>{teamCulture.eyebrow}</p>
+      <h2 id="team-culture-title" data-team-title>{teamCulture.title}</h2>
+    </div>
+    <p class="team-culture__text" data-team-reveal>{teamCulture.text}</p>
+  </div>
+  <div class="team-culture__gallery" aria-label="Coulisses Lemon Mind">
+    {teamCulture.gallery.map((item, index) => (
+      <figure class="team-culture__photo" style={`--team-item-index: ${index};`} data-team-stagger>
+        <img src={item.src} alt={item.alt} width="640" height="420" loading="lazy" decoding="async" />
+        <figcaption>{item.caption}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>

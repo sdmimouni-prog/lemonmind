@@ -1,0 +1,42 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { socialServices } from '../../data/socialMediaManagement';
+---
+<section class="sm-services sm-section-light" aria-labelledby="sm-services-title" data-sm-scene>
+  <div class="lm-shell">
+    <div class="sm-section-heading sm-section-heading--split">
+      <div>
+        <p class="lm-eyebrow" data-sm-reveal>{socialServices.eyebrow}</p>
+        <h2 id="sm-services-title" data-sm-reveal>{socialServices.title}</h2>
+      </div>
+      <p data-sm-reveal>{socialServices.text}</p>
+    </div>
+
+    <div class="sm-service-grid">
+      {socialServices.items.map((service) => (
+        <article
+          class={`sm-service-card sm-service-card--${service.tone}`}
+          style={`--sm-service-image: url('${service.image}')`}
+          data-sm-reveal
+          data-sm-depth
+        >
+          <figure>
+            <img
+              src={service.image}
+              alt={service.alt}
+              width="560"
+              height="360"
+              loading="eager"
+              decoding="async"
+            />
+          </figure>
+          <span class="sm-service-card__icon" aria-hidden="true">
+            <ExpertiseIcon name={service.icon} className="sm-icon" />
+          </span>
+          <h3>{service.title}</h3>
+          <p>{service.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

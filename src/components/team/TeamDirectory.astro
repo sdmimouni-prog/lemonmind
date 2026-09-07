@@ -1,0 +1,53 @@
+---
+import { teamDirectory, teamFilters, teamMembers, teamDepartments } from '../../data/team';
+
+const departmentLabels = new Map(teamDepartments.map((department) => [department.id, department.title]));
+---
+<section class="team-section team-directory" id="team-directory" aria-labelledby="team-directory-title" data-team-scene>
+  <div class="lm-shell">
+    <div class="team-directory__head">
+      <div>
+        <p class="team-eyebrow" data-team-line>{teamDirectory.eyebrow}</p>
+        <h2 id="team-directory-title" data-team-title>{teamDirectory.title}</h2>
+      </div>
+      <div class="team-filters" role="group" aria-label="Filtrer les profils par pôle" data-team-filters>
+        {teamFilters.map((filter) => (
+          <button
+            type="button"
+            class="team-filter"
+            data-team-filter={filter.id}
+            aria-pressed={filter.id === 'all' ? 'true' : 'false'}
+          >
+            {filter.label}
+          </button>
+        ))}
+      </div>
+      <p class="team-hand team-directory__hand">{teamDirectory.annotation}</p>
+    </div>
+
+    <div class="team-directory__grid" data-team-grid>
+      {teamMembers.map((profile, index) => (
+        <article
+          class="team-profile-card"
+          data-team-card
+          data-department={profile.department}
+          style={`--team-item-index: ${index % 8};`}
+        >
+          <figure>
+            <img src={profile.image} alt={profile.imageAlt} width="640" height="800" loading="lazy" decoding="async" />
+          </figure>
+          <div class="team-profile-card__body">
+            <span>{departmentLabels.get(profile.department)}</span>
+            <h3>{profile.name}</h3>
+            <p>{profile.role}</p>
+            {profile.linkedinUrl && (
+              <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label={`LinkedIn de ${profile.name}`}>
+                in
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

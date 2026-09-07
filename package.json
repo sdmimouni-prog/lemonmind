@@ -1,0 +1,29 @@
+{
+  "name": "lemon-mind-astro",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0 <27"
+  },
+  "scripts": {
+    "dev": "astro dev --mode development --host 127.0.0.1 --port 4323",
+    "dev:network": "astro dev --mode development --host 0.0.0.0 --port 4323",
+    "build": "astro build --mode production",
+    "preview": "astro preview --host 127.0.0.1 --port 4324",
+    "check": "astro check",
+    "verify": "npm run check && npm run build"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^7.0.6",
+    "@astrojs/node": "^11.1.5",
+    "@astrojs/sitemap": "^3.2.0",
+    "astro": "^7.2.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.0"
+  }
+}

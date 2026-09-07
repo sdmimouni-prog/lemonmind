@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ExpertisesHero from '../components/expertises/ExpertisesHero.astro';
+import IntegratedApproach from '../components/expertises/IntegratedApproach.astro';
+import SignatureExpertises from '../components/expertises/SignatureExpertises.astro';
+import ComplementaryDevices from '../components/expertises/ComplementaryDevices.astro';
+import AgilityMethod from '../components/expertises/AgilityMethod.astro';
+import ExpertisesResultsFaq from '../components/expertises/ExpertisesResultsFaq.astro';
+import ExpertisesFinalCta from '../components/expertises/ExpertisesFinalCta.astro';
+import '../styles/expertises.css';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Expertises Lemon Mind Digital',
+  provider: {
+    '@type': 'Organization',
+    name: 'Lemon Mind Digital',
+    url: 'https://lemonmind.agency',
+  },
+  serviceType: 'Influence marketing, production de contenu, social media, amplification et stratégie digitale',
+  areaServed: 'Maroc',
+};
+---
+<BaseLayout
+  title="Nos expertises | Lemon Mind Digital"
+  description="Découvrez les expertises Lemon Mind Digital : influence marketing, production de contenu, social media, amplification, data et stratégie digitale."
+  canonical="/nos-expertises"
+  schema={schema}
+  bodyClass="expertises-page"
+>
+  <Header />
+  <main>
+    <ExpertisesHero />
+    <IntegratedApproach />
+    <SignatureExpertises />
+    <ComplementaryDevices />
+    <AgilityMethod />
+    <ExpertisesResultsFaq />
+    <ExpertisesFinalCta />
+  </main>
+  <Footer />
+</BaseLayout>

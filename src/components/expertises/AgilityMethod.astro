@@ -1,0 +1,166 @@
+---
+import { contact } from '../../data/homepage';
+import { expertiseMethod, groupAgility } from '../../data/expertises';
+import ExpertiseIcon from './ExpertiseIcon.astro';
+---
+<section class="xp-agility" id="ecosysteme" aria-labelledby="agility-title" data-xp-agility>
+  <div class="lm-shell xp-agility__grid">
+    <div class="xp-agility__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow">{groupAgility.eyebrow}</p>
+      <h2 id="agility-title">{groupAgility.title}</h2>
+      <div>
+        {groupAgility.text.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+      <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+        {groupAgility.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="xp-agility__visual" data-xp-agility-visual>
+      <figure class="xp-agility__photo">
+        <img src={groupAgility.image} alt="" width="1200" height="900" loading="lazy" />
+        <figcaption>Stronger<br />Together</figcaption>
+      </figure>
+      <div class="xp-agility__logo-card">
+        <img src="/assets/lemon-mind-logo.png" alt="Lemon Mind Digital" width="320" height="180" loading="lazy" />
+        <span aria-hidden="true">×</span>
+        <strong>Un groupe,<br />plus d’opportunités.</strong>
+      </div>
+    </div>
+
+    <div class="xp-agility__cards">
+      {groupAgility.cards.map((card, index) => (
+        <article
+          class={`xp-agility-card xp-agility-card--${card.tone}`}
+          style={`--xp-order: ${index};`}
+          data-xp-agility-card
+        >
+          <ExpertiseIcon name={card.icon} />
+          <div>
+            <h3>{card.title}</h3>
+            <p>{card.text}</p>
+          </div>
+        </article>
+      ))}
+      <p class="xp-hand xp-hand--agility">Plus loin<br />ensemble.</p>
+    </div>
+  </div>
+</section>
+
+<section class="xp-method" id="methode" aria-labelledby="method-title" data-xp-method>
+  <div class="lm-shell xp-method__grid">
+    <div class="xp-method__copy">
+      <p class="lm-eyebrow lm-eyebrow--red">{expertiseMethod.eyebrow}</p>
+      <h2 id="method-title">{expertiseMethod.title}</h2>
+      <p>{expertiseMethod.text}</p>
+      <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+        {expertiseMethod.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <ol class="xp-method__steps">
+      {expertiseMethod.steps.map((step, index) => (
+        <li class={`xp-method-step xp-method-step--${step.tone}`} style={`--xp-order: ${index};`} data-xp-step>
+          <span class="xp-method-step__number">{step.number}</span>
+          <span class="xp-method-step__icon"><ExpertiseIcon name={step.icon} /></span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))}
+    </ol>
+    <p class="xp-hand xp-hand--method">De l’idée<br />au résultat.</p>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const sections = document.querySelectorAll('[data-xp-agility], [data-xp-method]');
+
+    sections.forEach((section) => {
+      section.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        section.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              section.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.26 },
+      );
+
+      observer.observe(section);
+    });
+
+    if (prefersReducedMotion.matches || !finePointer.matches) {
+      return;
+    }
+
+    document.querySelectorAll('[data-xp-agility-card]').forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+        card.style.setProperty('--xp-card-x', `${x.toFixed(2)}%`);
+        card.style.setProperty('--xp-card-y', `${y.toFixed(2)}%`);
+      });
+
+      card.addEventListener('pointerenter', () => card.classList.add('is-active'));
+      card.addEventListener('pointerleave', () => {
+        card.classList.remove('is-active');
+        card.style.setProperty('--xp-card-x', '18%');
+        card.style.setProperty('--xp-card-y', '45%');
+      });
+    });
+
+    document.querySelectorAll('[data-xp-agility-visual]').forEach((visual) => {
+      visual.addEventListener('pointermove', (event) => {
+        const rect = visual.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5).toFixed(3);
+        const y = ((event.clientY - rect.top) / rect.height - 0.5).toFixed(3);
+
+        visual.style.setProperty('--xp-visual-x', `${Number(x) * 12}px`);
+        visual.style.setProperty('--xp-visual-y', `${Number(y) * 10}px`);
+        visual.style.setProperty('--xp-visual-tilt', `${Number(x) * -1.2}deg`);
+      });
+
+      visual.addEventListener('pointerleave', () => {
+        visual.style.setProperty('--xp-visual-x', '0px');
+        visual.style.setProperty('--xp-visual-y', '0px');
+        visual.style.setProperty('--xp-visual-tilt', '0deg');
+      });
+    });
+
+    document.querySelectorAll('[data-xp-step]').forEach((step) => {
+      step.addEventListener('pointermove', (event) => {
+        const rect = step.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+        step.style.setProperty('--xp-step-x', `${x.toFixed(2)}%`);
+        step.style.setProperty('--xp-step-y', `${y.toFixed(2)}%`);
+      });
+
+      step.addEventListener('pointerenter', () => step.classList.add('is-active'));
+      step.addEventListener('pointerleave', () => {
+        step.classList.remove('is-active');
+        step.style.setProperty('--xp-step-x', '50%');
+        step.style.setProperty('--xp-step-y', '34%');
+      });
+    });
+  })();
+</script>

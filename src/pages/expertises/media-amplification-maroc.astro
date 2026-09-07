@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import MediaAmplificationHero from '../../components/media-amplification/MediaAmplificationHero.astro';
+import MediaAmplificationInteractions from '../../components/media-amplification/MediaAmplificationInteractions.astro';
+import MediaFaq from '../../components/media-amplification/MediaFaq.astro';
+import MediaFinalCta from '../../components/media-amplification/MediaFinalCta.astro';
+import MediaMethod from '../../components/media-amplification/MediaMethod.astro';
+import MediaPlatforms from '../../components/media-amplification/MediaPlatforms.astro';
+import MediaProjects from '../../components/media-amplification/MediaProjects.astro';
+import MediaServices from '../../components/media-amplification/MediaServices.astro';
+import MediaVision from '../../components/media-amplification/MediaVision.astro';
+import { contact } from '../../data/homepage';
+import {
+  mediaAmplificationMeta,
+  mediaCampaignHref,
+  mediaFaq,
+  mediaRelatedLinks,
+} from '../../data/mediaAmplification';
+import '../../styles/social-media-management.css';
+import '../../styles/media-amplification.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(mediaAmplificationMeta.canonical, siteUrl).toString();
+
+const organizationId = `${siteUrl}#organization`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: 'Lemon Mind',
+      url: siteUrl,
+      telephone: contact.phone,
+      email: contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Casablanca',
+        addressCountry: 'MA',
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+    },
+    {
+      '@type': 'Service',
+      '@id': `${pageUrl}#service`,
+      name: 'Agence média et amplification au Maroc',
+      serviceType: 'Stratégie média, gestion de campagnes et amplification digitale',
+      provider: {
+        '@id': organizationId,
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+      url: pageUrl,
+      relatedLink: mediaRelatedLinks.map((link) => new URL(link.href, siteUrl).toString()),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Nos expertises',
+          item: new URL('/nos-expertises', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Media & Amplification',
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${pageUrl}#faq`,
+      mainEntity: mediaFaq.questions.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+<BaseLayout
+  title={mediaAmplificationMeta.title}
+  description={mediaAmplificationMeta.description}
+  canonical={mediaAmplificationMeta.canonical}
+  ogImage={mediaAmplificationMeta.ogImage}
+  schema={schema}
+  bodyClass="social-media-page media-amplification-page"
+>
+  <Header ctaLabel="Parler de votre projet" ctaHref={mediaCampaignHref} />
+  <main>
+    <MediaAmplificationHero />
+    <MediaVision />
+    <MediaServices />
+    <MediaPlatforms />
+    <MediaMethod />
+    <MediaProjects />
+    <MediaFaq />
+    <MediaFinalCta />
+  </main>
+  <MediaAmplificationInteractions />
+  <Footer />
+</BaseLayout>

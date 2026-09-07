@@ -1,0 +1,28 @@
+---
+import { contactAfterSubmit } from '../../data/contactContent';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="ct-after" aria-labelledby="contact-after-title" data-ct-scene>
+  <div class="lm-shell ct-after__grid">
+    <div class="ct-after__copy">
+      <p class="ct-eyebrow ct-eyebrow--muted" data-ct-reveal>{contactAfterSubmit.eyebrow}</p>
+      <h2 id="contact-after-title" data-ct-reveal>{contactAfterSubmit.title}</h2>
+    </div>
+    <p class="ct-after__lead" data-ct-reveal>{contactAfterSubmit.text}</p>
+    <p class="ct-hand ct-hand--after" data-ct-reveal>{contactAfterSubmit.annotation}</p>
+  </div>
+  <div class="lm-shell ct-after__steps" data-ct-timeline>
+    {contactAfterSubmit.steps.map((step, index) => (
+      <article class="ct-after-step" style={`--ct-order: ${index};`} data-ct-reveal>
+        <div class="ct-after-step__num">{step.number}</div>
+        <span class="ct-after-step__icon">
+          <ExpertiseIcon name={step.icon} />
+        </span>
+        <div>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,85 @@
+---
+import { contact } from '../../data/homepage';
+import { platformIcons, socialHero } from '../../data/socialMediaManagement';
+
+const titleParts = socialHero.title.split(socialHero.highlight);
+---
+<section class="sm-hero" aria-labelledby="sm-hero-title" data-sm-scene data-sm-parallax>
+  <div class="sm-hero__glow sm-hero__glow--violet" aria-hidden="true"></div>
+  <div class="sm-hero__glow sm-hero__glow--coral" aria-hidden="true"></div>
+
+  <div class="lm-shell sm-hero__grid">
+    <div class="sm-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-sm-reveal>{socialHero.eyebrow}</p>
+      <h1 id="sm-hero-title" data-sm-reveal>
+        {titleParts[0]}
+        <span>{socialHero.highlight}</span>
+      </h1>
+      <p class="sm-hero__text" data-sm-reveal>{socialHero.text}</p>
+      <div class="sm-actions" data-sm-reveal>
+        <a class="lm-button lm-button--yellow" href={contact.contactHref}>
+          {socialHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href="/realisations">
+          {socialHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sm-hero__stage" aria-label="Social media management Lemon Mind" data-sm-hero-stage>
+      <figure class="sm-hero__portrait" data-sm-layer="portrait">
+        <img
+          src={socialHero.portrait}
+          alt="Créatrice Lemon Mind préparant du contenu social media pour une marque"
+          width="1024"
+          height="1536"
+          sizes="(max-width: 768px) 92vw, 620px"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+
+      <figure class="sm-phone sm-hero__phone" data-sm-layer="phone">
+        <span class="sm-phone__speaker" aria-hidden="true"></span>
+        <img
+          src={socialHero.phoneImage}
+          alt="Aperçu d'un contenu vertical pensé pour les réseaux sociaux"
+          width="276"
+          height="404"
+          sizes="(max-width: 768px) 34vw, 190px"
+          loading="eager"
+          decoding="async"
+        />
+        <figcaption>
+          <strong>Lemon Mind</strong>
+          <span>Social-first</span>
+        </figcaption>
+      </figure>
+
+      <article class="sm-performance-card" data-sm-layer="performance">
+        <strong>{socialHero.performanceTitle}</strong>
+        <span>{socialHero.performanceText}</span>
+        <div class="sm-mini-chart" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </article>
+
+      <p class="sm-hand sm-hand--hero-left" data-sm-layer="note">{socialHero.sideNote}</p>
+      <p class="sm-hand sm-hand--hero" data-sm-layer="note">{socialHero.annotation}</p>
+
+      <div class="sm-platform-orbit" aria-label="Plateformes social media">
+        {platformIcons.map((platform, index) => (
+          <span
+            class={`sm-platform-bubble sm-platform-bubble--${platform.slug}`}
+            style={`--sm-bubble-color: ${platform.tone}; --sm-order: ${index};`}
+          >
+            <img src={platform.src} alt={`${platform.name} logo`} width="28" height="28" loading="eager" decoding="async" />
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+---
+import { productionMethod } from '../../data/productionContent';
+---
+<section class="pc-method pc-section-dark" aria-labelledby="pc-method-title" data-pc-scene>
+  <div class="lm-shell">
+    <div class="pc-method__head">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--yellow" data-pc-reveal>{productionMethod.eyebrow}</p>
+        <h2 id="pc-method-title" data-pc-reveal>{productionMethod.title}</h2>
+      </div>
+      <p class="pc-hand pc-hand--method" data-pc-reveal>{productionMethod.annotation}</p>
+    </div>
+    <ol class="pc-method__timeline" aria-label="Méthode de production">
+      {productionMethod.steps.map((step, index) => (
+        <li class="pc-method-step" style={`--pc-order: ${index};`} data-pc-reveal>
+          <span class="pc-method-step__number">{step.number}</span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

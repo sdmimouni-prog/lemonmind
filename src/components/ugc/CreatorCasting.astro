@@ -1,0 +1,31 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { ugcCasting } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-casting ugc-section-light" aria-labelledby="ugc-casting-title" data-ugc-scene>
+  <div class="lm-shell">
+    <div class="ugc-casting__head">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--red" data-ugc-reveal>{ugcCasting.eyebrow}</p>
+        <h2 id="ugc-casting-title" data-ugc-reveal>{ugcCasting.title}</h2>
+      </div>
+      <div class="ugc-casting__copy" data-ugc-reveal>
+        {ugcCasting.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+    <div class="ugc-casting__grid">
+      {ugcCasting.criteria.map((criterion, index) => (
+        <article class={`ugc-criterion ugc-tone--${criterion.tone}`} style={`--ugc-order: ${index};`} data-ugc-reveal>
+          <span class="ugc-card-icon">
+            <ExpertiseIcon name={criterion.icon} />
+          </span>
+          <h3>{criterion.title}</h3>
+          <p>{criterion.text}</p>
+        </article>
+      ))}
+      <aside class="ugc-criterion ugc-criterion--important" data-ugc-reveal>
+        <strong>{ugcCasting.important}</strong>
+      </aside>
+    </div>
+  </div>
+</section>

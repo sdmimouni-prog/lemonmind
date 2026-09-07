@@ -1,0 +1,26 @@
+---
+import { mediaVision } from '../../data/mediaAmplification';
+---
+<section class="sm-vision sm-section-light ma-vision" aria-labelledby="ma-vision-title" data-sm-scene>
+  <div class="lm-shell sm-vision__grid ma-vision__grid">
+    <div class="sm-vision__title ma-vision__title">
+      <p class="lm-eyebrow" data-sm-reveal>{mediaVision.eyebrow}</p>
+      <h2 id="ma-vision-title" data-sm-reveal>{mediaVision.title}</h2>
+      <p class="sm-hand sm-hand--vision ma-hand--vision" data-sm-reveal>{mediaVision.annotation}</p>
+    </div>
+    <div class="sm-vision__content">
+      <div class="sm-vision__copy ma-vision__copy" data-sm-reveal>
+        {mediaVision.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <div class="sm-pillar-grid ma-pillar-grid" data-sm-reveal>
+        {mediaVision.pillars.map((pillar) => (
+          <article class={`sm-pillar sm-pillar--${pillar.tone} ma-pillar`} data-sm-depth>
+            <span>{pillar.number}</span>
+            <h3>{pillar.title}</h3>
+            <p>{pillar.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

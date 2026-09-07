@@ -1,0 +1,30 @@
+---
+import { agencyPurpose } from '../../data/agency';
+---
+<section class="ag-purpose ag-section-light" aria-labelledby="agency-purpose-title" data-ag-scene>
+  <div class="lm-shell ag-purpose__grid">
+    <div class="ag-purpose__title">
+      <p class="lm-eyebrow" data-ag-line>{agencyPurpose.eyebrow}</p>
+      <h2 id="agency-purpose-title" aria-label={agencyPurpose.title} data-ag-title>
+        Nous ne créons pas simplement des campagnes.
+        <span>Nous construisons des <mark>connexions durables</mark> entre les marques et leurs audiences.</span>
+      </h2>
+    </div>
+    <div class="ag-purpose__copy" data-ag-reveal>
+      {agencyPurpose.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      <strong>{agencyPurpose.signature}</strong>
+    </div>
+    <figure class="ag-purpose__media" data-ag-image>
+      <img
+        src={agencyPurpose.image}
+        alt={agencyPurpose.imageAlt}
+        width="1024"
+        height="1536"
+        sizes="(max-width: 768px) 92vw, 300px"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>{agencyPurpose.caption}</figcaption>
+    </figure>
+  </div>
+</section>

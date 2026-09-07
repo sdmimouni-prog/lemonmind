@@ -1,0 +1,21 @@
+---
+import { contribution } from '../../data/realisations';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="rs-contribution" aria-labelledby="contribution-title" data-rs-scene>
+  <div class="lm-shell rs-contribution__grid">
+    <div class="rs-contribution__copy">
+      <p class="rs-label">{contribution.eyebrow}</p>
+      <h2 id="contribution-title">{contribution.title}</h2>
+      <p>{contribution.text}</p>
+    </div>
+    <div class="rs-contribution__cards">
+      {contribution.cards.map((card, index) => (
+        <article class={`rs-contribution-card rs-contribution-card--${card.tone}`} data-rs-magnetic style={`--rs-order: ${index};`}>
+          <ExpertiseIcon name={card.icon} />
+          <h3>{card.label}</h3>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

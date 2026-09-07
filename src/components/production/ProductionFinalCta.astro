@@ -1,0 +1,26 @@
+---
+import { contact } from '../../data/homepage';
+import { productionFinalCta } from '../../data/productionContent';
+---
+<section class="pc-final-cta" aria-labelledby="pc-final-title" data-pc-scene>
+  <div class="lm-shell pc-final-cta__grid">
+    <div>
+      <p class="lm-eyebrow" data-pc-reveal>{productionFinalCta.eyebrow}</p>
+      <h2 id="pc-final-title" data-pc-reveal>{productionFinalCta.title}</h2>
+    </div>
+    <div class="pc-final-cta__actions">
+      <p data-pc-reveal>{productionFinalCta.text}</p>
+      <div class="pc-actions" data-pc-reveal>
+        <a class="lm-button pc-button--dark-fill" href={contact.phoneHref}>
+          {productionFinalCta.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button pc-button--light-outline" href="/realisations">
+          {productionFinalCta.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+    <p class="pc-hand pc-hand--final" data-pc-reveal>{productionFinalCta.annotation}</p>
+  </div>
+</section>

@@ -1,0 +1,26 @@
+---
+import { influenceVision } from '../../data/influenceMarketing';
+---
+<section class="im-vision im-section-light" aria-labelledby="im-vision-title" data-im-scene>
+  <div class="lm-shell im-vision__grid">
+    <div class="im-vision__title">
+      <p class="lm-eyebrow lm-eyebrow--red" data-im-reveal>{influenceVision.eyebrow}</p>
+      <h2 id="im-vision-title" data-im-reveal>{influenceVision.title}</h2>
+      <p class="im-hand im-hand--vision" data-im-reveal>{influenceVision.annotation}</p>
+    </div>
+    <div class="im-vision__text" data-im-reveal>
+      {influenceVision.paragraphs.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
+    <div class="im-vision__pillars" aria-label="Piliers du marketing d'influence Lemon Mind">
+      {influenceVision.pillars.map((pillar, index) => (
+        <article class={`im-vision-pillar im-vision-pillar--${pillar.tone}`} style={`--im-order: ${index};`} data-im-reveal>
+          <span>{pillar.number}</span>
+          <h3>{pillar.title}</h3>
+          <p>{pillar.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

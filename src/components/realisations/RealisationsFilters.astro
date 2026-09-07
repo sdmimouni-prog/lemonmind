@@ -1,0 +1,27 @@
+---
+import { realisationFilters } from '../../data/realisations';
+---
+<section class="rs-filters" aria-labelledby="realisations-filter-title" data-rs-filters>
+  <div class="lm-shell rs-filters__grid">
+    <div class="rs-filters__copy">
+      <p class="rs-label">Filtrer par expertise</p>
+      <h2 id="realisations-filter-title">Explorez nos projets</h2>
+    </div>
+    <div class="rs-filters__controls" role="group" aria-label="Filtrer les réalisations par expertise">
+      {realisationFilters.map((filter, index) => (
+        <button
+          type="button"
+          class="rs-filter-button"
+          data-rs-filter={filter.id}
+          aria-pressed={index === 0 ? 'true' : 'false'}
+        >
+          {filter.label}
+        </button>
+      ))}
+      <button type="button" class="rs-filter-more" data-rs-more-filters aria-label="Faire défiler les filtres">
+        <span aria-hidden="true">≡</span>
+        Plus de filtres
+      </button>
+    </div>
+  </div>
+</section>

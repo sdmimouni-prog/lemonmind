@@ -1,0 +1,178 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    document.querySelectorAll('[data-rs-scene]').forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.18 },
+      );
+
+      observer.observe(scene);
+    });
+
+    document.querySelectorAll('[data-rs-parallax]').forEach((scene) => {
+      if (!canHover || prefersReducedMotion.matches) {
+        return;
+      }
+
+      scene.addEventListener('pointermove', (event) => {
+        const rect = scene.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+        const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+        scene.style.setProperty('--rs-mx', x.toFixed(3));
+        scene.style.setProperty('--rs-my', y.toFixed(3));
+      });
+
+      scene.addEventListener('pointerleave', () => {
+        scene.style.setProperty('--rs-mx', '0');
+        scene.style.setProperty('--rs-my', '0');
+      });
+    });
+
+    const filterBar = document.querySelector('[data-rs-filters]');
+    const filterControls = filterBar?.querySelector('.rs-filters__controls');
+    const filterButtons = filterBar ? Array.from(filterBar.querySelectorAll('[data-rs-filter]')) : [];
+    const moreButton = filterBar?.querySelector('[data-rs-more-filters]');
+    const cards = Array.from(document.querySelectorAll('[data-rs-card]'));
+
+    const applyFilter = (filter) => {
+      filterButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', button.getAttribute('data-rs-filter') === filter ? 'true' : 'false');
+      });
+
+      cards.forEach((card, index) => {
+        const categories = (card.getAttribute('data-categories') || '').split(' ');
+        const shouldShow = filter === 'all' || categories.includes(filter);
+
+        card.toggleAttribute('hidden', !shouldShow);
+        if (shouldShow) {
+          card.style.setProperty('--rs-order', String(index % 6));
+          card.classList.remove('is-filtered-in');
+          window.requestAnimationFrame(() => card.classList.add('is-filtered-in'));
+        }
+      });
+    };
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => applyFilter(button.getAttribute('data-rs-filter') || 'all'));
+    });
+
+    moreButton?.addEventListener('click', () => {
+      filterControls?.scrollBy({ left: 240, behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
+    });
+
+    applyFilter('all');
+
+    const counters = Array.from(document.querySelectorAll('[data-rs-count]'));
+
+    const animateCounter = (element) => {
+      const target = Number(element.getAttribute('data-count') || '0');
+      const decimals = Number(element.getAttribute('data-decimals') || '0');
+      const prefix = element.getAttribute('data-prefix') || '';
+      const suffix = element.getAttribute('data-suffix') || '';
+      const duration = 950;
+      const start = performance.now();
+      let finished = false;
+
+      const formatValue = (value) =>
+        value.toLocaleString('fr-FR', {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        });
+
+      const finish = () => {
+        finished = true;
+        element.textContent = `${prefix}${formatValue(target)}${suffix}`;
+      };
+
+      const render = (now) => {
+        if (finished) {
+          return;
+        }
+
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = target * eased;
+
+        element.textContent = `${prefix}${formatValue(value)}${suffix}`;
+
+        if (progress < 1) {
+          window.requestAnimationFrame(render);
+        } else {
+          finish();
+        }
+      };
+
+      window.requestAnimationFrame(render);
+      window.setTimeout(finish, duration + 120);
+    };
+
+    if (counters.length) {
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        counters.forEach((counter) => animateCounter(counter));
+      } else {
+        const counterObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && !entry.target.hasAttribute('data-counted')) {
+                entry.target.setAttribute('data-counted', 'true');
+                animateCounter(entry.target);
+              }
+            });
+          },
+          { threshold: 0.45 },
+        );
+
+        counters.forEach((counter) => counterObserver.observe(counter));
+      }
+    }
+
+    if (canHover && !prefersReducedMotion.matches) {
+      document.querySelectorAll('[data-rs-magnetic]').forEach((card) => {
+        card.addEventListener('pointermove', (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          card.style.setProperty('--rs-card-x', `${(x * 8).toFixed(2)}px`);
+          card.style.setProperty('--rs-card-y', `${(y * 8).toFixed(2)}px`);
+          card.style.setProperty('--rs-card-rx', `${(y * -4).toFixed(2)}deg`);
+          card.style.setProperty('--rs-card-ry', `${(x * 5).toFixed(2)}deg`);
+        });
+
+        card.addEventListener('pointerleave', () => {
+          card.style.setProperty('--rs-card-x', '0px');
+          card.style.setProperty('--rs-card-y', '0px');
+          card.style.setProperty('--rs-card-rx', '0deg');
+          card.style.setProperty('--rs-card-ry', '0deg');
+        });
+      });
+    }
+
+    const testimonial = document.querySelector('[data-rs-testimonial]');
+    const testimonialControls = testimonial?.querySelectorAll('button');
+    testimonialControls?.forEach((button) => {
+      button.addEventListener('click', () => {
+        testimonial?.classList.remove('is-pulsing');
+        window.requestAnimationFrame(() => testimonial?.classList.add('is-pulsing'));
+      });
+    });
+  })();
+</script>

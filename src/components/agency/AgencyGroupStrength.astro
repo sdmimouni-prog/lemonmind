@@ -1,0 +1,29 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { agencyGroupStrength, agencyLinks } from '../../data/agency';
+---
+<section class="ag-group" aria-labelledby="agency-group-title" data-ag-scene>
+  <div class="ag-group__glow" aria-hidden="true"></div>
+  <div class="lm-shell ag-group__grid">
+    <div class="ag-group__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-ag-line>{agencyGroupStrength.eyebrow}</p>
+      <h2 id="agency-group-title" aria-label={agencyGroupStrength.title} data-ag-title>
+        {agencyGroupStrength.titleLines.map((line) => <span>{line}</span>)}
+      </h2>
+      <p data-ag-reveal>{agencyGroupStrength.text}</p>
+      <a class="lm-button lm-button--yellow" href={agencyLinks.ecosystem} data-ag-reveal>
+        {agencyGroupStrength.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="ag-group__resources" aria-label="Ressources du groupe Lemon Mind">
+      {agencyGroupStrength.resources.map((resource, index) => (
+        <article class={`ag-resource ag-resource--${resource.tone}`} style={`--ag-order: ${index};`} data-ag-reveal>
+          <span aria-hidden="true"><ExpertiseIcon name={resource.icon} className="ag-resource__svg" /></span>
+          <h3>{resource.label}</h3>
+        </article>
+      ))}
+    </div>
+    <p class="ag-hand ag-hand--group">{agencyGroupStrength.annotation}</p>
+  </div>
+</section>

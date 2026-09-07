@@ -1,0 +1,34 @@
+---
+import { productionProjects } from '../../data/productionContent';
+---
+<section class="pc-projects pc-section-light" id="production-realisations" aria-labelledby="pc-projects-title" data-pc-scene>
+  <div class="lm-shell">
+    <div class="pc-projects__head">
+      <div>
+        <p class="lm-eyebrow" data-pc-reveal>{productionProjects.eyebrow}</p>
+        <h2 id="pc-projects-title" data-pc-reveal>{productionProjects.title}</h2>
+      </div>
+      <a href="/realisations" class="pc-inline-link" data-pc-reveal>
+        {productionProjects.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="pc-project-grid">
+      {productionProjects.cards.map((project, index) => (
+        <article class="pc-project-card" style={`--pc-order: ${index};`} data-pc-reveal>
+          <figure>
+            <img src={project.image} alt={project.alt} width="720" height="420" loading="lazy" decoding="async" />
+          </figure>
+          <div class="pc-project-card__body">
+            <span>{project.sector}</span>
+            <h3>{project.title}</h3>
+            <div class="pc-tags" aria-label="Expertises mobilisées">
+              {project.tags.map((tag) => <small>{tag}</small>)}
+            </div>
+          </div>
+          <a href="/realisations" aria-label={`Voir les réalisations ${project.sector}`}>→</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

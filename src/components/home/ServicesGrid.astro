@@ -1,0 +1,66 @@
+---
+import { services } from '../../data/homepage';
+---
+<section class="lm-services" id="services" aria-labelledby="services-title">
+  <div class="lm-shell">
+    <span id="agence" aria-hidden="true"></span>
+    <div class="lm-section-heading lm-section-heading--split">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--red">Nos services !</p>
+        <h2 id="services-title" class="lm-services__title">Des solutions sur mesure pour votre marque</h2>
+      </div>
+      <p>
+        Chez Lemon Mind, nous sommes bien plus qu’une agence digitale : nous sommes vos partenaires de croissance. Nous concevons des stratégies créatives et pilotées par la donnée pour transformer vos idées en résultats concrets et mesurables.
+      </p>
+    </div>
+
+    <div class="lm-service-grid">
+      {services.map((service, index) => (
+        <article class={`lm-service-card lm-service-card--${service.tone}`} data-service-card>
+          <span class="lm-service-card__mark" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+          <div>
+            <h3>{service.title}</h3>
+            <p>{service.text}</p>
+          </div>
+          <a href="#contact" aria-label={`Discuter de ${service.title}`}>↗</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const cards = document.querySelectorAll('[data-service-card]');
+
+    if (!cards.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    cards.forEach((card) => {
+      const resetCard = () => {
+        card.style.setProperty('--service-x', '50%');
+        card.style.setProperty('--service-y', '50%');
+        card.style.setProperty('--service-tilt-x', '0deg');
+        card.style.setProperty('--service-tilt-y', '0deg');
+      };
+
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        const tiltY = ((x - 50) / 50) * 5;
+        const tiltX = ((50 - y) / 50) * 4;
+
+        card.style.setProperty('--service-x', `${x.toFixed(2)}%`);
+        card.style.setProperty('--service-y', `${y.toFixed(2)}%`);
+        card.style.setProperty('--service-tilt-x', `${tiltX.toFixed(2)}deg`);
+        card.style.setProperty('--service-tilt-y', `${tiltY.toFixed(2)}deg`);
+      });
+
+      card.addEventListener('pointerleave', resetCard);
+      card.addEventListener('blur', resetCard, true);
+      resetCard();
+    });
+  })();
+</script>

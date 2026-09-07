@@ -1,0 +1,30 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { ugcBenefits } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-benefits ugc-section-light" aria-labelledby="ugc-benefits-title" data-ugc-scene>
+  <div class="lm-shell">
+    <div class="ugc-section-head ugc-section-head--split">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--red" data-ugc-reveal>{ugcBenefits.eyebrow}</p>
+        <h2 id="ugc-benefits-title" data-ugc-reveal>{ugcBenefits.title}</h2>
+      </div>
+      <div class="ugc-section-head__text" data-ugc-reveal>
+        {ugcBenefits.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <p class="ugc-hand ugc-hand--benefits" data-ugc-reveal>{ugcBenefits.annotation}</p>
+    </div>
+
+    <div class="ugc-benefits__grid">
+      {ugcBenefits.items.map((item, index) => (
+        <article class={`ugc-benefit-card ugc-tone--${item.tone}`} style={`--ugc-order: ${index};`} data-ugc-reveal>
+          <span class="ugc-card-icon">
+            <ExpertiseIcon name={item.icon} />
+          </span>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

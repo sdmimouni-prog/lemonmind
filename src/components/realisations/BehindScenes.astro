@@ -1,0 +1,28 @@
+---
+import { behindScenes } from '../../data/realisations';
+---
+<section class="rs-behind" aria-labelledby="behind-title" data-rs-scene>
+  <div class="lm-shell rs-behind__grid">
+    <div class="rs-behind__copy">
+      <p class="rs-label rs-label--dark">{behindScenes.eyebrow}</p>
+      <h2 id="behind-title">{behindScenes.title}</h2>
+      <p>{behindScenes.text}</p>
+    </div>
+    <div class="rs-behind__sequence">
+      <div class="rs-behind__frames">
+        {behindScenes.steps.map((step, index) => (
+          <figure style={`--rs-order: ${index};`}>
+            <img src={step.image} alt={`Étape coulisses Lemon Mind : ${step.label}`} width="420" height="520" loading="lazy" />
+          </figure>
+        ))}
+      </div>
+      <ol class="rs-behind__steps" aria-label="Progression de production">
+        {behindScenes.steps.map((step, index) => (
+          <li style={`--rs-order: ${index};`}>
+            <span>{step.label}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>

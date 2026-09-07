@@ -1,0 +1,42 @@
+---
+import { influenceFaq } from '../../data/influenceMarketing';
+---
+<section class="im-faq im-section-light" aria-labelledby="im-faq-title" data-im-scene>
+  <div class="lm-shell im-faq__grid">
+    <div class="im-faq__copy">
+      <p class="lm-eyebrow lm-eyebrow--red" data-im-reveal>{influenceFaq.eyebrow}</p>
+      <h2 id="im-faq-title" data-im-reveal>{influenceFaq.title}</h2>
+      <a class="lm-button lm-button--yellow" href="/nos-expertises" data-im-reveal>
+        {influenceFaq.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="im-faq__list" data-im-faq-list data-im-reveal>
+      {influenceFaq.questions.map((item, index) => (
+        <article class="im-faq-item">
+          <h3>
+            <button
+              type="button"
+              id={`im-faq-question-${index + 1}`}
+              aria-expanded={index === 0 ? 'true' : 'false'}
+              aria-controls={`im-faq-answer-${index + 1}`}
+              data-im-faq-button
+            >
+              <span>{item.question}</span>
+              <span aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div
+            id={`im-faq-answer-${index + 1}`}
+            role="region"
+            aria-labelledby={`im-faq-question-${index + 1}`}
+            data-im-faq-panel
+            data-open={index === 0 ? 'true' : 'false'}
+          >
+            <p>{item.answer}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

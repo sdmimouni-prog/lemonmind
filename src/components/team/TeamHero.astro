@@ -1,0 +1,66 @@
+---
+import { teamHero, teamMembers } from '../../data/team';
+
+const heroProfiles = ['amal-amazouz', 'salah-eddine-mimouni', 'tarik-el-abbadi', 'ikram-dehiri', 'marwane-jouay']
+  .map((id) => teamMembers.find((profile) => profile.id === id))
+  .filter(Boolean);
+
+const titleLines = ['Les talents derrière', 'les idées, les contenus'];
+---
+<section class="team-hero" aria-labelledby="team-hero-title" data-team-scene data-team-parallax>
+  <div class="team-hero__glow team-hero__glow--yellow" aria-hidden="true"></div>
+  <div class="team-hero__glow team-hero__glow--violet" aria-hidden="true"></div>
+
+  <div class="lm-shell team-hero__grid">
+    <div class="team-hero__copy">
+      <p class="team-eyebrow team-eyebrow--yellow" data-team-line>{teamHero.eyebrow}</p>
+      <h1 id="team-hero-title" aria-label={teamHero.title}>
+        {titleLines.map((line) => <span data-team-title>{line}</span>)}
+        <span data-team-title>et <mark>{teamHero.highlightedText}</mark>.</span>
+      </h1>
+      <div class="team-hero__text" data-team-reveal>
+        {teamHero.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <div class="team-actions" data-team-reveal>
+        <a class="lm-button lm-button--yellow" href={teamHero.primaryHref}>
+          {teamHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href={teamHero.secondaryHref}>
+          {teamHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ul class="team-hero__reassurance" aria-label="Points forts de l’équipe">
+        {teamHero.reassurance.map((item, index) => (
+          <li style={`--team-item-index: ${index};`} data-team-stagger>{item}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="team-hero__visual" data-team-depth>
+      <div class="team-hero__mosaic" aria-label="Mosaïque de portraits officiels Lemon Mind">
+        {heroProfiles.map((profile, index) => profile && (
+          <figure class={`team-hero__portrait team-hero__portrait--${index + 1}`} style={`--team-item-index: ${index};`}>
+            <img
+              src={profile.image}
+              alt={profile.imageAlt}
+              width="640"
+              height="800"
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+            <figcaption>
+              <strong>{profile.name}</strong>
+              <span>{profile.category}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+      <p class="team-hand team-hero__hand">{teamHero.annotation}</p>
+      <div class="team-hero__logo-card" aria-hidden="true">
+        <img src="/assets/lemon-mind-logo.png" alt="" width="560" height="320" />
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+---
+import { influenceProcess } from '../../data/influenceMarketing';
+---
+<section class="im-process im-section-dark" aria-labelledby="im-process-title" data-im-process data-im-scene>
+  <div class="lm-shell">
+    <div class="im-process__header">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--yellow" data-im-reveal>{influenceProcess.eyebrow}</p>
+        <h2 id="im-process-title" data-im-reveal>{influenceProcess.title}</h2>
+      </div>
+      <p class="im-hand im-hand--process" data-im-reveal>{influenceProcess.annotation}</p>
+    </div>
+    <ol class="im-process__timeline">
+      {influenceProcess.steps.map((step, index) => (
+        <li class="im-process-step" style={`--im-order: ${index};`} data-im-reveal>
+          <span class="im-process-step__number">{step.number}</span>
+          <div>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

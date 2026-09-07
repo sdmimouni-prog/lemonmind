@@ -1,0 +1,35 @@
+---
+import { socialPlatforms } from '../../data/socialMediaManagement';
+---
+<section class="sm-platforms sm-section-dark" aria-labelledby="sm-platforms-title" data-sm-scene>
+  <div class="lm-shell">
+    <div class="sm-section-heading sm-section-heading--split">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--yellow" data-sm-reveal>{socialPlatforms.eyebrow}</p>
+        <h2 id="sm-platforms-title" data-sm-reveal>{socialPlatforms.title}</h2>
+      </div>
+      <p data-sm-reveal>{socialPlatforms.text}</p>
+    </div>
+
+    <div class="sm-platform-grid" aria-label="Plateformes social media">
+      {socialPlatforms.cards.map((platform, index) => (
+        <article
+          class={`sm-platform-card sm-platform-card--${platform.logo.slug}`}
+          style={`--sm-card-color: ${platform.logo.tone}; --sm-order: ${index};`}
+          data-sm-reveal
+          data-sm-depth
+        >
+          <div class="sm-platform-card__head">
+            <span>
+              <img src={platform.logo.src} alt={`${platform.name} logo`} width="30" height="30" loading="lazy" decoding="async" />
+            </span>
+            <h3>{platform.name}</h3>
+          </div>
+          <ul>
+            {platform.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

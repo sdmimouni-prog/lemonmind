@@ -1,0 +1,101 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const scenes = document.querySelectorAll('[data-sm-scene]');
+
+    scenes.forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.08, rootMargin: '14% 0px 10% 0px' },
+      );
+
+      observer.observe(scene);
+    });
+
+    window.setTimeout(() => {
+      scenes.forEach((scene) => scene.classList.add('is-visible'));
+    }, 1200);
+
+    if (finePointer && !prefersReducedMotion.matches) {
+      document.querySelectorAll('[data-sm-parallax]').forEach((scene) => {
+        scene.addEventListener('pointermove', (event) => {
+          const rect = scene.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          scene.style.setProperty('--sm-mx', x.toFixed(3));
+          scene.style.setProperty('--sm-my', y.toFixed(3));
+        });
+
+        scene.addEventListener('pointerleave', () => {
+          scene.style.setProperty('--sm-mx', '0');
+          scene.style.setProperty('--sm-my', '0');
+        });
+      });
+
+      document.querySelectorAll('[data-sm-depth]').forEach((card) => {
+        card.addEventListener('pointermove', (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          card.style.setProperty('--sm-depth-x', `${(x * 7).toFixed(2)}px`);
+          card.style.setProperty('--sm-depth-y', `${(y * 6).toFixed(2)}px`);
+          card.style.setProperty('--sm-depth-r', `${(x * -1.2).toFixed(2)}deg`);
+        });
+
+        card.addEventListener('pointerleave', () => {
+          card.style.setProperty('--sm-depth-x', '0px');
+          card.style.setProperty('--sm-depth-y', '0px');
+          card.style.setProperty('--sm-depth-r', '0deg');
+        });
+      });
+    }
+
+    document.querySelectorAll('[data-sm-faq-list]').forEach((list) => {
+      const buttons = Array.from(list.querySelectorAll('[data-sm-faq-button]'));
+      const panels = Array.from(list.querySelectorAll('[data-sm-faq-panel]'));
+
+      const setOpen = (button) => {
+        buttons.forEach((currentButton) => {
+          const isSelected = currentButton === button;
+          const panelId = currentButton.getAttribute('aria-controls');
+          const panel = panelId ? document.getElementById(panelId) : null;
+
+          currentButton.setAttribute('aria-expanded', String(isSelected));
+          panel?.setAttribute('data-open', String(isSelected));
+        });
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+          if (isOpen) {
+            button.setAttribute('aria-expanded', 'false');
+            document.getElementById(button.getAttribute('aria-controls') || '')?.setAttribute('data-open', 'false');
+          } else {
+            setOpen(button);
+          }
+        });
+      });
+
+      panels.forEach((panel) => panel.setAttribute('data-open', 'false'));
+    });
+  })();
+</script>

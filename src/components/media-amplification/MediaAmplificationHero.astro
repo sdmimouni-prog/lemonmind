@@ -1,0 +1,99 @@
+---
+import { mediaHero, mediaPlatformIcons } from '../../data/mediaAmplification';
+---
+<section class="sm-hero ma-hero" aria-labelledby="ma-hero-title" data-sm-scene data-sm-parallax>
+  <div class="sm-hero__glow sm-hero__glow--violet" aria-hidden="true"></div>
+  <div class="sm-hero__glow sm-hero__glow--coral" aria-hidden="true"></div>
+
+  <div class="lm-shell sm-hero__grid ma-hero__grid">
+    <div class="sm-hero__copy ma-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-sm-reveal>{mediaHero.eyebrow}</p>
+      <h1 id="ma-hero-title" class="ma-hero-title" data-sm-reveal>
+        <span>{mediaHero.title[0]}</span>
+        <span>{mediaHero.title[1]}</span>
+        <span>Des <strong>résultats concrets.</strong></span>
+      </h1>
+      <p class="sm-hero__text ma-hero__text" data-sm-reveal>{mediaHero.text}</p>
+      <div class="sm-actions" data-sm-reveal>
+        <a class="lm-button lm-button--yellow" href={mediaHero.primaryHref}>
+          {mediaHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href={mediaHero.secondaryHref}>
+          {mediaHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sm-hero__stage ma-hero__stage" aria-label="Media et amplification Lemon Mind" data-sm-hero-stage>
+      <figure class="sm-hero__portrait ma-hero__portrait" data-sm-layer="portrait">
+        <img
+          src={mediaHero.portrait}
+          alt="Experte Lemon Mind préparant une campagne media social-first"
+          width="1024"
+          height="1536"
+          sizes="(max-width: 768px) 92vw, 520px"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+
+      <figure class="ma-hero__desk" data-sm-layer="desk">
+        <img
+          src={mediaHero.deskImage}
+          alt="Poste de pilotage et reunion de campagne digitale Lemon Mind"
+          width="640"
+          height="380"
+          sizes="(max-width: 768px) 64vw, 250px"
+          loading="eager"
+          decoding="async"
+        />
+        <figcaption>Lemon Mind</figcaption>
+      </figure>
+
+      <figure class="sm-phone sm-hero__phone ma-hero__phone" data-sm-layer="phone">
+        <span class="sm-phone__speaker" aria-hidden="true"></span>
+        <img
+          src={mediaHero.phoneImage}
+          alt="Aperçu mobile d'un contenu amplifié sur les plateformes sociales"
+          width="276"
+          height="404"
+          sizes="(max-width: 768px) 32vw, 150px"
+          loading="eager"
+          decoding="async"
+        />
+        <figcaption>
+          <strong>Media flight</strong>
+          <span>Social ads</span>
+        </figcaption>
+      </figure>
+
+      <article class="sm-performance-card ma-performance-card" data-sm-layer="performance">
+        <strong>{mediaHero.performanceTitle}</strong>
+        <span>{mediaHero.performanceText}</span>
+        <div class="sm-mini-chart ma-mini-chart" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </article>
+
+      <p class="sm-hand sm-hand--hero-left ma-hand--hero-left" data-sm-layer="note">{mediaHero.sideNote}</p>
+      <p class="sm-hand sm-hand--hero ma-hand--hero" data-sm-layer="note">{mediaHero.annotation}</p>
+
+      <div class="ma-ad-stack" aria-label="Plateformes media activees">
+        {mediaPlatformIcons.map((platform, index) => (
+          <span
+            class={`ma-ad-badge ma-ad-badge--${platform.slug}`}
+            style={`--ma-platform-color: ${platform.tone}; --sm-order: ${index};`}
+          >
+            <span>
+              <img src={platform.src} alt={`${platform.name} logo`} width="24" height="24" loading="eager" decoding="async" />
+            </span>
+            {platform.name}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

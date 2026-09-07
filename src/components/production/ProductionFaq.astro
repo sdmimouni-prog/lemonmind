@@ -1,0 +1,38 @@
+---
+import { productionFaq } from '../../data/productionContent';
+---
+<section class="pc-faq pc-section-light" aria-labelledby="pc-faq-title" data-pc-scene>
+  <div class="lm-shell pc-faq__grid">
+    <div>
+      <p class="lm-eyebrow" data-pc-reveal>{productionFaq.eyebrow}</p>
+      <h2 id="pc-faq-title" data-pc-reveal>{productionFaq.title}</h2>
+    </div>
+    <div class="pc-faq__list" data-pc-faq-list data-pc-reveal>
+      {productionFaq.questions.map((item, index) => (
+        <article class="pc-faq-item">
+          <h3>
+            <button
+              type="button"
+              id={`pc-faq-question-${index + 1}`}
+              aria-expanded="false"
+              aria-controls={`pc-faq-answer-${index + 1}`}
+              data-pc-faq-button
+            >
+              <span>{item.question}</span>
+              <span aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div
+            id={`pc-faq-answer-${index + 1}`}
+            role="region"
+            aria-labelledby={`pc-faq-question-${index + 1}`}
+            data-pc-faq-panel
+            data-open="false"
+          >
+            <p>{item.answer}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

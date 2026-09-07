@@ -1,0 +1,29 @@
+---
+import { productionCapabilities } from '../../data/productionContent';
+---
+<section class="pc-capabilities pc-section-light" aria-labelledby="pc-capabilities-title" data-pc-scene>
+  <div class="lm-shell">
+    <div class="pc-section-head pc-capabilities__head">
+      <div>
+        <p class="lm-eyebrow" data-pc-reveal>{productionCapabilities.eyebrow}</p>
+        <h2 id="pc-capabilities-title" data-pc-reveal>{productionCapabilities.title}</h2>
+      </div>
+      <div class="pc-section-head__text" data-pc-reveal>
+        <p>{productionCapabilities.text}</p>
+        <p class="pc-hand pc-hand--capabilities">{productionCapabilities.annotation}</p>
+      </div>
+    </div>
+
+    <div class="pc-capability-grid">
+      {productionCapabilities.items.map((item, index) => (
+        <article class="pc-capability-card" style={`--pc-order: ${index};`} data-pc-reveal>
+          <figure>
+            <img src={item.image} alt={item.alt} width="520" height="340" loading="lazy" decoding="async" />
+          </figure>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

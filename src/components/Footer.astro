@@ -1,0 +1,76 @@
+---
+import { contact, footerColumns } from '../data/homepage';
+---
+<footer class="site-footer" id="contact" data-footer-scene>
+  <div class="lm-pixel-cloud lm-pixel-cloud--footer" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="lm-shell site-footer__grid">
+    <div class="site-footer__brand">
+      <img src="/assets/lemon-mind-logo.png" alt="Lemon Mind Digital" width="560" height="320" />
+      <p class="site-footer__question">Et si votre prochain projet devenait notre prochaine réussite ?</p>
+      <p>Chaque collaboration est une nouvelle opportunité de créer, d’innover et de générer un impact.</p>
+      <div class="site-footer__contact">
+        <a class="site-footer__contact-link site-footer__contact-link--phone" href={contact.phoneHref}>{contact.phone}</a>
+        <a class="site-footer__contact-link site-footer__contact-link--mail" href={contact.emailHref}>{contact.email}</a>
+      </div>
+      <div class="site-footer__social" aria-label="Réseaux sociaux">
+        <a class="site-footer__social-link site-footer__social-link--facebook" href={contact.contactHref} aria-label="Facebook">f</a>
+        <a class="site-footer__social-link site-footer__social-link--instagram" href={contact.contactHref} aria-label="Instagram">ig</a>
+        <a class="site-footer__social-link site-footer__social-link--linkedin" href={contact.contactHref} aria-label="LinkedIn">in</a>
+      </div>
+    </div>
+
+    <nav class="site-footer__columns" aria-label="Navigation du footer">
+      {footerColumns.map((column) => (
+        <div>
+          <h2>{column.title}</h2>
+          {column.links.map((link) => (
+            <a href={link.href}>{link.label}</a>
+          ))}
+        </div>
+      ))}
+    </nav>
+  </div>
+
+  <div class="lm-shell site-footer__bottom">
+    <span>© 2026 Lemon Mind Digital</span>
+    <a href="/contact?objet=mentions-legales">Mentions légales</a>
+    <a href="/contact?objet=politique-confidentialite">Politique de confidentialité</a>
+  </div>
+</footer>
+
+<script is:inline>
+  (() => {
+    const footer = document.querySelector('[data-footer-scene]');
+
+    if (!footer) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    footer.classList.add('is-motion-ready');
+
+    if ('IntersectionObserver' in window && !prefersReducedMotion.matches) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              footer.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.2 },
+      );
+
+      observer.observe(footer);
+    } else {
+      footer.classList.add('is-visible');
+    }
+
+    window.setTimeout(() => {
+      footer.classList.add('is-visible');
+    }, 1200);
+  })();
+</script>

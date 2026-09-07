@@ -1,0 +1,55 @@
+---
+import { agencyHero, agencyLinks } from '../../data/agency';
+---
+<section class="ag-hero" id="agence" aria-labelledby="agency-hero-title" data-ag-scene data-ag-parallax>
+  <div class="ag-hero__glow ag-hero__glow--yellow" aria-hidden="true"></div>
+  <div class="ag-hero__glow ag-hero__glow--violet" aria-hidden="true"></div>
+
+  <div class="lm-shell ag-hero__grid">
+    <div class="ag-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-ag-line>{agencyHero.eyebrow}</p>
+      <h1 id="agency-hero-title" aria-label={agencyHero.title}>
+        {agencyHero.titleLines.map((line, index) => (
+          <span class:list={[line.highlight && 'is-highlight']} style={`--ag-order: ${index};`} data-ag-title-line>
+            {line.text}
+          </span>
+        ))}
+      </h1>
+      <p class="ag-hero__text" data-ag-reveal>{agencyHero.text}</p>
+      <div class="ag-actions" data-ag-reveal>
+        <a class="lm-button lm-button--yellow" href={agencyLinks.expertises}>
+          {agencyHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href={agencyLinks.contact}>
+          {agencyHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ul class="ag-hero__reassurance" aria-label="Points forts Lemon Mind" data-ag-stagger>
+        {agencyHero.reassurance.map((item, index) => (
+          <li style={`--ag-order: ${index};`} data-ag-reveal>{item}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="ag-hero__visual" aria-label="Univers créatif Lemon Mind" data-ag-depth>
+      <figure class="ag-hero__photo">
+        <img
+          src={agencyHero.image}
+          alt={agencyHero.imageAlt}
+          width="1280"
+          height="720"
+          sizes="(max-width: 768px) 92vw, 700px"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+      <p class="ag-hand ag-hand--hero">{agencyHero.annotation}</p>
+      <p class="ag-hero__caption">{agencyHero.caption}</p>
+      <span class="ag-pixel ag-pixel--one" aria-hidden="true"></span>
+      <span class="ag-pixel ag-pixel--two" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>

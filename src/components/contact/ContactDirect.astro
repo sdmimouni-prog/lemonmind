@@ -1,0 +1,48 @@
+---
+import { contactDirect, contactDetails } from '../../data/contactContent';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="ct-direct" aria-labelledby="contact-direct-title" data-ct-scene>
+  <div class="lm-shell ct-direct__grid">
+    <div class="ct-direct__copy">
+      <p class="ct-eyebrow" data-ct-reveal>{contactDirect.eyebrow}</p>
+      <h2 id="contact-direct-title" data-ct-reveal>{contactDirect.title}</h2>
+      <p data-ct-reveal>{contactDirect.text}</p>
+
+      <div class="ct-direct__items" data-ct-reveal>
+        {contactDirect.items.map((item) => (
+          <a class="ct-direct-item" href={item.href}>
+            <span><ExpertiseIcon name={item.icon} /></span>
+            <strong>{item.title}</strong>
+            <small>{item.label}</small>
+          </a>
+        ))}
+      </div>
+
+      <div class="ct-direct__actions" data-ct-reveal>
+        {contactDirect.actions.map((action) => (
+          <a class={`lm-button ${action.tone === 'yellow' ? 'lm-button--yellow' : 'lm-button--dark'}`} href={action.href}>
+            {action.label}
+            <span aria-hidden="true">→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="ct-map-card" data-ct-reveal data-ct-depth>
+      <iframe
+        title="Carte de localisation Lemon Mind à Casablanca"
+        src={contactDetails.mapsEmbed}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+      <a class="ct-map-card__pin" href={contactDetails.mapsHref}>
+        <span><ExpertiseIcon name="pin" /></span>
+        <strong>Lemon Mind</strong>
+        <small>{contactDetails.cityDisplay}</small>
+      </a>
+      <a class="ct-map-card__open" href={contactDetails.mapsHref} aria-label="Ouvrir l’itinéraire vers Lemon Mind">↗</a>
+      <p class="ct-hand ct-hand--map">{contactDirect.annotation}</p>
+    </div>
+  </div>
+</section>

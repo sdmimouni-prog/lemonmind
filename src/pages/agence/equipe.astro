@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import TeamCulture from '../../components/team/TeamCulture.astro';
+import TeamDepartments from '../../components/team/TeamDepartments.astro';
+import TeamDirectory from '../../components/team/TeamDirectory.astro';
+import TeamHero from '../../components/team/TeamHero.astro';
+import TeamInteractions from '../../components/team/TeamInteractions.astro';
+import TeamLeadership from '../../components/team/TeamLeadership.astro';
+import TeamRecruitmentCta from '../../components/team/TeamRecruitmentCta.astro';
+import TeamValues from '../../components/team/TeamValues.astro';
+import { contact } from '../../data/homepage';
+import { teamMembers, teamMeta } from '../../data/team';
+import '../../styles/team.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(teamMeta.canonical, siteUrl).toString();
+const organizationId = `${siteUrl}#organization`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: 'Lemon Mind Digital',
+      url: siteUrl,
+      telephone: contact.phone,
+      email: contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Casablanca',
+        addressCountry: 'MA',
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+    },
+    {
+      '@type': 'CollectionPage',
+      '@id': `${pageUrl}#page`,
+      name: teamMeta.title,
+      description: teamMeta.description,
+      url: pageUrl,
+      inLanguage: 'fr-MA',
+      isPartOf: {
+        '@id': siteUrl,
+      },
+      about: {
+        '@id': organizationId,
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'L’agence',
+          item: new URL('/agence', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'L’équipe',
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      '@id': `${pageUrl}#profiles`,
+      itemListElement: teamMembers.map((profile) => ({
+        '@type': 'ListItem',
+        position: profile.displayOrder,
+        name: profile.name,
+        description: profile.role,
+      })),
+    },
+  ],
+};
+---
+<BaseLayout
+  title={teamMeta.title}
+  description={teamMeta.description}
+  canonical={teamMeta.canonical}
+  ogImage={teamMeta.ogImage}
+  schema={schema}
+  bodyClass="team-page"
+>
+  <Header ctaLabel="Réservez un appel" ctaHref={contact.bookingHref} />
+  <main>
+    <TeamHero />
+    <TeamValues />
+    <TeamLeadership />
+    <TeamDepartments />
+    <TeamDirectory />
+    <TeamCulture />
+    <TeamRecruitmentCta />
+  </main>
+  <TeamInteractions />
+  <Footer />
+</BaseLayout>

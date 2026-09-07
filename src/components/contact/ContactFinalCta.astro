@@ -1,0 +1,25 @@
+---
+import { contactFinalCta, contactDetails } from '../../data/contactContent';
+---
+<section class="ct-final-cta" aria-labelledby="contact-final-title" data-ct-scene>
+  <div class="lm-shell ct-final-cta__grid">
+    <div class="ct-final-cta__copy">
+      <p class="ct-eyebrow ct-eyebrow--outline" data-ct-reveal>{contactFinalCta.eyebrow}</p>
+      <h2 id="contact-final-title" data-ct-reveal>{contactFinalCta.title}</h2>
+    </div>
+    <div class="ct-final-cta__side" data-ct-reveal>
+      <p>{contactFinalCta.text}</p>
+      <div>
+        <a class="lm-button lm-button--dark" href={contactDetails.bookingHref}>
+          {contactFinalCta.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button ct-button--outline" href="/realisations">
+          {contactFinalCta.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+    <p class="ct-hand ct-hand--final" data-ct-reveal>{contactFinalCta.annotation}</p>
+  </div>
+</section>

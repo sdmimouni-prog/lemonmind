@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ClientLogos from '../components/home/ClientLogos.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import InfluenceSection from '../components/home/InfluenceSection.astro';
+import KpiStrip from '../components/home/KpiStrip.astro';
+import ProcessTimeline from '../components/home/ProcessTimeline.astro';
+import ProductionSection from '../components/home/ProductionSection.astro';
+import ProjectsShowcase from '../components/home/ProjectsShowcase.astro';
+import ServicesGrid from '../components/home/ServicesGrid.astro';
+import TestimonialBand from '../components/home/TestimonialBand.astro';
+import '../styles/homepage.css';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Lemon Mind Digital',
+  url: 'https://lemonmind.agency',
+  email: 'contact@lemonmind.agency',
+  telephone: '+212661768009',
+  description: 'Agence influence, production et stratégie digitale pour faire grandir les marques.',
+};
+---
+<BaseLayout
+  title="Lemon Mind Digital | Influence, production et stratégie digitale"
+  description="Lemon Mind Digital conçoit des campagnes d’influence, de production de contenu et de stratégie digitale pour faire grandir les marques."
+  schema={schema}
+>
+  <Header />
+  <main>
+    <HomeHero />
+    <KpiStrip />
+    <ClientLogos />
+    <ServicesGrid />
+    <InfluenceSection />
+    <ProductionSection />
+    <ProcessTimeline />
+    <ProjectsShowcase />
+    <TestimonialBand />
+    <FinalCta />
+  </main>
+  <Footer />
+</BaseLayout>

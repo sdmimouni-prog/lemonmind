@@ -1,0 +1,40 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { countReferencesByGroup, sectors } from '../../data/references';
+---
+<section class="rf-sectors rf-section-light" aria-labelledby="references-sectors-title" data-rf-scene>
+  <div class="lm-shell">
+    <div class="rf-section-head rf-section-head--split">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--red" data-rf-reveal>Des secteurs accompagnés</p>
+        <h2 id="references-sectors-title" data-rf-title>
+          Une expertise transversale au service de marques de tous horizons.
+        </h2>
+      </div>
+      <p data-rf-reveal style="--rf-order: 1;">
+        Chaque secteur possède ses propres audiences, ses codes et ses enjeux. Nous adaptons les idées, les
+        contenus et les stratégies à chaque univers de marque.
+      </p>
+    </div>
+
+    <div class="rf-sector-grid">
+      {sectors.map((sector, index) => (
+        <article
+          class={`rf-sector-card rf-sector-card--${sector.tone}`}
+          data-rf-reveal
+          data-rf-hover
+          style={`--rf-order: ${index};`}
+        >
+          <div class="rf-sector-card__top">
+            <span class="rf-icon">
+              <ExpertiseIcon name={sector.icon} className="rf-icon__svg" />
+            </span>
+            <strong>{countReferencesByGroup(sector.id)}</strong>
+          </div>
+          <h3>{sector.title}</h3>
+          <p>{sector.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,89 @@
+---
+import { contact, finalCta } from '../../data/homepage';
+---
+<section class="lm-final-cta" aria-labelledby="final-cta-title" data-final-cta>
+  <div class="lm-shell">
+    <span class="lm-cta-glow" aria-hidden="true"></span>
+    <span class="lm-cta-sweep" aria-hidden="true"></span>
+    <span class="lm-cta-pixels" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </span>
+    <span class="lm-sticker lm-sticker--green">Croissance</span>
+    <span class="lm-sticker lm-sticker--orange">Visuels percutants</span>
+    <span class="lm-sticker lm-sticker--red">Stratégie de marque</span>
+    <span class="lm-cta-spark" aria-hidden="true">*</span>
+    <span class="lm-cta-thread lm-cta-thread--left" aria-hidden="true"></span>
+    <span class="lm-cta-thread lm-cta-thread--right" aria-hidden="true"></span>
+    <h2 id="final-cta-title">Prêt à écrire votre prochaine <span>grande réussite ?</span></h2>
+    <p>{finalCta.text}</p>
+    <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+      {finalCta.cta}
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const section = document.querySelector('[data-final-cta]');
+
+    if (!section) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    section.classList.add('is-motion-ready');
+
+    let animationFrame = 0;
+
+    const updatePointer = (event) => {
+      if (prefersReducedMotion.matches) {
+        return;
+      }
+
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(() => {
+        const rect = section.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        const tiltX = ((event.clientY - rect.top) / rect.height - 0.5) * -6;
+        const tiltY = ((event.clientX - rect.left) / rect.width - 0.5) * 8;
+
+        section.style.setProperty('--cta-x', `${x.toFixed(2)}%`);
+        section.style.setProperty('--cta-y', `${y.toFixed(2)}%`);
+        section.style.setProperty('--cta-tilt-x', `${tiltX.toFixed(2)}deg`);
+        section.style.setProperty('--cta-tilt-y', `${tiltY.toFixed(2)}deg`);
+      });
+    };
+
+    const resetPointer = () => {
+      window.cancelAnimationFrame(animationFrame);
+      section.style.setProperty('--cta-x', '50%');
+      section.style.setProperty('--cta-y', '38%');
+      section.style.setProperty('--cta-tilt-x', '0deg');
+      section.style.setProperty('--cta-tilt-y', '0deg');
+    };
+
+    section.addEventListener('pointermove', updatePointer);
+    section.addEventListener('pointerleave', resetPointer);
+    resetPointer();
+
+    if ('IntersectionObserver' in window && !prefersReducedMotion.matches) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              section.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.28 },
+      );
+
+      observer.observe(section);
+    } else {
+      section.classList.add('is-visible');
+    }
+  })();
+</script>

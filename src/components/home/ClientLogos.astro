@@ -1,0 +1,92 @@
+---
+import { clientLogos } from '../../data/homepage';
+
+const logoLoop = [...clientLogos, ...clientLogos];
+---
+<section class="lm-client-logos" id="references" aria-labelledby="client-logos-title">
+  <div class="lm-shell">
+    <div class="lm-logo-band">
+      <h2 id="client-logos-title">Ils nous font confiance</h2>
+      <div
+        class="lm-logo-band__viewport"
+        data-logo-slider
+        data-logo-count={clientLogos.length}
+        aria-label="Logos clients Lemon Mind en slider"
+      >
+        <div class="lm-logo-band__track">
+          {logoLoop.map((logo, index) => (
+          <figure
+            class={`lm-logo-slide ${logo.size ? `lm-logo-slide--${logo.size}` : ''} ${logo.surface ? `lm-logo-slide--${logo.surface}` : ''}`}
+            aria-hidden={index >= clientLogos.length ? 'true' : 'false'}
+          >
+            <img
+              src={logo.src}
+              alt={index >= clientLogos.length ? '' : logo.name}
+              width="360"
+              height="160"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const viewport = document.querySelector('[data-logo-slider]');
+    const track = viewport?.querySelector('.lm-logo-band__track');
+
+    if (!viewport || !track || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    const total = Number(viewport.getAttribute('data-logo-count') || '0');
+    let index = 0;
+    let timer = 0;
+
+    const getStep = () => {
+      const first = track.children[0]?.getBoundingClientRect();
+      const second = track.children[1]?.getBoundingClientRect();
+
+      if (!first || !second) {
+        return 0;
+      }
+
+      return second.left - first.left;
+    };
+
+    const moveTo = (nextIndex, animated = true) => {
+      const step = getStep();
+
+      if (!step) {
+        return;
+      }
+
+      track.classList.toggle('is-resetting', !animated);
+      track.style.transform = `translate3d(${-nextIndex * step}px, 0, 0)`;
+      index = nextIndex;
+    };
+
+    const start = () => {
+      window.clearInterval(timer);
+      timer = window.setInterval(() => moveTo(index + 1), 3000);
+    };
+
+    track.addEventListener('transitionend', () => {
+      if (index >= total) {
+        moveTo(0, false);
+        window.requestAnimationFrame(() => track.classList.remove('is-resetting'));
+      }
+    });
+
+    viewport.addEventListener('mouseenter', () => window.clearInterval(timer));
+    viewport.addEventListener('mouseleave', start);
+    window.addEventListener('resize', () => moveTo(index, false));
+
+    start();
+  })();
+</script>

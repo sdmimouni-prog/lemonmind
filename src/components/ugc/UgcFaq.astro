@@ -1,0 +1,45 @@
+---
+import { ugcFaq } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-faq ugc-section-light" aria-labelledby="ugc-faq-title" data-ugc-scene>
+  <div class="lm-shell ugc-faq__grid">
+    <div>
+      <p class="lm-eyebrow lm-eyebrow--red" data-ugc-reveal>{ugcFaq.eyebrow}</p>
+      <h2 id="ugc-faq-title" data-ugc-reveal>{ugcFaq.title}</h2>
+      <p class="ugc-hand ugc-hand--faq" data-ugc-reveal>Good content builds trust.</p>
+    </div>
+    <div class="ugc-faq__list" data-ugc-faq-list data-ugc-reveal>
+      {ugcFaq.questions.map((item, index) => {
+        const panelId = `ugc-faq-panel-${index + 1}`;
+        const buttonId = `ugc-faq-button-${index + 1}`;
+        return (
+          <article class="ugc-faq__item">
+            <h3>
+              <button
+                id={buttonId}
+                type="button"
+                data-ugc-faq-button
+                aria-expanded={index === 0 ? 'true' : 'false'}
+                aria-controls={panelId}
+              >
+                <span>{item.question}</span>
+                <span aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div
+              id={panelId}
+              class="ugc-faq__panel"
+              role="region"
+              aria-labelledby={buttonId}
+              data-open={index === 0 ? 'true' : 'false'}
+            >
+              <div>
+                <p>{item.answer}</p>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>

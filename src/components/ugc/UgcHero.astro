@@ -1,0 +1,91 @@
+---
+import { ugcContactHref, ugcHero, ugcRealisationHref, ugcSocialIcons } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-hero" aria-labelledby="ugc-hero-title" data-ugc-scene data-ugc-parallax>
+  <div class="ugc-hero__halo ugc-hero__halo--magenta" aria-hidden="true"></div>
+  <div class="ugc-hero__halo ugc-hero__halo--violet" aria-hidden="true"></div>
+
+  <div class="lm-shell ugc-hero__grid">
+    <div class="ugc-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-ugc-reveal>{ugcHero.eyebrow}</p>
+      <h1 id="ugc-hero-title" class="ugc-hero__title" data-ugc-reveal>
+        <span>Agence UGC au Maroc :</span>
+        <span>vidéos UGC et Creator Content</span>
+        <span><strong>pour les marques</strong></span>
+      </h1>
+      <div class="ugc-hero__lead" data-ugc-reveal>
+        {ugcHero.intro.map((line) => <p>{line}</p>)}
+      </div>
+      <div class="ugc-hero__text" data-ugc-reveal>
+        {ugcHero.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <div class="ugc-actions" data-ugc-reveal>
+        <a class="lm-button lm-button--yellow" href={ugcContactHref}>
+          {ugcHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href={ugcRealisationHref}>
+          {ugcHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ul class="ugc-hero__tags" aria-label="Formats UGC" data-ugc-reveal>
+        {ugcHero.tags.map((tag) => <li>{tag}</li>)}
+      </ul>
+    </div>
+
+    <div class="ugc-hero__stage" aria-label="Production UGC Lemon Mind">
+      <figure class="ugc-hero__main" data-ugc-layer="main">
+        <img
+          src={ugcHero.mainImage}
+          alt="Créatrice en tournage pour un contenu UGC Lemon Mind"
+          width="1024"
+          height="1536"
+          sizes="(max-width: 768px) 88vw, 560px"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+      <figure class="ugc-phone" data-ugc-layer="phone">
+        <span class="ugc-phone__speaker" aria-hidden="true"></span>
+        <img
+          src={ugcHero.phoneImage}
+          alt="Aperçu vertical d’un contenu UGC sur smartphone"
+          width="276"
+          height="404"
+          sizes="(max-width: 768px) 38vw, 164px"
+          loading="eager"
+          decoding="async"
+        />
+        <figcaption>Creator Content</figcaption>
+      </figure>
+      <figure class="ugc-camera-card" data-ugc-layer="camera">
+        <img
+          src={ugcHero.cameraImage}
+          alt="Équipe Lemon Mind préparant une production de contenu"
+          width="640"
+          height="390"
+          sizes="(max-width: 768px) 58vw, 235px"
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+      <article class="ugc-performance-card" data-ugc-layer="card">
+        <strong>{ugcHero.performanceTitle}</strong>
+        <span>{ugcHero.performanceText}</span>
+        <i aria-hidden="true"></i>
+      </article>
+      <p class="ugc-hand ugc-hand--hero-left" data-ugc-layer="note">{ugcHero.annotation}</p>
+      <p class="ugc-hand ugc-hand--hero-right" data-ugc-layer="note">{ugcHero.sideNote}</p>
+      <p class="ugc-sticker" data-ugc-layer="sticker">{ugcHero.sticker}</p>
+      <div class="ugc-social-stack" aria-label="Plateformes de diffusion UGC">
+        {ugcSocialIcons.map((icon, index) => (
+          <span class={`ugc-social-stack__item ugc-social-stack__item--${icon.slug}`} style={`--ugc-social: ${icon.tone}; --ugc-order: ${index};`}>
+            <img src={icon.src} alt={`${icon.name} logo`} width="28" height="28" loading="eager" decoding="async" />
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

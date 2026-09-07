@@ -1,0 +1,151 @@
+---
+import { contact, production } from '../../data/homepage';
+
+const productionFrames = [
+  {
+    src: production.assets.wide,
+    alt: 'Session de création Lemon Mind en studio',
+    className: 'lm-production-collage__wide',
+    width: 1280,
+    height: 720,
+  },
+  {
+    src: production.assets.vertical,
+    alt: 'Activation terrain et captation de contenu',
+    className: 'lm-production-collage__left',
+    width: 1024,
+    height: 1536,
+  },
+  {
+    src: production.assets.edit,
+    alt: 'Créatrice filmant un contenu produit',
+    className: 'lm-production-collage__right',
+    width: 560,
+    height: 996,
+  },
+];
+---
+<section class="lm-production" aria-labelledby="production-title" data-production-scene>
+  <div class="lm-shell lm-production__grid">
+    <div class="lm-production__copy">
+      <p class="lm-eyebrow lm-eyebrow--mint">{production.eyebrow}</p>
+      <h2 id="production-title">{production.title}</h2>
+      <p>{production.text}</p>
+      <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+        {production.cta}
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="lm-production-collage" aria-label="Collage des contenus de production">
+      {productionFrames.map((frame, index) => (
+        <figure
+          class={frame.className}
+          data-production-frame
+          data-production-index={index}
+          style={`--production-order: ${index}`}
+        >
+          <img src={frame.src} alt={frame.alt} width={frame.width} height={frame.height} loading="lazy" />
+        </figure>
+      ))}
+    </div>
+
+    <div class="lm-deliverables" aria-label="Livrables production">
+      {production.deliverables.map((deliverable, index) => (
+        <article data-production-box data-production-index={index} style={`--production-order: ${index + 3}`}>
+          <span aria-hidden="true">
+            <small>{String(index + 1).padStart(2, '0')}</small>
+          </span>
+          <div>
+            <h3>{deliverable.title}</h3>
+            <p>{deliverable.text}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const scene = document.querySelector('[data-production-scene]');
+
+    if (!scene) {
+      return;
+    }
+
+    const frames = Array.from(scene.querySelectorAll('[data-production-frame]'));
+    const boxes = Array.from(scene.querySelectorAll('[data-production-box]'));
+    const interactiveItems = [...frames, ...boxes];
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const setPointer = (element, event) => {
+      const rect = element.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+      element.style.setProperty('--production-x', `${x.toFixed(2)}%`);
+      element.style.setProperty('--production-y', `${y.toFixed(2)}%`);
+    };
+
+    const resetPointer = (element) => {
+      element.style.setProperty('--production-x', '50%');
+      element.style.setProperty('--production-y', '50%');
+    };
+
+    const clearActive = () => {
+      frames.forEach((frame) => frame.classList.remove('is-linked'));
+      boxes.forEach((box) => box.classList.remove('is-linked'));
+    };
+
+    const setActive = (rawIndex) => {
+      const index = Number(rawIndex || '0');
+      const frameIndex = index % Math.max(frames.length, 1);
+
+      frames.forEach((frame) => {
+        frame.classList.toggle(
+          'is-linked',
+          Number(frame.getAttribute('data-production-index')) === frameIndex,
+        );
+      });
+
+      boxes.forEach((box) => {
+        box.classList.toggle(
+          'is-linked',
+          Number(box.getAttribute('data-production-index')) === index,
+        );
+      });
+    };
+
+    scene.classList.add('is-motion-ready');
+
+    if ('IntersectionObserver' in window && !prefersReducedMotion.matches) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.32 },
+      );
+
+      observer.observe(scene);
+    } else {
+      scene.classList.add('is-visible');
+    }
+
+    interactiveItems.forEach((item) => {
+      resetPointer(item);
+
+      item.addEventListener('pointermove', (event) => setPointer(item, event));
+      item.addEventListener('pointerenter', () => setActive(item.getAttribute('data-production-index')));
+      item.addEventListener('pointerleave', () => {
+        resetPointer(item);
+        clearActive();
+      });
+    });
+  })();
+</script>

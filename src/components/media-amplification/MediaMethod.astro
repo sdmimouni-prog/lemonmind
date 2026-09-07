@@ -1,0 +1,23 @@
+---
+import { mediaMethod } from '../../data/mediaAmplification';
+---
+<section class="sm-method ma-method" aria-labelledby="ma-method-title" data-sm-scene>
+  <div class="lm-shell sm-method__grid ma-method__grid">
+    <div class="sm-method__intro">
+      <p class="lm-eyebrow" data-sm-reveal>{mediaMethod.eyebrow}</p>
+      <h2 id="ma-method-title" data-sm-reveal>{mediaMethod.title}</h2>
+    </div>
+    <p class="sm-method__text" data-sm-reveal>{mediaMethod.text}</p>
+    <p class="sm-hand sm-hand--method ma-hand--method" data-sm-reveal>{mediaMethod.annotation}</p>
+
+    <div class="sm-method__timeline ma-method__timeline" data-sm-reveal>
+      {mediaMethod.steps.map((step, index) => (
+        <article class={`sm-method-step sm-method-step--${step.tone} ma-method-step`} style={`--sm-order: ${index};`}>
+          <span>{step.number}</span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

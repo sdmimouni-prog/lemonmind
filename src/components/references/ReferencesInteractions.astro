@@ -1,0 +1,124 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const scenes = Array.from(document.querySelectorAll('[data-rf-scene]'));
+
+    scenes.forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '8% 0px 8% 0px' },
+      );
+
+      observer.observe(scene);
+    });
+
+    window.setTimeout(() => {
+      scenes.forEach((scene) => scene.classList.add('is-visible'));
+    }, 1400);
+
+    const filters = Array.from(document.querySelectorAll('[data-rf-filter]'));
+    const references = Array.from(document.querySelectorAll('[data-rf-reference]'));
+    const countStatus = document.querySelector('[data-rf-count-status]');
+
+    const applyFilter = (filter) => {
+      let visibleCount = 0;
+
+      filters.forEach((button) => {
+        button.setAttribute('aria-pressed', button.getAttribute('data-rf-filter') === filter ? 'true' : 'false');
+      });
+
+      references.forEach((card, index) => {
+        const matches = filter === 'all' || card.getAttribute('data-group') === filter;
+        card.toggleAttribute('hidden', !matches);
+
+        if (matches) {
+          visibleCount += 1;
+          card.style.setProperty('--rf-order', String(index % 12));
+          card.classList.remove('is-filtered-in');
+          window.requestAnimationFrame(() => card.classList.add('is-filtered-in'));
+        }
+      });
+
+      if (countStatus) {
+        countStatus.textContent = `${visibleCount} références affichées`;
+      }
+    };
+
+    filters.forEach((button) => {
+      button.addEventListener('click', () => applyFilter(button.getAttribute('data-rf-filter') || 'all'));
+    });
+
+    applyFilter('all');
+
+    if (!canHover || prefersReducedMotion.matches) {
+      return;
+    }
+
+    document.querySelectorAll('[data-rf-parallax]').forEach((scene) => {
+      scene.addEventListener('pointermove', (event) => {
+        const rect = scene.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+        const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+        scene.style.setProperty('--rf-mx', x.toFixed(3));
+        scene.style.setProperty('--rf-my', y.toFixed(3));
+      });
+
+      scene.addEventListener('pointerleave', () => {
+        scene.style.setProperty('--rf-mx', '0');
+        scene.style.setProperty('--rf-my', '0');
+      });
+    });
+
+    document.querySelectorAll('[data-rf-depth]').forEach((item) => {
+      item.addEventListener('pointermove', (event) => {
+        const rect = item.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+        const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+        item.style.setProperty('--rf-tilt-x', `${(y * -3).toFixed(2)}deg`);
+        item.style.setProperty('--rf-tilt-y', `${(x * 4).toFixed(2)}deg`);
+      });
+
+      item.addEventListener('pointerleave', () => {
+        item.style.setProperty('--rf-tilt-x', '0deg');
+        item.style.setProperty('--rf-tilt-y', '0deg');
+      });
+    });
+
+    document.querySelectorAll('[data-rf-hover]').forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+        const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+        card.style.setProperty('--rf-card-x', `${(x * 6).toFixed(2)}px`);
+        card.style.setProperty('--rf-card-y', `${(y * 6).toFixed(2)}px`);
+        card.style.setProperty('--rf-card-rx', `${(y * -3).toFixed(2)}deg`);
+        card.style.setProperty('--rf-card-ry', `${(x * 4).toFixed(2)}deg`);
+      });
+
+      card.addEventListener('pointerleave', () => {
+        card.style.setProperty('--rf-card-x', '0px');
+        card.style.setProperty('--rf-card-y', '0px');
+        card.style.setProperty('--rf-card-rx', '0deg');
+        card.style.setProperty('--rf-card-ry', '0deg');
+      });
+    });
+  })();
+</script>

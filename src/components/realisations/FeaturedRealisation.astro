@@ -1,0 +1,48 @@
+---
+import { featuredRealisation } from '../../data/realisations';
+---
+<section class="rs-featured" aria-labelledby="featured-realisation-title" data-rs-scene>
+  <div class="lm-shell rs-featured__grid">
+    <div class="rs-featured__copy">
+      <p class="rs-label rs-label--outline">{featuredRealisation.eyebrow}</p>
+      <h2 id="featured-realisation-title">{featuredRealisation.title}</h2>
+      <p>{featuredRealisation.text}</p>
+      <dl class="rs-featured__details">
+        {featuredRealisation.details.map((item) => (
+          <div>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <div class="rs-featured__stats">
+        {featuredRealisation.stats.map((stat) => (
+          <div>
+            <strong>{stat.value}</strong>
+            <span>{stat.label}</span>
+          </div>
+        ))}
+      </div>
+      <a class="lm-button lm-button--yellow" href="#projects">
+        {featuredRealisation.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <figure class="rs-featured__main">
+      <img src={featuredRealisation.images.main} alt="Campagne beauté produite par Lemon Mind" width="1024" height="1536" loading="lazy" />
+      <figcaption class="rs-hand">{featuredRealisation.hand}</figcaption>
+    </figure>
+
+    <div class="rs-featured__side">
+      <figure>
+        <img src={featuredRealisation.images.bts} alt="Coulisses de tournage d’une campagne" width="1280" height="720" loading="lazy" />
+        <figcaption class="rs-hand">{featuredRealisation.bts}</figcaption>
+      </figure>
+      <figure>
+        <img src={featuredRealisation.images.place} alt="Lieu de campagne et de visibilité de marque" width="1200" height="1200" loading="lazy" />
+        <figcaption>{featuredRealisation.confidence}</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

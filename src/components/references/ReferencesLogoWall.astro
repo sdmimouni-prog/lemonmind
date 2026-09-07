@@ -1,0 +1,98 @@
+---
+import {
+  countReferencesByGroup,
+  referenceFilters,
+  references,
+  referencesIntro,
+} from '../../data/references';
+
+const filterCounts = referenceFilters.map((filter) => ({
+  ...filter,
+  count: filter.id === 'all' ? references.length : countReferencesByGroup(filter.id),
+}));
+
+const darkLogoIds = new Set([
+  'hem',
+  'tbs-education',
+  'euromed',
+  'upm',
+  'electroplanet',
+  'carrefour',
+  'marjane',
+  'massinart',
+  'sango',
+  'maserati',
+  'range-rover',
+  'jaguar',
+  'barcelo',
+  'banyan-tree',
+]);
+---
+<section class="rf-logo-wall rf-section-light" id="references" aria-labelledby="references-wall-title" data-rf-scene>
+  <div class="lm-shell">
+    <div class="rf-section-head rf-section-head--split">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--red" data-rf-reveal>{referencesIntro.eyebrow}</p>
+        <h2 id="references-wall-title" data-rf-title>{referencesIntro.title}</h2>
+      </div>
+      <div class="rf-section-head__side" data-rf-reveal style="--rf-order: 1;">
+        <p>{referencesIntro.text}</p>
+        <a class="rf-text-link" href="#reference-grid">
+          {referencesIntro.cta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="rf-filterbar" aria-label="Filtrer les références par secteur" data-rf-reveal style="--rf-order: 2;">
+      {filterCounts.map((filter) => (
+        <button
+          class="rf-filter"
+          type="button"
+          data-rf-filter={filter.id}
+          aria-pressed={filter.id === 'all' ? 'true' : 'false'}
+        >
+          <span>{filter.label}</span>
+          <strong>{filter.count}</strong>
+        </button>
+      ))}
+    </div>
+
+    <p class="rf-visually-hidden" aria-live="polite" data-rf-count-status>
+      {references.length} références affichées
+    </p>
+
+    <div class="rf-reference-grid" id="reference-grid">
+      {references.map((reference, index) => (
+        <article
+          id={reference.id}
+          class:list={[
+            'rf-reference-card',
+            darkLogoIds.has(reference.id) && 'rf-reference-card--dark',
+          ]}
+          data-rf-reference
+          data-group={reference.sectorGroup}
+          style={`--rf-order: ${index % 12};`}
+          tabindex="0"
+        >
+          <div class="rf-reference-card__logo">
+            <img
+              src={reference.logo}
+              alt={reference.logoAlt}
+              width="180"
+              height="78"
+              sizes="(max-width: 520px) 44vw, (max-width: 1024px) 28vw, 180px"
+              loading={index < 12 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          </div>
+          <div class="rf-reference-card__details">
+            <h3>{reference.name}</h3>
+            <p>{reference.sourceSector}</p>
+            <span>{reference.mission}</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

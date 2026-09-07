@@ -1,0 +1,30 @@
+---
+import { impactNumbers } from '../../data/realisations';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="rs-impact" id="impact" aria-labelledby="impact-title" data-rs-scene data-rs-counters>
+  <div class="lm-shell rs-impact__grid">
+    <div class="rs-impact__copy">
+      <p class="rs-label">{impactNumbers.eyebrow}</p>
+      <h2 id="impact-title">{impactNumbers.title}</h2>
+      <p>{impactNumbers.text}</p>
+    </div>
+    <div class="rs-impact__stats">
+      {impactNumbers.stats.map((stat, index) => (
+        <article class={`rs-impact-card rs-impact-card--${stat.tone}`} style={`--rs-order: ${index};`}>
+          <ExpertiseIcon name={stat.icon} />
+          <strong
+            data-rs-count
+            data-count={stat.count}
+            data-prefix={stat.prefix ?? ''}
+            data-suffix={stat.suffix ?? ''}
+            data-decimals={stat.decimals ?? 0}
+          >
+            {stat.value}
+          </strong>
+          <span>{stat.label}</span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,88 @@
+---
+import { contact, hero } from '../../data/homepage';
+---
+<section class="lm-hero" id="accueil" aria-labelledby="hero-title">
+  <div class="lm-pixel-cloud lm-pixel-cloud--hero" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="lm-shell lm-hero__grid">
+    <div class="lm-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow">{hero.eyebrow}</p>
+      <h1 id="hero-title">
+        <span class="lm-hero-title__line lm-hero-title__line--main lm-hero-title__line--desktop">Influence, production</span>
+        <span class="lm-hero-title__line lm-hero-title__line--main lm-hero-title__line--mobile">Influence,</span>
+        <span class="lm-hero-title__line lm-hero-title__line--main lm-hero-title__line--mobile">production</span>
+        <span class="lm-hero-title__line lm-hero-title__line--main">et stratégie digitale</span>
+        <span class="lm-hero-title__line lm-hero-title__line--accent">pour faire grandir</span>
+        <span class="lm-hero-title__line lm-hero-title__line--accent">les marques.</span>
+      </h1>
+      <p>{hero.text}</p>
+      <div class="lm-hero__actions">
+        <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+          {hero.primaryCta}
+          <span aria-hidden="true">↗</span>
+        </a>
+        <a class="lm-button lm-button--dark" href="#services">
+          {hero.secondaryCta}
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="lm-hero-collage" aria-label="Collage influence et production Lemon Mind">
+      <figure class="lm-hero-collage__photo lm-hero-collage__photo--portrait">
+        <img src={hero.assets.portrait} alt="Portrait de créatrice en campagne d'influence" width="560" height="996" />
+      </figure>
+      <figure class="lm-hero-collage__photo lm-hero-collage__photo--production">
+        <img src={hero.assets.production} alt="Plateau de production de contenu" width="1280" height="720" />
+      </figure>
+      <figure class="lm-hero-collage__phone">
+        <img src={hero.assets.phone} alt="Contenu social vertical sur mobile" width="276" height="404" />
+      </figure>
+      <article class="lm-hero-collage__metric">
+        <span>{hero.metricLabel}</span>
+        <strong>{hero.metricValue}</strong>
+        <p>{hero.metricText}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const collage = document.querySelector('.lm-hero-collage');
+
+    if (
+      !collage ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    ) {
+      return;
+    }
+
+    let rafId = 0;
+
+    const setMotion = (x, y) => {
+      collage.style.setProperty('--hero-shift-x', `${x * 14}px`);
+      collage.style.setProperty('--hero-shift-y', `${y * 12}px`);
+      collage.style.setProperty('--hero-tilt-x', `${x * 3.6}deg`);
+      collage.style.setProperty('--hero-tilt-y', `${y * -3.2}deg`);
+      collage.style.setProperty('--hero-light-x', `${50 + x * 22}%`);
+      collage.style.setProperty('--hero-light-y', `${50 + y * 18}%`);
+    };
+
+    collage.addEventListener('pointermove', (event) => {
+      const rect = collage.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+      window.cancelAnimationFrame(rafId);
+      rafId = window.requestAnimationFrame(() => setMotion(x * 2, y * 2));
+    });
+
+    collage.addEventListener('pointerleave', () => {
+      window.cancelAnimationFrame(rafId);
+      rafId = window.requestAnimationFrame(() => setMotion(0, 0));
+    });
+  })();
+</script>

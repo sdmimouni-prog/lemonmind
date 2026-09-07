@@ -1,0 +1,28 @@
+---
+import { strategyFinalCta, strategyRelatedLinks } from '../../data/strategyConsulting';
+---
+<section class="sc-final-cta" aria-labelledby="sc-final-title" data-sc-scene>
+  <div class="lm-shell sc-final-cta__grid">
+    <div>
+      <p class="lm-eyebrow" data-sc-line>{strategyFinalCta.eyebrow}</p>
+      <h2 id="sc-final-title" data-sc-title>{strategyFinalCta.title}</h2>
+    </div>
+    <div class="sc-final-cta__content">
+      <p data-sc-reveal>{strategyFinalCta.text}</p>
+      <div class="sc-actions" data-sc-reveal>
+        <a class="lm-button sc-button--dark-fill" href={strategyFinalCta.primaryHref}>
+          {strategyFinalCta.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button sc-button--light-outline" href={strategyFinalCta.secondaryHref}>
+          {strategyFinalCta.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <nav class="sc-related-links" aria-label="Pages Lemon Mind liées" data-sc-reveal>
+        {strategyRelatedLinks.slice(0, 5).map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+    </div>
+    <p class="sc-hand sc-hand--final" data-sc-reveal>{strategyFinalCta.annotation}</p>
+  </div>
+</section>

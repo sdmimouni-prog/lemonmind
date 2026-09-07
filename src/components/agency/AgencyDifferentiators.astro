@@ -1,0 +1,26 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { agencyDifferentiators } from '../../data/agency';
+---
+<section class="ag-diff ag-section-light" aria-labelledby="agency-diff-title" data-ag-scene>
+  <div class="lm-shell">
+    <div class="ag-section-head ag-section-head--split">
+      <div>
+        <p class="lm-eyebrow" data-ag-line>{agencyDifferentiators.eyebrow}</p>
+        <h2 id="agency-diff-title" data-ag-title>{agencyDifferentiators.title}</h2>
+      </div>
+      <p data-ag-reveal>{agencyDifferentiators.text}</p>
+    </div>
+
+    <div class="ag-diff__grid">
+      {agencyDifferentiators.items.map((item, index) => (
+        <article class={`ag-diff-card ag-diff-card--${item.tone}`} style={`--ag-order: ${index};`} data-ag-reveal>
+          <span class="ag-icon" aria-hidden="true"><ExpertiseIcon name={item.icon} className="ag-icon__svg" /></span>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+      <p class="ag-hand ag-hand--diff">{agencyDifferentiators.annotation}</p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,24 @@
+---
+import { contact } from '../../data/homepage';
+import { realisationsFinalCta } from '../../data/realisations';
+---
+<section class="rs-final-cta" aria-labelledby="realisations-final-title" data-rs-scene data-rs-final-cta>
+  <div class="lm-shell rs-final-cta__grid">
+    <div class="rs-final-cta__copy">
+      <p class="rs-label rs-label--outline">{realisationsFinalCta.eyebrow}</p>
+      <h2 id="realisations-final-title">{realisationsFinalCta.title}</h2>
+      <p>{realisationsFinalCta.text}</p>
+    </div>
+    <div class="rs-final-cta__actions">
+      <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+        {realisationsFinalCta.primaryCta}
+        <span aria-hidden="true">→</span>
+      </a>
+      <a class="lm-button lm-button--dark" href="/nos-expertises">
+        {realisationsFinalCta.secondaryCta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <p class="rs-hand rs-hand--final">{realisationsFinalCta.hand}</p>
+  </div>
+</section>

@@ -1,0 +1,49 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { teamDepartments, teamMembersById } from '../../data/team';
+---
+<section class="team-section team-departments" id="team-departments" aria-labelledby="team-departments-title" data-team-scene>
+  <div class="lm-shell">
+    <div class="team-section__head team-section__head--split">
+      <div>
+        <p class="team-eyebrow" data-team-line>Nos pôles</p>
+        <h2 id="team-departments-title" data-team-title>Une équipe organisée autour de six expertises clés.</h2>
+      </div>
+      <p class="team-section__copy" data-team-reveal>
+        Des talents complémentaires mobilisés sur toute la chaîne de valeur, de la réflexion stratégique à la production et à la performance.
+      </p>
+    </div>
+
+    <div class="team-departments__grid">
+      {teamDepartments.map((department, index) => {
+        const profiles = department.memberIds.map((id) => teamMembersById.get(id)).filter(Boolean);
+        const visibleProfiles = profiles.slice(0, 4);
+        const hiddenCount = Math.max(profiles.length - visibleProfiles.length, 0);
+
+        return (
+          <button
+            class={`team-department-card team-tone--${department.tone}`}
+            type="button"
+            data-team-dept-jump={department.id}
+            style={`--team-item-index: ${index};`}
+            aria-label={`Filtrer l’annuaire par ${department.title}`}
+            data-team-stagger
+          >
+            <span class="team-department-card__icon" aria-hidden="true">
+              <ExpertiseIcon name={department.icon} className="team-icon__svg" />
+            </span>
+            <span class="team-department-card__count">{profiles.length} profils</span>
+            <span class="team-department-card__title">{department.title}</span>
+            <span class="team-department-card__text">{department.description}</span>
+            <span class="team-avatar-stack" aria-hidden="true">
+              {visibleProfiles.map((profile) => profile && (
+                <img src={profile.image} alt="" width="64" height="64" loading="lazy" decoding="async" />
+              ))}
+              {hiddenCount > 0 && <span>+{hiddenCount}</span>}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  </div>
+</section>

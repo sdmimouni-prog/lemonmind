@@ -1,0 +1,80 @@
+---
+import { testimonial } from '../../data/homepage';
+---
+<section class="lm-testimonial" id="temoignage" aria-labelledby="testimonial-title" data-testimonial-scene>
+  <div class="lm-shell lm-testimonial__grid">
+    <div class="lm-testimonial__visual" data-testimonial-visual>
+      <span class="lm-testimonial__line" aria-hidden="true"></span>
+      <span class="lm-testimonial__block" aria-hidden="true"></span>
+      <figure class="lm-testimonial__portrait">
+        <img src={testimonial.image} alt={`Portrait de ${testimonial.author}`} width="360" height="450" loading="lazy" />
+        <span class="lm-testimonial__badge" aria-hidden="true">99</span>
+      </figure>
+    </div>
+    <blockquote class="lm-testimonial__quote">
+      <span class="lm-testimonial__quote-mark lm-testimonial__quote-mark--open" aria-hidden="true">“</span>
+      <p id="testimonial-title">{testimonial.quote}</p>
+      <span class="lm-testimonial__quote-mark lm-testimonial__quote-mark--close" aria-hidden="true">”</span>
+      <cite class="lm-testimonial__author">— {testimonial.author} — {testimonial.role}</cite>
+    </blockquote>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const scene = document.querySelector('[data-testimonial-scene]');
+
+    if (!scene) {
+      return;
+    }
+
+    const visual = scene.querySelector('[data-testimonial-visual]');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    scene.classList.add('is-motion-ready');
+
+    if ('IntersectionObserver' in window && !prefersReducedMotion.matches) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.32 },
+      );
+
+      observer.observe(scene);
+    } else {
+      scene.classList.add('is-visible');
+    }
+
+    if (!visual || prefersReducedMotion.matches) {
+      return;
+    }
+
+    const resetPointer = () => {
+      visual.style.setProperty('--testimonial-x', '54%');
+      visual.style.setProperty('--testimonial-y', '46%');
+    };
+
+    visual.addEventListener('pointermove', (event) => {
+      const rect = visual.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+      visual.style.setProperty('--testimonial-x', `${x.toFixed(2)}%`);
+      visual.style.setProperty('--testimonial-y', `${y.toFixed(2)}%`);
+    });
+
+    visual.addEventListener('pointerenter', () => scene.classList.add('is-hovered'));
+    visual.addEventListener('pointerleave', () => {
+      scene.classList.remove('is-hovered');
+      resetPointer();
+    });
+
+    resetPointer();
+  })();
+</script>

@@ -1,0 +1,83 @@
+---
+import { contact } from '../../data/homepage';
+import { expertisesHero } from '../../data/expertises';
+---
+<section class="xp-hero" id="accueil" aria-labelledby="expertises-hero-title" data-xp-hero>
+  <div class="xp-hero__pixels" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="lm-shell xp-hero__grid">
+    <div class="xp-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow">{expertisesHero.eyebrow}</p>
+      <h1 id="expertises-hero-title">
+        {expertisesHero.titleLines.map((line) => (
+          <span class:list={[line.tone === 'yellow' && 'xp-text-yellow']}>{line.text}</span>
+        ))}
+      </h1>
+      <p>{expertisesHero.text}</p>
+      <div class="xp-hero__actions">
+        <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+          {expertisesHero.primaryCta}
+          <span aria-hidden="true">↗</span>
+        </a>
+        <a class="lm-button lm-button--dark" href="#expertises-realisations">
+          {expertisesHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="xp-hero__visual" aria-label="Univers influence et production Lemon Mind">
+      <figure class="xp-hero__main">
+        <img src={expertisesHero.image} alt="Créatrice de contenu en tournage produit" width="1024" height="1536" />
+      </figure>
+      <figure class="xp-hero__phone">
+        <img src={expertisesHero.phoneImage} alt="Vidéo sociale verticale Lemon Mind" width="276" height="404" />
+        <figcaption>♥ 1.2M</figcaption>
+      </figure>
+      <span class="xp-hand xp-hand--hero">Real<br />People<br />Real<br />Impact</span>
+      <span class="xp-hand xp-hand--side">Des<br />contenus<br />qui font<br />du sens.</span>
+      {expertisesHero.tags.map((tag, index) => (
+        <span class={`xp-hero__tag xp-hero__tag--${index + 1}`}>{tag}</span>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const hero = document.querySelector('[data-xp-hero]');
+    const visual = hero?.querySelector('.xp-hero__visual');
+
+    if (
+      !visual ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    ) {
+      return;
+    }
+
+    let raf = 0;
+
+    const setMotion = (x, y) => {
+      visual.style.setProperty('--xp-hero-x', `${x * 16}px`);
+      visual.style.setProperty('--xp-hero-y', `${y * 12}px`);
+      visual.style.setProperty('--xp-hero-tilt-x', `${y * -3}deg`);
+      visual.style.setProperty('--xp-hero-tilt-y', `${x * 4}deg`);
+    };
+
+    visual.addEventListener('pointermove', (event) => {
+      const rect = visual.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+      window.cancelAnimationFrame(raf);
+      raf = window.requestAnimationFrame(() => setMotion(x, y));
+    });
+
+    visual.addEventListener('pointerleave', () => {
+      window.cancelAnimationFrame(raf);
+      raf = window.requestAnimationFrame(() => setMotion(0, 0));
+    });
+  })();
+</script>

@@ -1,0 +1,25 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { strategyChallenges } from '../../data/strategyConsulting';
+---
+<section class="sc-challenges sc-section-light" aria-labelledby="sc-challenges-title" data-sc-scene>
+  <div class="lm-shell">
+    <div class="sc-section-heading sc-section-heading--split">
+      <div>
+        <p class="lm-eyebrow" data-sc-line>{strategyChallenges.eyebrow}</p>
+        <h2 id="sc-challenges-title" data-sc-title>{strategyChallenges.title}</h2>
+      </div>
+      <p data-sc-reveal>{strategyChallenges.text}</p>
+    </div>
+
+    <div class="sc-challenge-grid">
+      {strategyChallenges.items.map((item, index) => (
+        <article class={`sc-pastel-card sc-pastel-card--${item.tone}`} style={`--sc-order: ${index};`} data-sc-card data-sc-reveal>
+          <span class="sc-card-icon" aria-hidden="true"><ExpertiseIcon name={item.icon} className="sc-icon" /></span>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

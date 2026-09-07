@@ -1,0 +1,27 @@
+---
+import { finalReferencesCta } from '../../data/references';
+---
+<section class="rf-final-cta" aria-labelledby="references-final-title" data-rf-scene>
+  <div class="lm-shell rf-final-cta__grid">
+    <div class="rf-final-cta__copy">
+      <p class="lm-eyebrow" data-rf-reveal>{finalReferencesCta.eyebrow}</p>
+      <h2 id="references-final-title" data-rf-title>{finalReferencesCta.title}</h2>
+    </div>
+
+    <div class="rf-final-cta__actions" data-rf-reveal style="--rf-order: 1;">
+      <p>{finalReferencesCta.text}</p>
+      <div class="rf-actions">
+        <a class="lm-button rf-final-cta__primary" href={finalReferencesCta.primaryHref}>
+          {finalReferencesCta.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button rf-final-cta__secondary" href={finalReferencesCta.secondaryHref}>
+          {finalReferencesCta.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <p class="rf-hand rf-hand--final" data-rf-reveal style="--rf-order: 2;">{finalReferencesCta.annotation}</p>
+  </div>
+</section>

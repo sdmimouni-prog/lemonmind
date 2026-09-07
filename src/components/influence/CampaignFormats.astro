@@ -1,0 +1,24 @@
+---
+import { campaignFormats } from '../../data/influenceMarketing';
+---
+<section class="im-formats im-section-light" aria-labelledby="im-formats-title" data-im-scene>
+  <div class="lm-shell im-formats__grid">
+    <div class="im-formats__copy">
+      <p class="lm-eyebrow lm-eyebrow--mint" data-im-reveal>{campaignFormats.eyebrow}</p>
+      <h2 id="im-formats-title" data-im-reveal>{campaignFormats.title}</h2>
+    </div>
+    <p class="im-formats__intro" data-im-reveal>{campaignFormats.text}</p>
+    <div class="im-format-cards" aria-label="Formats de campagnes influence">
+      {campaignFormats.cards.map((card, index) => (
+        <article class="im-format-card" style={`--im-order: ${index};`} data-im-reveal>
+          <img src={card.image} alt={card.alt} width="900" height="620" loading="lazy" decoding="async" />
+          <div>
+            <h3>{card.title}</h3>
+            <p>{card.text}</p>
+          </div>
+          <a href="/#realisations" aria-label={`Voir des réalisations pour ${card.title}`}>→</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

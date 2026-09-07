@@ -1,0 +1,58 @@
+---
+import { collaborationIntro, featuredCollaborations, getReferenceById } from '../../data/references';
+
+const collaborationCards = featuredCollaborations.flatMap((card) => {
+  const reference = getReferenceById(card.referenceId);
+  return reference ? [{ ...card, reference }] : [];
+});
+---
+<section class="rf-collaborations" aria-labelledby="references-collaborations-title" data-rf-scene>
+  <div class="lm-shell">
+    <div class="rf-section-head rf-section-head--split">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--red" data-rf-reveal>{collaborationIntro.eyebrow}</p>
+        <h2 id="references-collaborations-title" data-rf-title>{collaborationIntro.title}</h2>
+      </div>
+      <div class="rf-section-head__side" data-rf-reveal style="--rf-order: 1;">
+        <p>{collaborationIntro.text}</p>
+        <a class="rf-text-link" href="/realisations">
+          {collaborationIntro.cta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="rf-collaboration-cards">
+      {collaborationCards.map((card, index) => (
+        <a
+          class="rf-collaboration-card"
+          href={card.reference.caseStudyUrl || '/realisations'}
+          data-rf-reveal
+          data-rf-hover
+          style={`--rf-order: ${index};`}
+        >
+          <figure style={`--rf-project-image: url('${card.image}');`}>
+            <img
+              src={card.image}
+              alt={card.imageAlt}
+              width="640"
+              height="420"
+              sizes="(max-width: 768px) 88vw, 280px"
+              loading="eager"
+              decoding="async"
+            />
+          </figure>
+          <div class="rf-collaboration-card__body">
+            <p>{card.reference.sourceSector}</p>
+            <h3>{card.reference.name}</h3>
+            <span>{card.reference.mission}</span>
+            <ul aria-label={`Expertises mobilisées pour ${card.reference.name}`}>
+              {card.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          </div>
+          <span class="rf-card-arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

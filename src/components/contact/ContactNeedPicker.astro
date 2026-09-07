@@ -1,0 +1,36 @@
+---
+import { contactNeeds } from '../../data/contactContent';
+---
+<section class="ct-needs" aria-labelledby="contact-needs-title" data-ct-scene>
+  <div class="lm-shell">
+    <div class="ct-section-head ct-needs__head">
+      <div>
+        <p class="ct-eyebrow ct-eyebrow--dark" data-ct-reveal>{contactNeeds.eyebrow}</p>
+        <h2 id="contact-needs-title" data-ct-reveal>{contactNeeds.title}</h2>
+      </div>
+      <p data-ct-reveal>{contactNeeds.helper}</p>
+    </div>
+
+    <div class="ct-need-grid">
+      {contactNeeds.cards.map((card, index) => (
+        <button
+          class={`ct-need-card ct-need-card--${card.tone}`}
+          type="button"
+          data-contact-choice
+          data-project-type={card.value}
+          style={`--ct-order: ${index};`}
+        >
+          <span class="ct-need-card__image">
+            <img src={card.image} alt={card.alt} width="640" height="360" loading="lazy" decoding="async" />
+          </span>
+          <span class="ct-need-card__body">
+            <strong>{card.title}</strong>
+            <span>{card.text}</span>
+            <small>{card.tag}</small>
+          </span>
+          <span class="ct-card-arrow" aria-hidden="true">→</span>
+        </button>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+import { socialFaq } from '../../data/socialMediaManagement';
+---
+<section class="sm-faq sm-section-light" aria-labelledby="sm-faq-title" data-sm-scene>
+  <div class="lm-shell sm-faq__grid">
+    <div>
+      <p class="lm-eyebrow" data-sm-reveal>{socialFaq.eyebrow}</p>
+      <h2 id="sm-faq-title" data-sm-reveal>{socialFaq.title}</h2>
+    </div>
+    <div class="sm-faq__list" data-sm-faq-list data-sm-reveal>
+      {socialFaq.questions.map((item, index) => (
+        <article class="sm-faq-item">
+          <h3>
+            <button
+              type="button"
+              id={`sm-faq-question-${index + 1}`}
+              aria-expanded="false"
+              aria-controls={`sm-faq-answer-${index + 1}`}
+              data-sm-faq-button
+            >
+              <span>{item.question}</span>
+              <span aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div
+            id={`sm-faq-answer-${index + 1}`}
+            role="region"
+            aria-labelledby={`sm-faq-question-${index + 1}`}
+            data-sm-faq-panel
+            data-open="false"
+          >
+            <p>{item.answer}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,146 @@
+---
+import { contact } from '../../data/homepage';
+import { signatureInfluence, signatureProduction } from '../../data/expertises';
+import ExpertiseIcon from './ExpertiseIcon.astro';
+
+const avatars = [
+  '/assets/lemon/leader-portrait.webp',
+  '/assets/lemon/influence-ai-beauty-creator.webp',
+  '/assets/lemon/creative-presentation.webp',
+  '/assets/lemon/influence-reel.webp',
+];
+---
+<section class="xp-signature xp-signature--influence" id="influence" aria-labelledby="signature-influence-title" data-xp-scene>
+  <div class="lm-shell xp-signature__grid">
+    <div class="xp-signature__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow">{signatureInfluence.eyebrow}</p>
+      <h2 id="signature-influence-title">{signatureInfluence.title}</h2>
+      <p class="xp-signature__subtitle">{signatureInfluence.subtitle}</p>
+      <p>{signatureInfluence.text}</p>
+      <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+        {signatureInfluence.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="xp-influence-card" data-xp-tilt>
+      <figure>
+        <img src={signatureInfluence.image} alt="Créatrice en campagne d'influence Lemon Mind" width="1024" height="1536" loading="lazy" />
+      </figure>
+      <span class="xp-like-badge">♥ {signatureInfluence.badge}</span>
+      <div class="xp-avatar-stack" aria-label="Profils créateurs">
+        {avatars.map((avatar) => (
+          <img src={avatar} alt="" width="52" height="52" loading="lazy" />
+        ))}
+        <span aria-hidden="true">+</span>
+      </div>
+      <span class="xp-hand xp-hand--signature">Real<br />People<br />Real<br />Impact</span>
+    </div>
+
+    <ul class="xp-signature-list" aria-label="Prestations influence">
+      {signatureInfluence.services.map((service, index) => (
+        <li style={`--xp-order: ${index};`}>
+          <ExpertiseIcon name={service.icon} />
+          <span>{service.label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section class="xp-signature xp-signature--production" id="production" aria-labelledby="signature-production-title" data-xp-scene>
+  <div class="lm-shell xp-production__grid">
+    <div class="xp-signature__copy">
+      <p class="lm-eyebrow lm-eyebrow--red">{signatureProduction.eyebrow}</p>
+      <h2 id="signature-production-title">{signatureProduction.title}</h2>
+      <p class="xp-signature__subtitle">{signatureProduction.subtitle}</p>
+      <p>{signatureProduction.text}</p>
+      <div class="xp-button-row">
+        <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+          {signatureProduction.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button xp-button-outline" href="#expertises-realisations">
+          {signatureProduction.secondaryCta}
+          <span aria-hidden="true">▶</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="xp-production-collage" data-xp-tilt>
+      <figure class="xp-production-collage__wide">
+        <img src={signatureProduction.wideImage} alt="Équipe Lemon Mind en production créative" width="1280" height="720" loading="lazy" />
+      </figure>
+      <figure class="xp-production-collage__small">
+        <img src={signatureProduction.smallImage} alt="Montage de contenu social Lemon Mind" width="560" height="996" loading="lazy" />
+        <span aria-hidden="true">▶</span>
+      </figure>
+      <span class="xp-production-pixels" aria-hidden="true"></span>
+      <span class="xp-hand xp-hand--production">Shoot<br />Edit<br />Create<br />Repeat</span>
+    </div>
+
+    <ul class="xp-signature-list xp-signature-list--dark" aria-label="Prestations production">
+      {signatureProduction.services.map((service, index) => (
+        <li style={`--xp-order: ${index};`}>
+          <ExpertiseIcon name={service.icon} />
+          <span>{service.label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scenes = document.querySelectorAll('[data-xp-scene]');
+    const tiltItems = document.querySelectorAll('[data-xp-tilt]');
+
+    scenes.forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.28 },
+      );
+
+      observer.observe(scene);
+    });
+
+    if (prefersReducedMotion.matches || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      return;
+    }
+
+    tiltItems.forEach((item) => {
+      item.addEventListener('pointermove', (event) => {
+        const rect = item.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+        const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+        item.style.setProperty('--xp-tilt-x', `${y * -5}deg`);
+        item.style.setProperty('--xp-tilt-y', `${x * 6}deg`);
+        item.style.setProperty('--xp-shift-x', `${x * 10}px`);
+        item.style.setProperty('--xp-shift-y', `${y * 8}px`);
+      });
+
+      item.addEventListener('pointerleave', () => {
+        item.style.setProperty('--xp-tilt-x', '0deg');
+        item.style.setProperty('--xp-tilt-y', '0deg');
+        item.style.setProperty('--xp-shift-x', '0px');
+        item.style.setProperty('--xp-shift-y', '0px');
+      });
+    });
+  })();
+</script>

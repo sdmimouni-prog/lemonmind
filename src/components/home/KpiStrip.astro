@@ -1,0 +1,91 @@
+---
+import { kpis } from '../../data/homepage';
+
+const icons: Record<string, string> = {
+  creators: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M24 30c-7 0-13 5-13 12v5" />
+      <path d="M40 47v-5c0-7-6-12-13-12h-3" />
+      <path d="M24 24a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" />
+      <path d="M44 30c5 1 9 5 9 11v5" />
+      <path d="M41 23a7 7 0 1 0-3-13" />
+      <path d="M42 8v6" />
+      <path d="M39 11h6" />
+    </svg>
+  `,
+  growth: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M10 43 24 29l10 10 20-22" />
+      <path d="M40 17h14v14" />
+    </svg>
+  `,
+  target: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M34 55c-13 0-23-10-23-23S21 9 34 9" />
+      <path d="M34 46c-8 0-14-6-14-14s6-14 14-14" />
+      <path d="M34 37a5 5 0 1 1 0-10" />
+      <path d="m36 29 16-16" />
+      <path d="M46 13h8v8" />
+      <path d="m52 13 4-4" />
+    </svg>
+  `,
+  play: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <rect x="14" y="12" width="36" height="36" rx="8" />
+      <path d="m29 24 12 8-12 8V24Z" />
+    </svg>
+  `,
+  bars: `
+    <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+      <path d="M14 48V34h8v14h-8Z" />
+      <path d="M28 48V24h8v24h-8Z" />
+      <path d="M42 48V14h8v34h-8Z" />
+    </svg>
+  `,
+};
+---
+<section class="lm-kpis" aria-label="Indicateurs clés">
+  <div class="lm-shell lm-kpis__grid">
+    {kpis.map((kpi, index) => (
+      <article class={`lm-kpi-card lm-kpi-card--${kpi.tone}`} style={`--kpi-delay: ${index * 90}ms;`}>
+        <span class="lm-kpi-card__icon" aria-hidden="true" set:html={icons[kpi.icon]} />
+        <strong>{kpi.value}</strong>
+        <p>{kpi.label}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const cards = document.querySelectorAll('.lm-kpi-card');
+
+    if (
+      !cards.length ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    ) {
+      return;
+    }
+
+    cards.forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+
+        card.style.setProperty('--kpi-light-x', `${x * 100}%`);
+        card.style.setProperty('--kpi-light-y', `${y * 100}%`);
+        card.style.setProperty('--kpi-tilt-x', `${(x - 0.5) * 8}deg`);
+        card.style.setProperty('--kpi-tilt-y', `${(0.5 - y) * 7}deg`);
+      });
+
+      card.addEventListener('pointerleave', () => {
+        card.style.setProperty('--kpi-light-x', '50%');
+        card.style.setProperty('--kpi-light-y', '46%');
+        card.style.setProperty('--kpi-tilt-x', '0deg');
+        card.style.setProperty('--kpi-tilt-y', '0deg');
+      });
+    });
+  })();
+</script>

@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import SocialFaq from '../../components/social-media/SocialFaq.astro';
+import SocialFinalCta from '../../components/social-media/SocialFinalCta.astro';
+import SocialMediaHero from '../../components/social-media/SocialMediaHero.astro';
+import SocialMediaInteractions from '../../components/social-media/SocialMediaInteractions.astro';
+import SocialMediaServices from '../../components/social-media/SocialMediaServices.astro';
+import SocialMediaVision from '../../components/social-media/SocialMediaVision.astro';
+import SocialMethod from '../../components/social-media/SocialMethod.astro';
+import SocialPlatforms from '../../components/social-media/SocialPlatforms.astro';
+import SocialProjects from '../../components/social-media/SocialProjects.astro';
+import { contact } from '../../data/homepage';
+import { socialFaq, socialMediaMeta } from '../../data/socialMediaManagement';
+import '../../styles/social-media-management.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(socialMediaMeta.canonical, siteUrl).toString();
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      '@id': `${pageUrl}#service`,
+      name: 'Agence Social Media au Maroc',
+      serviceType: 'Stratégie social media, community management, création de contenu, Social Ads et reporting',
+      provider: {
+        '@type': 'Organization',
+        name: 'Lemon Mind',
+        url: siteUrl,
+        telephone: contact.phone,
+        email: contact.email,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Casablanca',
+          addressCountry: 'MA',
+        },
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+      url: pageUrl,
+      relatedLink: [
+        new URL('/expertises/influence-marketing-maroc', siteUrl).toString(),
+        new URL('/expertises/production-contenu-maroc', siteUrl).toString(),
+        new URL('/realisations', siteUrl).toString(),
+        new URL('/contact', siteUrl).toString(),
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Nos expertises',
+          item: new URL('/nos-expertises', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Social Media Management',
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${pageUrl}#faq`,
+      mainEntity: socialFaq.questions.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+<BaseLayout
+  title={socialMediaMeta.title}
+  description={socialMediaMeta.description}
+  canonical={socialMediaMeta.canonical}
+  ogImage={socialMediaMeta.ogImage}
+  schema={schema}
+  bodyClass="social-media-page"
+>
+  <Header ctaLabel="Parler de votre projet" ctaHref={contact.contactHref} />
+  <main>
+    <SocialMediaHero />
+    <SocialMediaVision />
+    <SocialMediaServices />
+    <SocialPlatforms />
+    <SocialMethod />
+    <SocialProjects />
+    <SocialFaq />
+    <SocialFinalCta />
+  </main>
+  <SocialMediaInteractions />
+  <Footer />
+</BaseLayout>

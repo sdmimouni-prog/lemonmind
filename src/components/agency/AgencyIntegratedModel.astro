@@ -1,0 +1,30 @@
+---
+import { agencyIntegratedModel } from '../../data/agency';
+---
+<section class="ag-model ag-section-light" aria-labelledby="agency-model-title" data-ag-scene data-ag-timeline>
+  <div class="lm-shell">
+    <div class="ag-section-head ag-section-head--split">
+      <div>
+        <p class="lm-eyebrow" data-ag-line>{agencyIntegratedModel.eyebrow}</p>
+        <h2 id="agency-model-title" data-ag-title>{agencyIntegratedModel.title}</h2>
+      </div>
+      <p data-ag-reveal>{agencyIntegratedModel.text}</p>
+    </div>
+
+    <div class="ag-model__row">
+      <ol class="ag-model__timeline">
+        {agencyIntegratedModel.steps.map((step, index) => (
+          <li class={`ag-step ag-step--${step.tone}`} style={`--ag-order: ${index};`}>
+            <span class="ag-step__number">{step.number}</span>
+            <span class="ag-step__connector" aria-hidden="true"></span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="ag-model__summary" data-ag-reveal>
+        {agencyIntegratedModel.summary.map((line) => <span>{line}</span>)}
+      </p>
+    </div>
+  </div>
+</section>

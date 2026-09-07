@@ -1,0 +1,312 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const scenes = document.querySelectorAll('[data-ct-scene]');
+
+    scenes.forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.08, rootMargin: '12% 0px 8% 0px' },
+      );
+
+      observer.observe(scene);
+    });
+
+    window.setTimeout(() => {
+      scenes.forEach((scene) => scene.classList.add('is-visible'));
+    }, 1300);
+
+    if (finePointer && !prefersReducedMotion.matches) {
+      document.querySelectorAll('[data-ct-parallax]').forEach((stage) => {
+        stage.addEventListener('pointermove', (event) => {
+          const rect = stage.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          stage.style.setProperty('--ct-mx', x.toFixed(3));
+          stage.style.setProperty('--ct-my', y.toFixed(3));
+        });
+
+        stage.addEventListener('pointerleave', () => {
+          stage.style.setProperty('--ct-mx', '0');
+          stage.style.setProperty('--ct-my', '0');
+        });
+      });
+
+      document.querySelectorAll('[data-ct-depth]').forEach((card) => {
+        card.addEventListener('pointermove', (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          card.style.setProperty('--ct-depth-x', `${(x * 7).toFixed(2)}px`);
+          card.style.setProperty('--ct-depth-y', `${(y * 6).toFixed(2)}px`);
+          card.style.setProperty('--ct-depth-r', `${(x * -1.3).toFixed(2)}deg`);
+        });
+
+        card.addEventListener('pointerleave', () => {
+          card.style.setProperty('--ct-depth-x', '0px');
+          card.style.setProperty('--ct-depth-y', '0px');
+          card.style.setProperty('--ct-depth-r', '0deg');
+        });
+      });
+    }
+
+    const form = document.querySelector('[data-contact-form]');
+    const status = form?.querySelector('[data-form-status]');
+    const submitButton = form?.querySelector('[data-submit-button]');
+    const submitLabel = form?.querySelector('[data-submit-label]');
+    const projectTypeField = form?.querySelector('[data-project-type-field]');
+    const briefInput = form?.querySelector('[data-brief-input]');
+    const acceptedExtensions = ['pdf', 'ppt', 'pptx', 'doc', 'docx', 'zip'];
+    const maxBriefSize = 10 * 1024 * 1024;
+
+    const setStatus = (message, tone = '') => {
+      if (!status) {
+        return;
+      }
+
+      status.textContent = message;
+      status.dataset.tone = tone;
+    };
+
+    const setError = (fieldName, message = '') => {
+      const error = form?.querySelector(`[data-error-for="${fieldName}"]`);
+      const field = form?.querySelector(`[name="${fieldName}"]`);
+
+      if (error) {
+        error.textContent = message;
+      }
+
+      if (field) {
+        field.setAttribute('aria-invalid', message ? 'true' : 'false');
+        const errorId = error?.id;
+        if (errorId) {
+          field.setAttribute('aria-describedby', errorId);
+        }
+      }
+    };
+
+    const clearErrors = () => {
+      form?.querySelectorAll('[data-error-for]').forEach((node) => {
+        node.textContent = '';
+      });
+      form?.querySelectorAll('[aria-invalid]').forEach((node) => {
+        node.setAttribute('aria-invalid', 'false');
+      });
+    };
+
+    const getValue = (name) => {
+      const field = form?.querySelector(`[name="${name}"]`);
+      return field && 'value' in field ? field.value.trim() : '';
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const projectAliases = {
+      'production-ugc': 'Production UGC',
+      'ugc': 'Production UGC',
+      'ugc-creator-content': 'Production UGC',
+      'production-video': 'Production vidéo',
+      'media-amplification': 'Media & Amplification',
+    };
+    const projectSlug = params.get('projet');
+    const requestedProjectType = params.get('projectType') || (projectSlug ? projectAliases[projectSlug] || projectSlug : '');
+    if (requestedProjectType && projectTypeField) {
+      const hasOption = Array.from(projectTypeField.options || []).some((option) => option.value === requestedProjectType);
+
+      if (hasOption) {
+        projectTypeField.value = requestedProjectType;
+        projectTypeField.dispatchEvent(new Event('change', { bubbles: true }));
+        setError('projectType', '');
+        setStatus(`Besoin sélectionné : ${requestedProjectType}.`, 'success');
+      }
+    }
+
+    const validateFile = (file) => {
+      if (!file || file.size === 0) {
+        return '';
+      }
+
+      const extension = file.name.split('.').pop()?.toLowerCase() || '';
+
+      if (!acceptedExtensions.includes(extension)) {
+        return 'Format accepté : PDF, PPT, PPTX, DOC, DOCX ou ZIP.';
+      }
+
+      if (file.size > maxBriefSize) {
+        return 'Le brief ne doit pas dépasser 10 Mo.';
+      }
+
+      return '';
+    };
+
+    const validateClient = () => {
+      clearErrors();
+      const errors = {};
+
+      if (getValue('website')) {
+        errors.website = 'Votre demande n’a pas pu être envoyée.';
+      }
+
+      if (getValue('fullName').length < 2) {
+        errors.fullName = 'Indiquez votre nom complet.';
+      }
+
+      if (getValue('company').length < 2) {
+        errors.company = 'Indiquez le nom de votre entreprise.';
+      }
+
+      const email = getValue('email');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.email = 'Indiquez un email professionnel valide.';
+      }
+
+      if (getValue('phone').replace(/[^\d+]/g, '').length < 8) {
+        errors.phone = 'Indiquez un numéro de téléphone valide.';
+      }
+
+      if (!getValue('projectType')) {
+        errors.projectType = 'Sélectionnez un type de projet.';
+      }
+
+      if (!getValue('objective')) {
+        errors.objective = 'Sélectionnez un objectif principal.';
+      }
+
+      const fileError = validateFile(briefInput?.files?.[0]);
+      if (fileError) {
+        errors.brief = fileError;
+      }
+
+      Object.entries(errors).forEach(([field, message]) => setError(field, message));
+      return errors;
+    };
+
+    briefInput?.addEventListener('change', () => {
+      const file = briefInput.files?.[0];
+      const error = validateFile(file);
+      setError('brief', error);
+
+      const label = briefInput.closest('.ct-upload')?.querySelector('strong');
+      if (label && file && !error) {
+        label.textContent = file.name;
+      }
+    });
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const errors = validateClient();
+
+      if (Object.keys(errors).length) {
+        setStatus('Merci de corriger les champs indiqués.', 'error');
+        form.querySelector('[aria-invalid="true"]')?.focus();
+        return;
+      }
+
+      setStatus('Validation du brief en cours...', 'loading');
+      submitButton?.setAttribute('disabled', 'true');
+      if (submitLabel) {
+        submitLabel.textContent = 'Envoi en cours';
+      }
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || !data.ok) {
+          if (data.errors) {
+            Object.entries(data.errors).forEach(([field, message]) => setError(field, String(message)));
+          }
+          throw new Error(data.message || 'La demande n’a pas pu être validée.');
+        }
+
+        setStatus(data.message || 'Votre brief est validé. Votre logiciel email va s’ouvrir pour finaliser l’envoi.', 'success');
+
+        if (data.mailto) {
+          window.setTimeout(() => {
+            window.location.href = data.mailto;
+          }, 420);
+        }
+      } catch (error) {
+        setStatus(error instanceof Error ? error.message : 'Un problème est survenu. Vous pouvez aussi nous écrire par email.', 'error');
+      } finally {
+        submitButton?.removeAttribute('disabled');
+        if (submitLabel) {
+          submitLabel.textContent = 'Envoyer mon brief';
+        }
+      }
+    });
+
+    document.querySelectorAll('[data-contact-choice]').forEach((choice) => {
+      choice.addEventListener('click', () => {
+        const value = choice.getAttribute('data-project-type') || '';
+
+        if (projectTypeField) {
+          projectTypeField.value = value;
+          projectTypeField.dispatchEvent(new Event('change', { bubbles: true }));
+          setError('projectType', '');
+        }
+
+        document.querySelectorAll('[data-contact-choice]').forEach((item) => {
+          item.setAttribute('aria-pressed', String(item === choice));
+        });
+
+        setStatus(`Besoin sélectionné : ${value}.`, 'success');
+        form?.scrollIntoView({ behavior: prefersReducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
+      });
+    });
+
+    document.querySelectorAll('[data-contact-faq-list]').forEach((list) => {
+      const buttons = Array.from(list.querySelectorAll('[data-contact-faq-button]'));
+      const panels = Array.from(list.querySelectorAll('[data-contact-faq-panel]'));
+
+      const setOpen = (button) => {
+        buttons.forEach((currentButton) => {
+          const isSelected = currentButton === button;
+          const panelId = currentButton.getAttribute('aria-controls');
+          const panel = panelId ? document.getElementById(panelId) : null;
+
+          currentButton.setAttribute('aria-expanded', String(isSelected));
+          panel?.setAttribute('data-open', String(isSelected));
+        });
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const isOpen = button.getAttribute('aria-expanded') === 'true';
+          if (isOpen) {
+            button.setAttribute('aria-expanded', 'false');
+            document.getElementById(button.getAttribute('aria-controls') || '')?.setAttribute('data-open', 'false');
+          } else {
+            setOpen(button);
+          }
+        });
+      });
+
+      panels.forEach((panel) => {
+        panel.setAttribute('data-open', 'false');
+      });
+    });
+  })();
+</script>

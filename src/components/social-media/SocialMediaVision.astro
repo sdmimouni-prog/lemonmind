@@ -1,0 +1,26 @@
+---
+import { socialVision } from '../../data/socialMediaManagement';
+---
+<section class="sm-vision sm-section-light" aria-labelledby="sm-vision-title" data-sm-scene>
+  <div class="lm-shell sm-vision__grid">
+    <div class="sm-vision__title">
+      <p class="lm-eyebrow" data-sm-reveal>{socialVision.eyebrow}</p>
+      <h2 id="sm-vision-title" data-sm-reveal>{socialVision.title}</h2>
+      <p class="sm-hand sm-hand--vision" data-sm-reveal>{socialVision.annotation}</p>
+    </div>
+    <div class="sm-vision__content">
+      <div class="sm-vision__copy" data-sm-reveal>
+        {socialVision.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <div class="sm-pillar-grid" data-sm-reveal>
+        {socialVision.pillars.map((pillar) => (
+          <article class={`sm-pillar sm-pillar--${pillar.tone}`} data-sm-depth>
+            <span>{pillar.number}</span>
+            <h3>{pillar.title}</h3>
+            <p>{pillar.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

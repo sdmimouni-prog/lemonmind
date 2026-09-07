@@ -1,0 +1,48 @@
+---
+import { socialProjects } from '../../data/socialMediaManagement';
+---
+<section class="sm-projects sm-section-light" aria-labelledby="sm-projects-title" data-sm-scene>
+  <div class="lm-shell">
+    <div class="sm-section-heading sm-section-heading--split sm-projects__heading">
+      <div>
+        <p class="lm-eyebrow" data-sm-reveal>{socialProjects.eyebrow}</p>
+        <h2 id="sm-projects-title" data-sm-reveal>{socialProjects.title}</h2>
+      </div>
+      <a class="sm-text-link" href="/realisations" data-sm-reveal>
+        {socialProjects.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="sm-project-grid">
+      {socialProjects.cards.map((project) => (
+        <article class="sm-project-card" data-sm-reveal data-sm-depth>
+          <a
+            href={project.href}
+            aria-label={`Voir les réalisations : ${project.sector}`}
+            style={`--sm-project-image: url('${project.image}')`}
+          >
+            <figure>
+              <img
+                src={project.image}
+                alt={project.alt}
+                width="640"
+                height="360"
+                loading="eager"
+                decoding="async"
+              />
+            </figure>
+            <div class="sm-project-card__body">
+              <span>{project.sector}</span>
+              <h3>{project.title}</h3>
+              <div class="sm-project-card__tags" aria-label="Plateformes et expertises">
+                {[...project.platforms, ...project.expertises].map((tag) => <small>{tag}</small>)}
+              </div>
+              <b aria-hidden="true">→</b>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+---
+import { teamRecruitment } from '../../data/team';
+---
+<section class="team-recruitment" id="team-recruitment" aria-labelledby="team-recruitment-title" data-team-scene>
+  <div class="team-recruitment__shape team-recruitment__shape--one" aria-hidden="true"></div>
+  <div class="team-recruitment__shape team-recruitment__shape--two" aria-hidden="true"></div>
+  <div class="lm-shell team-recruitment__grid">
+    <div>
+      <p class="team-eyebrow" data-team-line>{teamRecruitment.eyebrow}</p>
+      <h2 id="team-recruitment-title" data-team-title>{teamRecruitment.title}</h2>
+    </div>
+    <div class="team-recruitment__content" data-team-reveal>
+      <p>{teamRecruitment.text}</p>
+      <div class="team-actions">
+        <a class="lm-button lm-button--dark" href={teamRecruitment.secondaryHref}>
+          {teamRecruitment.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+    <p class="team-hand team-recruitment__hand">{teamRecruitment.annotation}</p>
+  </div>
+</section>

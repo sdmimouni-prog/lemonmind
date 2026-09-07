@@ -1,0 +1,42 @@
+---
+import { ugcComparison, ugcRelatedLinks } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-explain ugc-section-light" aria-labelledby="ugc-explain-title" data-ugc-scene>
+  <div class="lm-shell ugc-explain__grid">
+    <div class="ugc-section-copy">
+      <p class="lm-eyebrow lm-eyebrow--red" data-ugc-reveal>{ugcComparison.eyebrow}</p>
+      <h2 id="ugc-explain-title" data-ugc-reveal>{ugcComparison.title}</h2>
+      <div class="ugc-explain__paragraphs" data-ugc-reveal>
+        {ugcComparison.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <p class="ugc-callout ugc-callout--soft" data-ugc-reveal>{ugcComparison.highlight}</p>
+      <nav class="ugc-related-links" aria-label="Liens utiles UGC" data-ugc-reveal>
+        {ugcRelatedLinks.map((link) => (
+          <a href={link.href}>{link.label}</a>
+        ))}
+      </nav>
+    </div>
+
+    <div class="ugc-table-wrap" data-ugc-reveal>
+      <table class="ugc-comparison-table">
+        <caption>Comparatif entre UGC organique, Creator Content et influence</caption>
+        <thead>
+          <tr>
+            <th scope="col">Usage</th>
+            {ugcComparison.columns.map((column, index) => <th class={index === 1 ? 'is-featured' : ''} scope="col">{column}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {ugcComparison.rows.map((row) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              {row.values.map((value, index) => (
+                <td class={index === 1 ? 'is-featured' : ''} data-label={ugcComparison.columns[index]}>{value}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

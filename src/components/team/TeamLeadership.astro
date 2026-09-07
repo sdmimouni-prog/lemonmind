@@ -1,0 +1,35 @@
+---
+import { teamLeadership, teamMembersById } from '../../data/team';
+
+const leaders = teamLeadership.memberIds.map((id) => teamMembersById.get(id)).filter(Boolean);
+---
+<section class="team-section team-leadership" id="team-leadership" aria-labelledby="team-leadership-title" data-team-scene>
+  <div class="lm-shell">
+    <div class="team-section__head team-section__head--split">
+      <div>
+        <p class="team-eyebrow" data-team-line>{teamLeadership.eyebrow}</p>
+        <h2 id="team-leadership-title" data-team-title>{teamLeadership.title}</h2>
+      </div>
+      <p class="team-section__copy" data-team-reveal>{teamLeadership.text}</p>
+    </div>
+
+    <div class="team-leadership__grid">
+      {leaders.map((leader, index) => leader && (
+        <article class="team-leader-card" style={`--team-item-index: ${index};`} data-team-stagger data-team-depth>
+          <figure>
+            <img src={leader.image} alt={leader.imageAlt} width="640" height="800" loading="lazy" decoding="async" />
+          </figure>
+          <div>
+            <h3>{leader.name}</h3>
+            <p>{leader.role}</p>
+            {leader.linkedinUrl && (
+              <a href={leader.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label={`LinkedIn de ${leader.name}`}>
+                in
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+---
+import { contact } from '../../data/homepage';
+import { influenceFinalCta } from '../../data/influenceMarketing';
+---
+<section class="im-final-cta" aria-labelledby="im-final-title" data-im-scene>
+  <div class="lm-shell im-final-cta__grid">
+    <div>
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-im-reveal>{influenceFinalCta.eyebrow}</p>
+      <h2 id="im-final-title" data-im-reveal>{influenceFinalCta.title}</h2>
+    </div>
+    <div class="im-final-cta__actions">
+      <p data-im-reveal>{influenceFinalCta.text}</p>
+      <div class="im-actions" data-im-reveal>
+        <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+          {influenceFinalCta.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href="/#realisations">
+          {influenceFinalCta.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+---
+import { strategyMethod } from '../../data/strategyConsulting';
+---
+<section class="sc-method sc-section-dark" aria-labelledby="sc-method-title" data-sc-scene>
+  <div class="lm-shell sc-method__grid">
+    <div class="sc-method__intro">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-sc-line>{strategyMethod.eyebrow}</p>
+      <h2 id="sc-method-title" data-sc-title>{strategyMethod.title}</h2>
+    </div>
+    <p class="sc-method__text" data-sc-reveal>{strategyMethod.text}</p>
+    <p class="sc-hand sc-hand--method" data-sc-reveal>{strategyMethod.annotation}</p>
+
+    <div class="sc-method__timeline" data-sc-reveal>
+      {strategyMethod.steps.map((step, index) => (
+        <article class={`sc-method-step sc-method-step--${step.tone}`} style={`--sc-order: ${index};`}>
+          <span>{step.number}</span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

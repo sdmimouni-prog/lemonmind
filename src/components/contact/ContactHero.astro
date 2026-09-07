@@ -1,0 +1,139 @@
+---
+import { contactForm, contactHero } from '../../data/contactContent';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="ct-hero" aria-labelledby="contact-hero-title" data-ct-scene data-ct-hero>
+  <div class="ct-hero__shade" aria-hidden="true"></div>
+  <div class="lm-shell ct-hero__grid">
+    <div class="ct-hero__copy">
+      <p class="ct-eyebrow" data-ct-reveal>{contactHero.eyebrow}</p>
+      <h1 id="contact-hero-title" data-ct-reveal>
+        Une idée, un lancement ou une campagne en tête ? Construisons la suite
+        <span>{contactHero.highlight}</span>
+      </h1>
+      <p class="ct-hero__text" data-ct-reveal>{contactHero.text}</p>
+      <ul class="ct-hero__stats" aria-label="Repères Lemon Mind" data-ct-reveal>
+        {contactHero.stats.map((stat) => (
+          <li>
+            <strong>{stat.value}</strong>
+            <span>{stat.label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="ct-hero__media" data-ct-parallax>
+      <figure class="ct-hero__photo" data-ct-layer style="--ct-depth: 1.1;">
+        <img
+          src={contactHero.image}
+          alt="Équipe Lemon Mind en cadrage de projet"
+          width="1280"
+          height="720"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </figure>
+      <p class="ct-hand ct-hand--hero" data-ct-layer style="--ct-depth: 1.7;">{contactHero.annotation}</p>
+      <p class="ct-note-card" data-ct-layer style="--ct-depth: 2;">{contactHero.note}</p>
+    </div>
+
+    <aside class="ct-form-panel" aria-label="Formulaire de contact" data-ct-reveal>
+      <form id="contact-form" class="ct-form" action="/api/contact" method="post" enctype="multipart/form-data" novalidate data-contact-form>
+        <div class="ct-form__head">
+          <h2>{contactForm.title}</h2>
+          <p class="ct-form__status" id="contact-form-status" role="status" aria-live="polite" data-form-status></p>
+        </div>
+
+        <div class="ct-form__honeypot" aria-hidden="true">
+          <label for="website">Site web</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="ct-form__grid">
+          <label class="ct-field" for="fullName">
+            <span>Nom et prénom *</span>
+            <input id="fullName" name="fullName" type="text" autocomplete="name" placeholder="Votre nom" required />
+            <em id="fullName-error" data-error-for="fullName"></em>
+          </label>
+
+          <label class="ct-field" for="company">
+            <span>Entreprise *</span>
+            <input id="company" name="company" type="text" autocomplete="organization" placeholder="Nom de votre entreprise" required />
+            <em id="company-error" data-error-for="company"></em>
+          </label>
+
+          <label class="ct-field" for="email">
+            <span>Email professionnel *</span>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="vous@entreprise.com" required />
+            <em id="email-error" data-error-for="email"></em>
+          </label>
+
+          <label class="ct-field" for="phone">
+            <span>Téléphone *</span>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+212 6 12 34 56 78" required />
+            <em id="phone-error" data-error-for="phone"></em>
+          </label>
+
+          <label class="ct-field" for="projectType">
+            <span>Type de projet *</span>
+            <select id="projectType" name="projectType" required data-project-type-field>
+              <option value="">Sélectionner</option>
+              {contactForm.projectTypes.map((option) => <option value={option}>{option}</option>)}
+            </select>
+            <em id="projectType-error" data-error-for="projectType"></em>
+          </label>
+
+          <label class="ct-field" for="objective">
+            <span>Objectif principal *</span>
+            <select id="objective" name="objective" required>
+              <option value="">Sélectionner</option>
+              {contactForm.objectives.map((option) => <option value={option}>{option}</option>)}
+            </select>
+            <em id="objective-error" data-error-for="objective"></em>
+          </label>
+
+          <label class="ct-field" for="budget">
+            <span>Budget estimatif</span>
+            <select id="budget" name="budget">
+              <option value="">Sélectionner</option>
+              {contactForm.budgets.map((option) => <option value={option}>{option}</option>)}
+            </select>
+            <em id="budget-error" data-error-for="budget"></em>
+          </label>
+
+          <label class="ct-field" for="preferredDate">
+            <span>Date souhaitée</span>
+            <select id="preferredDate" name="preferredDate">
+              <option value="">Sélectionner</option>
+              {contactForm.dates.map((option) => <option value={option}>{option}</option>)}
+            </select>
+            <em id="preferredDate-error" data-error-for="preferredDate"></em>
+          </label>
+
+          <label class="ct-field ct-field--wide" for="message">
+            <span>Votre message</span>
+            <textarea id="message" name="message" rows="4" placeholder="Parlez-nous de votre projet..."></textarea>
+            <em id="message-error" data-error-for="message"></em>
+          </label>
+        </div>
+
+        <label class="ct-upload" for="brief">
+          <span class="ct-upload__icon" aria-hidden="true"><ExpertiseIcon name="upload" /></span>
+          <span>
+            <strong>{contactForm.briefLabel}</strong>
+            <small>{contactForm.briefHelp}</small>
+          </span>
+          <input id="brief" name="brief" type="file" accept=".pdf,.ppt,.pptx,.doc,.docx,.zip" data-brief-input />
+          <em id="brief-error" data-error-for="brief"></em>
+        </label>
+
+        <button class="ct-submit" type="submit" data-submit-button>
+          <span data-submit-label>{contactForm.submitLabel}</span>
+          <span aria-hidden="true">→</span>
+        </button>
+        <p class="ct-form__note">{contactForm.confidentiality}</p>
+      </form>
+    </aside>
+  </div>
+</section>

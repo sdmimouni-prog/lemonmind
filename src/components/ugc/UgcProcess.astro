@@ -1,0 +1,27 @@
+---
+import { ugcContactHref, ugcProcess } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-process ugc-section-dark" aria-labelledby="ugc-process-title" data-ugc-scene data-ugc-timeline>
+  <div class="lm-shell">
+    <div class="ugc-process__head">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--yellow" data-ugc-reveal>{ugcProcess.eyebrow}</p>
+        <h2 id="ugc-process-title" data-ugc-reveal>{ugcProcess.title}</h2>
+      </div>
+      <p data-ugc-reveal>{ugcProcess.text}</p>
+    </div>
+    <div class="ugc-process__timeline" aria-label="Processus de production UGC">
+      {ugcProcess.steps.map((step, index) => (
+        <article class={`ugc-step ugc-step--${step.tone}`} style={`--ugc-order: ${index};`} data-ugc-reveal>
+          <span>{step.number}</span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </article>
+      ))}
+    </div>
+    <a class="lm-button lm-button--yellow ugc-process__cta" href={ugcContactHref} data-ugc-reveal>
+      {ugcProcess.cta}
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>

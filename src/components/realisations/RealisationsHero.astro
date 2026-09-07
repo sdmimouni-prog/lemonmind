@@ -1,0 +1,46 @@
+---
+import { realisationsHero } from '../../data/realisations';
+---
+<section class="rs-hero" aria-labelledby="realisations-hero-title" data-rs-scene data-rs-parallax>
+  <div class="lm-shell rs-hero__grid">
+    <div class="rs-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow">{realisationsHero.eyebrow}</p>
+      <h1 id="realisations-hero-title">
+        {realisationsHero.titleLines.map((line) => <span>{line}</span>)}
+      </h1>
+      <p>{realisationsHero.text}</p>
+      <a class="lm-button lm-button--yellow" href="#projects">
+        {realisationsHero.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="rs-hero__visual" aria-label="Collage de campagnes Lemon Mind">
+      <figure class="rs-hero-phone rs-depth" style="--rs-depth: 1.25;">
+        <img src={realisationsHero.images.phone} alt="Format social vidéo produit par Lemon Mind" width="276" height="404" />
+        <figcaption>{realisationsHero.phoneMetric}</figcaption>
+      </figure>
+
+      <figure class="rs-hero-card rs-hero-card--camera rs-depth" style="--rs-depth: .75;">
+        <img src={realisationsHero.images.camera} alt="Tournage de contenu en studio" width="1280" height="720" />
+      </figure>
+
+      <figure class="rs-hero-card rs-hero-card--product rs-depth" style="--rs-depth: .95;">
+        <img src={realisationsHero.images.product} alt="Contenu produit pour une marque FMCG" width="1600" height="900" />
+      </figure>
+
+      <figure class="rs-hero-card rs-hero-card--place rs-depth" style="--rs-depth: .55;">
+        <img src={realisationsHero.images.place} alt="Décor de campagne lifestyle" width="1200" height="1200" />
+        <figcaption>Des marques<br />plus loin.</figcaption>
+      </figure>
+
+      <div class="rs-hero-metric rs-depth" style="--rs-depth: 1;">
+        <strong>{realisationsHero.metric}</strong>
+        <span>{realisationsHero.metricLabel}</span>
+      </div>
+
+      <p class="rs-hand rs-hand--hero">{realisationsHero.hand}</p>
+      <p class="rs-hand rs-hand--hero-side">{realisationsHero.note}</p>
+    </div>
+  </div>
+</section>

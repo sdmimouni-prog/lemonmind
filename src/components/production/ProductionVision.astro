@@ -1,0 +1,26 @@
+---
+import { productionVision } from '../../data/productionContent';
+---
+<section class="pc-vision pc-section-light" aria-labelledby="pc-vision-title" data-pc-scene>
+  <div class="lm-shell pc-vision__grid">
+    <div class="pc-vision__title">
+      <p class="lm-eyebrow" data-pc-reveal>{productionVision.eyebrow}</p>
+      <h2 id="pc-vision-title" data-pc-reveal>{productionVision.title}</h2>
+      <p class="pc-hand pc-hand--vision" data-pc-reveal>{productionVision.annotation}</p>
+    </div>
+    <div class="pc-vision__body">
+      <div class="pc-vision__text" data-pc-reveal>
+        {productionVision.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <div class="pc-principles" aria-label="Principes de production">
+        {productionVision.principles.map((item, index) => (
+          <article class={`pc-principle pc-principle--${item.tone}`} style={`--pc-order: ${index};`} data-pc-reveal>
+            <span>{item.number}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

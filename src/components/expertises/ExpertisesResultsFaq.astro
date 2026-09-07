@@ -1,0 +1,150 @@
+---
+import { expertisesFaq, expertisesProjects } from '../../data/expertises';
+---
+<section class="xp-results" id="realisations" aria-labelledby="expertises-results-title" data-xp-results>
+  <div class="lm-shell xp-results__grid">
+    <div class="xp-results__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow">{expertisesProjects.eyebrow}</p>
+      <h2 id="expertises-results-title">{expertisesProjects.title}</h2>
+      <p>{expertisesProjects.text}</p>
+      <a class="lm-button lm-button--yellow" href="/#realisations">
+        {expertisesProjects.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="xp-results__showcase">
+      <div class="xp-results-controls" aria-label="Contrôles du slider réalisations">
+        <button type="button" data-results-prev aria-label="Réalisation précédente">←</button>
+        <button type="button" data-results-next aria-label="Réalisation suivante">→</button>
+      </div>
+      <div class="xp-results-viewport">
+        <div class="xp-results-track">
+          {expertisesProjects.cards.map((card, index) => (
+            <article class="xp-result-card" style={`--xp-order: ${index};`}>
+              {card.image ? (
+                <img src={card.image} alt="" width="900" height="1120" loading="lazy" />
+              ) : (
+                <span class="xp-result-placeholder" role="img" aria-label="Visuel à intégrer"></span>
+              )}
+              <div>
+                <h3>{card.title}</h3>
+                <p>{card.label}</p>
+              </div>
+              <a href="/#realisations" aria-label={`Voir ${card.title}`}>→</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <p class="xp-hand xp-hand--results">Des marques<br />plus loin.</p>
+  </div>
+</section>
+
+<section class="xp-faq" id="faq" aria-labelledby="expertises-faq-title" data-xp-faq>
+  <div class="lm-shell xp-faq__grid">
+    <div class="xp-faq__copy">
+      <p class="lm-eyebrow lm-eyebrow--red">{expertisesFaq.eyebrow}</p>
+      <h2 id="expertises-faq-title">{expertisesFaq.title}</h2>
+      <a class="lm-button lm-button--yellow" href="#contact">
+        {expertisesFaq.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="xp-faq__list" aria-label="Questions fréquentes">
+      {expertisesFaq.questions.map((question, index) => (
+        <button type="button" class="xp-faq-row" style={`--xp-order: ${index};`} aria-expanded="false">
+          <span>{question}</span>
+          <span aria-hidden="true">+</span>
+        </button>
+      ))}
+    </div>
+    <p class="xp-hand xp-hand--faq">Des réponses<br />claires.</p>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    document.querySelectorAll('[data-xp-results], [data-xp-faq]').forEach((section) => {
+      section.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        section.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              section.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.18 },
+      );
+
+      observer.observe(section);
+    });
+
+    const results = document.querySelector('[data-xp-results]');
+    const track = results?.querySelector('.xp-results-track');
+    const cards = track ? Array.from(track.children) : [];
+    const prev = results?.querySelector('[data-results-prev]');
+    const next = results?.querySelector('[data-results-next]');
+    let index = 0;
+    let timer = 0;
+
+    if (!results || !track || !cards.length || prefersReducedMotion.matches) {
+      return;
+    }
+
+    const getStep = () => {
+      const first = cards[0]?.getBoundingClientRect();
+      const second = cards[1]?.getBoundingClientRect();
+
+      return first && second ? second.left - first.left : first?.width || 0;
+    };
+
+    const setIndex = (nextIndex) => {
+      index = (nextIndex + cards.length) % cards.length;
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        track.style.transform = `translate3d(${-index * getStep()}px, 0, 0)`;
+      } else {
+        track.style.transform = '';
+      }
+      cards.forEach((card, cardIndex) => card.classList.toggle('is-active', cardIndex === index));
+    };
+
+    const start = () => {
+      window.clearInterval(timer);
+      timer = window.setInterval(() => setIndex(index + 1), 3000);
+    };
+
+    prev?.addEventListener('click', () => {
+      setIndex(index - 1);
+      start();
+    });
+
+    next?.addEventListener('click', () => {
+      setIndex(index + 1);
+      start();
+    });
+
+    cards.forEach((card, cardIndex) => {
+      card.addEventListener('mouseenter', () => {
+        setIndex(cardIndex);
+        window.clearInterval(timer);
+      });
+      card.addEventListener('mouseleave', start);
+    });
+
+    window.addEventListener('resize', () => setIndex(index));
+    setIndex(0);
+    start();
+  })();
+</script>

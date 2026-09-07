@@ -1,0 +1,51 @@
+---
+import { projectsIntro, realisationProjects } from '../../data/realisations';
+---
+<section class="rs-projects" id="projects" aria-labelledby="realisations-projects-title" data-rs-scene>
+  <div class="lm-shell">
+    <div class="rs-projects__head">
+      <div>
+        <p class="rs-label">{projectsIntro.eyebrow}</p>
+        <h2 id="realisations-projects-title">
+          {projectsIntro.titleLines.map((line) => <span>{line}</span>)}
+        </h2>
+      </div>
+      <a href="#impact" class="rs-inline-link">
+        {projectsIntro.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="rs-project-grid" data-rs-project-grid aria-live="polite">
+      {realisationProjects.map((project, index) => (
+        <article
+          class="rs-project-card"
+          data-rs-card
+          data-project-card
+          data-categories={project.categories.join(' ')}
+          style={`--rs-order: ${index};`}
+        >
+          <figure>
+            {project.image ? (
+              <img src={project.image} alt={`Visuel de réalisation : ${project.title}`} width="900" height="520" loading="lazy" />
+            ) : (
+              <span class="rs-image-placeholder" role="img" aria-label={`Visuel manquant pour ${project.title}`}>
+                Visuel à intégrer
+              </span>
+            )}
+          </figure>
+          <div class="rs-project-card__body">
+            <div>
+              <h3>{project.title}</h3>
+              <p>{project.subtitle}</p>
+              <div class="rs-tags" aria-label="Expertises associées">
+                {project.tags.map((tag) => <span class={`rs-tag rs-tag--${tag.tone}`}>{tag.label}</span>)}
+              </div>
+            </div>
+            <a href="#contact" aria-label={`Parler d’un projet similaire : ${project.title}`}>→</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

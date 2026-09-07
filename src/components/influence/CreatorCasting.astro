@@ -1,0 +1,41 @@
+---
+import { creatorCasting } from '../../data/influenceMarketing';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="im-casting im-section-light" aria-labelledby="im-casting-title" data-im-scene>
+  <div class="lm-shell im-casting__grid">
+    <div class="im-casting__mosaic" aria-label="Profils créateurs analysés par Lemon Mind" data-im-depth>
+      {creatorCasting.images.map((image, index) => (
+        <figure class={`im-casting-media ${image.className}`} style={`--im-order: ${index};`}>
+          <img src={image.src} alt={image.alt} width="1024" height="1536" loading="lazy" decoding="async" />
+        </figure>
+      ))}
+      <span class="im-validation-badge">
+        <span aria-hidden="true">✓</span>
+        {creatorCasting.validationBadge}
+      </span>
+    </div>
+
+    <div class="im-casting__copy">
+      <p class="lm-eyebrow lm-eyebrow--red" data-im-reveal>{creatorCasting.eyebrow}</p>
+      <h2 id="im-casting-title" data-im-reveal>{creatorCasting.title}</h2>
+      <p data-im-reveal>{creatorCasting.text}</p>
+      <div class="im-casting-categories" aria-label="Catégories de créateurs">
+        {creatorCasting.categories.map((category, index) => (
+          <article class={`im-casting-category im-casting-category--${category.tone}`} style={`--im-order: ${index};`} data-im-reveal>
+            <h3>{category.title}</h3>
+            <p>{category.text}</p>
+          </article>
+        ))}
+      </div>
+      <ul class="im-tags" aria-label="Critères d'analyse du casting" data-im-reveal>
+        {creatorCasting.criteria.map((criterion) => (
+          <li>
+            <ExpertiseIcon name="target" className="im-tag-icon" />
+            <span>{criterion}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

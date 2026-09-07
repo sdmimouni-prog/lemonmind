@@ -1,0 +1,25 @@
+---
+import { ugcContactHref, ugcFinalCta, ugcRealisationHref } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-final-cta" aria-labelledby="ugc-final-cta-title" data-ugc-scene>
+  <div class="lm-shell ugc-final-cta__grid">
+    <div>
+      <p class="lm-eyebrow" data-ugc-reveal>{ugcFinalCta.eyebrow}</p>
+      <h2 id="ugc-final-cta-title" data-ugc-reveal>{ugcFinalCta.title}</h2>
+    </div>
+    <div class="ugc-final-cta__copy" data-ugc-reveal>
+      <p>{ugcFinalCta.text}</p>
+      <div class="ugc-actions">
+        <a class="lm-button lm-button--dark ugc-final-cta__primary" href={ugcContactHref}>
+          {ugcFinalCta.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button ugc-final-cta__secondary" href={ugcRealisationHref}>
+          {ugcFinalCta.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+    <p class="ugc-hand ugc-hand--final" data-ugc-reveal>{ugcFinalCta.annotation}</p>
+  </div>
+</section>

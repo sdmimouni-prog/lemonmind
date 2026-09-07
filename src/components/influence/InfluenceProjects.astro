@@ -1,0 +1,29 @@
+---
+import { influenceProjects } from '../../data/influenceMarketing';
+---
+<section class="im-projects im-section-dark" aria-labelledby="im-projects-title" data-im-scene>
+  <div class="lm-shell im-projects__grid">
+    <div class="im-projects__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-im-reveal>{influenceProjects.eyebrow}</p>
+      <h2 id="im-projects-title" data-im-reveal>{influenceProjects.title}</h2>
+      <p data-im-reveal>{influenceProjects.text}</p>
+      <a class="lm-button lm-button--yellow" href="/#realisations" data-im-reveal>
+        {influenceProjects.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="im-project-cards" aria-label="Exemples de campagnes d'influence">
+      {influenceProjects.cards.map((card, index) => (
+        <article class="im-project-card" style={`--im-order: ${index};`} data-im-reveal>
+          <img src={card.image} alt={card.alt} width="900" height="720" loading="lazy" decoding="async" />
+          <div>
+            <span>{card.sector}</span>
+            <h3>{card.title}</h3>
+            <p>{card.expertises}</p>
+          </div>
+          <a href="/#realisations" aria-label={`Voir les réalisations ${card.sector}`}>→</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

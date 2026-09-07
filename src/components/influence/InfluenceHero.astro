@@ -1,0 +1,79 @@
+---
+import { contact } from '../../data/homepage';
+import { influenceMarketingHero } from '../../data/influenceMarketing';
+
+const titleParts = influenceMarketingHero.title.split(influenceMarketingHero.highlight);
+---
+<section class="im-hero" aria-labelledby="im-hero-title" data-im-hero data-im-scene>
+  <div class="im-pixels im-pixels--hero" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="lm-shell im-hero__grid">
+    <div class="im-hero__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow" data-im-reveal>{influenceMarketingHero.eyebrow}</p>
+      <h1 id="im-hero-title" data-im-reveal>
+        {titleParts[0]}
+        <span>{influenceMarketingHero.highlight}</span>
+        {titleParts[1]}
+      </h1>
+      <p class="im-hero__lead" data-im-reveal>{influenceMarketingHero.lead}</p>
+      <p class="im-hero__text" data-im-reveal>{influenceMarketingHero.text}</p>
+      <div class="im-actions" data-im-reveal>
+        <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+          {influenceMarketingHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href="/#realisations">
+          {influenceMarketingHero.secondaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="im-hero__stage" aria-label="Campagne influence Lemon Mind" data-im-hero-stage>
+      <figure class="im-hero__portrait" data-im-hero-layer="portrait">
+        <img
+          src={influenceMarketingHero.image}
+          alt="Créatrice présentant un produit pendant une campagne d'influence"
+          width="1024"
+          height="1536"
+          sizes="(max-width: 768px) 84vw, 620px"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+      <figure class="im-phone im-hero__phone" data-im-hero-layer="phone">
+        <span class="im-phone__speaker" aria-hidden="true"></span>
+        <img
+          src={influenceMarketingHero.phoneImage}
+          alt="Aperçu vertical d'un contenu UGC filmé pour les réseaux sociaux"
+          width="560"
+          height="996"
+          sizes="(max-width: 768px) 38vw, 220px"
+          loading="eager"
+          decoding="async"
+        />
+        <figcaption>
+          <strong>UGC social-first</strong>
+          <span>Contenu prêt à diffuser</span>
+        </figcaption>
+      </figure>
+      <p class="im-hand im-hand--hero" data-im-hero-layer="note">{influenceMarketingHero.annotation}</p>
+      <div class="im-hero__badges" aria-label="Expertises mises en avant">
+        {influenceMarketingHero.badges.map((badge, index) => (
+          <span class={`im-floating-badge im-floating-badge--${index + 1}`} style={`--im-order: ${index};`}>
+            {badge}
+          </span>
+        ))}
+      </div>
+      <article class="im-performance-card" data-im-hero-layer="performance">
+        <span>{influenceMarketingHero.performanceLabel}</span>
+        <strong>{influenceMarketingHero.performanceHint}</strong>
+        <div class="im-mini-chart" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

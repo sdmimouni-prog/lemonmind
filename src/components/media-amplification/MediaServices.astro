@@ -1,0 +1,42 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { mediaServices } from '../../data/mediaAmplification';
+---
+<section class="sm-services sm-section-light ma-services" aria-labelledby="ma-services-title" data-sm-scene>
+  <div class="lm-shell">
+    <div class="sm-section-heading sm-section-heading--split ma-services__heading">
+      <div>
+        <p class="lm-eyebrow" data-sm-reveal>{mediaServices.eyebrow}</p>
+        <h2 id="ma-services-title" data-sm-reveal>{mediaServices.title}</h2>
+      </div>
+      <p data-sm-reveal>{mediaServices.text}</p>
+    </div>
+
+    <div class="sm-service-grid ma-service-grid">
+      {mediaServices.items.map((service, index) => (
+        <article
+          class={`sm-service-card sm-service-card--${service.tone} ma-service-card`}
+          style={`--sm-service-image: url('${service.image}')`}
+          data-sm-reveal
+          data-sm-depth
+        >
+          <figure>
+            <img
+              src={service.image}
+              alt={service.alt}
+              width="560"
+              height="360"
+              loading={index < 2 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          </figure>
+          <span class="sm-service-card__icon" aria-hidden="true">
+            <ExpertiseIcon name={service.icon} className="sm-icon" />
+          </span>
+          <h3>{service.title}</h3>
+          <p>{service.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

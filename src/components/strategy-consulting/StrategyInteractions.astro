@@ -1,0 +1,91 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const scenes = document.querySelectorAll('[data-sc-scene]');
+
+    scenes.forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.09, rootMargin: '12% 0px 10% 0px' },
+      );
+
+      observer.observe(scene);
+    });
+
+    window.setTimeout(() => {
+      scenes.forEach((scene) => scene.classList.add('is-visible'));
+    }, 1200);
+
+    if (finePointer && !prefersReducedMotion.matches) {
+      document.querySelectorAll('[data-sc-parallax]').forEach((scene) => {
+        scene.addEventListener('pointermove', (event) => {
+          const rect = scene.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          scene.style.setProperty('--sc-mx', x.toFixed(3));
+          scene.style.setProperty('--sc-my', y.toFixed(3));
+        });
+
+        scene.addEventListener('pointerleave', () => {
+          scene.style.setProperty('--sc-mx', '0');
+          scene.style.setProperty('--sc-my', '0');
+        });
+      });
+    }
+
+    document.querySelectorAll('[data-sc-mission-list]').forEach((list) => {
+      const buttons = Array.from(list.querySelectorAll('[data-sc-mission-button]'));
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const isOpen = button.getAttribute('aria-expanded') === 'true';
+          const panel = document.getElementById(button.getAttribute('aria-controls') || '');
+
+          button.setAttribute('aria-expanded', String(!isOpen));
+          panel?.setAttribute('data-open', String(!isOpen));
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-sc-faq-list]').forEach((list) => {
+      const buttons = Array.from(list.querySelectorAll('[data-sc-faq-button]'));
+
+      const closeAll = () => {
+        buttons.forEach((button) => {
+          button.setAttribute('aria-expanded', 'false');
+          const panel = document.getElementById(button.getAttribute('aria-controls') || '');
+          panel?.setAttribute('data-open', 'false');
+        });
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const wasOpen = button.getAttribute('aria-expanded') === 'true';
+          closeAll();
+
+          if (!wasOpen) {
+            button.setAttribute('aria-expanded', 'true');
+            const panel = document.getElementById(button.getAttribute('aria-controls') || '');
+            panel?.setAttribute('data-open', 'true');
+          }
+        });
+      });
+    });
+  })();
+</script>

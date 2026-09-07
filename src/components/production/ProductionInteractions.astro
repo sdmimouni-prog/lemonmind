@@ -1,0 +1,131 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const scenes = document.querySelectorAll('[data-pc-scene]');
+
+    scenes.forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const revealScene = () => {
+        scene.classList.add('is-visible');
+      };
+
+      const revealIfNearViewport = () => {
+        if (scene.classList.contains('is-visible')) {
+          window.removeEventListener('scroll', revealIfNearViewport);
+          window.removeEventListener('resize', revealIfNearViewport);
+          return;
+        }
+
+        const rect = scene.getBoundingClientRect();
+        const nearViewport = rect.top < window.innerHeight * 1.22;
+
+        if (nearViewport) {
+          revealScene();
+          window.removeEventListener('scroll', revealIfNearViewport);
+          window.removeEventListener('resize', revealIfNearViewport);
+        }
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              revealScene();
+              observer.disconnect();
+              window.removeEventListener('scroll', revealIfNearViewport);
+              window.removeEventListener('resize', revealIfNearViewport);
+            }
+          });
+        },
+        { threshold: 0.04, rootMargin: '18% 0px 12% 0px' },
+      );
+
+      observer.observe(scene);
+      window.addEventListener('scroll', revealIfNearViewport, { passive: true });
+      window.addEventListener('resize', revealIfNearViewport);
+      requestAnimationFrame(revealIfNearViewport);
+    });
+
+    const revealNearbyScenes = () => {
+      scenes.forEach((scene) => {
+        if (scene.classList.contains('is-visible')) {
+          return;
+        }
+
+        const rect = scene.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight * 1.4) {
+          scene.classList.add('is-visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', revealNearbyScenes, { passive: true });
+    window.addEventListener('resize', revealNearbyScenes);
+    requestAnimationFrame(revealNearbyScenes);
+    window.setTimeout(revealNearbyScenes, 600);
+    window.setTimeout(() => {
+      scenes.forEach((scene) => scene.classList.add('is-visible'));
+    }, 1200);
+
+    if (finePointer && !prefersReducedMotion.matches) {
+      document.querySelectorAll('[data-pc-parallax]').forEach((scene) => {
+        scene.addEventListener('pointermove', (event) => {
+          const rect = scene.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          scene.style.setProperty('--pc-mx', x.toFixed(3));
+          scene.style.setProperty('--pc-my', y.toFixed(3));
+        });
+
+        scene.addEventListener('pointerleave', () => {
+          scene.style.setProperty('--pc-mx', '0');
+          scene.style.setProperty('--pc-my', '0');
+        });
+      });
+
+      document.querySelectorAll('[data-pc-depth]').forEach((card) => {
+        card.addEventListener('pointermove', (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          card.style.setProperty('--pc-depth-x', `${(x * 8).toFixed(2)}px`);
+          card.style.setProperty('--pc-depth-y', `${(y * 7).toFixed(2)}px`);
+        });
+
+        card.addEventListener('pointerleave', () => {
+          card.style.setProperty('--pc-depth-x', '0px');
+          card.style.setProperty('--pc-depth-y', '0px');
+        });
+      });
+    }
+
+    document.querySelectorAll('[data-pc-faq-list]').forEach((list) => {
+      const buttons = Array.from(list.querySelectorAll('[data-pc-faq-button]'));
+
+      const setOpen = (button) => {
+        buttons.forEach((currentButton) => {
+          const isSelected = currentButton === button;
+          const panelId = currentButton.getAttribute('aria-controls');
+          const panel = panelId ? document.getElementById(panelId) : null;
+
+          currentButton.setAttribute('aria-expanded', String(isSelected));
+          panel?.setAttribute('data-open', String(isSelected));
+        });
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => setOpen(button));
+      });
+    });
+  })();
+</script>

@@ -1,0 +1,36 @@
+---
+import { contact } from '../../data/homepage';
+import { productionUgc } from '../../data/productionContent';
+---
+<section class="pc-ugc" aria-labelledby="pc-ugc-title" data-pc-scene data-pc-parallax>
+  <div class="lm-shell pc-ugc__grid">
+    <div class="pc-ugc__copy">
+      <p class="lm-eyebrow lm-eyebrow--mint" data-pc-reveal>{productionUgc.eyebrow}</p>
+      <h2 id="pc-ugc-title" data-pc-reveal>{productionUgc.title}</h2>
+      <p data-pc-reveal>{productionUgc.text}</p>
+      <a class="lm-button pc-button--outline-dark" href={contact.phoneHref} data-pc-reveal>
+        {productionUgc.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="pc-ugc__visual" aria-label="Production UGC accompagnée">
+      <figure class="pc-ugc__main" data-pc-layer="main">
+        <img src={productionUgc.image} alt="Production UGC accompagnée par Lemon Mind" width="1024" height="1536" loading="lazy" decoding="async" />
+      </figure>
+      <figure class="pc-phone pc-ugc__phone" data-pc-layer="phone">
+        <span class="pc-phone__speaker" aria-hidden="true"></span>
+        <img src={productionUgc.phoneImage} alt="Contenu UGC en format vertical" width="560" height="996" loading="lazy" decoding="async" />
+        <span class="pc-record-dot" aria-hidden="true"></span>
+      </figure>
+      <p class="pc-hand pc-hand--ugc" data-pc-layer="hand">{productionUgc.annotation}</p>
+    </div>
+    <ul class="pc-ugc__services" aria-label="Prestations UGC">
+      {productionUgc.services.map((service, index) => (
+        <li style={`--pc-order: ${index};`} data-pc-reveal>
+          <span aria-hidden="true">✓</span>
+          {service}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,44 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { ugcActivation } from '../../data/ugcCreatorContent';
+---
+<section class="ugc-activation ugc-section-light" aria-labelledby="ugc-activation-title" data-ugc-scene>
+  <div class="lm-shell">
+    <div class="ugc-section-head ugc-section-head--split">
+      <div>
+        <p class="lm-eyebrow lm-eyebrow--red" data-ugc-reveal>{ugcActivation.eyebrow}</p>
+        <h2 id="ugc-activation-title" data-ugc-reveal>{ugcActivation.title}</h2>
+      </div>
+      <p class="ugc-section-head__single" data-ugc-reveal>{ugcActivation.text}</p>
+    </div>
+
+    <div class="ugc-usage-grid">
+      {ugcActivation.usages.map((usage, index) => (
+        <article class={`ugc-usage-card ugc-tone--${usage.tone}`} style={`--ugc-order: ${index};`} data-ugc-reveal>
+          <span class="ugc-card-icon">
+            <ExpertiseIcon name={usage.icon} />
+          </span>
+          <h3>{usage.title}</h3>
+          <p>{usage.text}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="ugc-activation__bottom">
+      <p class="ugc-callout ugc-callout--yellow" data-ugc-reveal>{ugcActivation.important}</p>
+      {[ugcActivation.variants, ugcActivation.rights].map((group, index) => (
+        <article class="ugc-checklist" style={`--ugc-order: ${index};`} data-ugc-reveal>
+          <h3>{group.title}</h3>
+          <ul>
+            {group.items.map((item) => (
+              <li>
+                <ExpertiseIcon name="check" className="ugc-check-icon" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

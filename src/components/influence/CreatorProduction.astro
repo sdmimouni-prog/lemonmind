@@ -1,0 +1,52 @@
+---
+import { contact } from '../../data/homepage';
+import { creatorProduction } from '../../data/influenceMarketing';
+---
+<section class="im-creator-production" aria-labelledby="im-production-title" data-im-scene>
+  <div class="lm-shell im-creator-production__grid">
+    <div class="im-creator-production__copy">
+      <p class="lm-eyebrow lm-eyebrow--mint" data-im-reveal>{creatorProduction.eyebrow}</p>
+      <h2 id="im-production-title" data-im-reveal>{creatorProduction.title}</h2>
+      <p data-im-reveal>{creatorProduction.text}</p>
+      <a class="lm-button lm-button--yellow" href={contact.phoneHref} data-im-reveal>
+        {creatorProduction.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+      <ul class="im-deliverables" aria-label="Livrables social-first" data-im-reveal>
+        {creatorProduction.deliverables.map((deliverable) => (
+          <li>{deliverable}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="im-production-visual" data-im-depth>
+      <figure class="im-production-visual__main">
+        <img src={creatorProduction.image} alt="Tournage d'un contenu UGC accompagné par Lemon Mind" width="1024" height="1536" loading="lazy" decoding="async" />
+      </figure>
+      <figure class="im-production-visual__edit">
+        <img src={creatorProduction.editImage} alt="Réunion de postproduction et préparation des contenus" width="1280" height="720" loading="lazy" decoding="async" />
+      </figure>
+      <figure class="im-phone im-production-visual__phone">
+        <span class="im-phone__speaker" aria-hidden="true"></span>
+        <img src={creatorProduction.phoneImage} alt="Aperçu vertical d'un contenu créateur" width="560" height="996" loading="lazy" decoding="async" />
+        <figcaption>
+          <strong>Format vertical</strong>
+          <span>Déclinaisons multi-plateformes</span>
+        </figcaption>
+      </figure>
+      <p class="im-hand im-hand--production">{creatorProduction.annotation}</p>
+    </div>
+
+    <ol class="im-production-phases" aria-label="Phases de production">
+      {creatorProduction.phases.map((phase, index) => (
+        <li style={`--im-order: ${index};`} data-im-reveal>
+          <span>{phase.number}</span>
+          <div>
+            <h3>{phase.title}</h3>
+            <p>{phase.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

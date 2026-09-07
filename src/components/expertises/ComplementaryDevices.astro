@@ -1,0 +1,145 @@
+---
+import { contact } from '../../data/homepage';
+import { complementaryExpertises, tailoredDevices } from '../../data/expertises';
+import ExpertiseIcon from './ExpertiseIcon.astro';
+---
+<section class="xp-complement" id="expertises-complementaires" aria-labelledby="complement-title" data-xp-card-scene>
+  <div class="lm-shell xp-complement__grid">
+    <div class="xp-complement__copy">
+      <p class="lm-eyebrow lm-eyebrow--red">{complementaryExpertises.eyebrow}</p>
+      <h2 id="complement-title">{complementaryExpertises.title}</h2>
+      <p>{complementaryExpertises.text}</p>
+      <a class="lm-button lm-button--yellow" href="#contact">
+        {complementaryExpertises.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <p class="xp-hand xp-hand--complement">Des idées.<br />Des contenus.<br />Des résultats.</p>
+    <div class="xp-complement__cards">
+      {complementaryExpertises.cards.map((card, index) => (
+        <article class={`xp-complement-card xp-complement-card--${card.tone}`} style={`--xp-order: ${index};`} data-xp-card>
+          <ExpertiseIcon name={card.icon} />
+          <h3>{card.title}</h3>
+          <p>{card.text}</p>
+          {card.image ? <img src={card.image} alt="" width="276" height="404" loading="lazy" /> : <span class="xp-card-placeholder" aria-label="Visuel à intégrer"></span>}
+          <a href="#contact" aria-label={`Découvrir ${card.title}`}>→</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="xp-devices" id="dispositifs" aria-labelledby="devices-title" data-xp-device-slider>
+  <div class="lm-shell xp-devices__grid">
+    <div class="xp-devices__copy">
+      <p class="lm-eyebrow lm-eyebrow--yellow">{tailoredDevices.eyebrow}</p>
+      <h2 id="devices-title">{tailoredDevices.title}</h2>
+      <a class="lm-button lm-button--yellow" href={contact.phoneHref}>
+        {tailoredDevices.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <p class="xp-devices__text">{tailoredDevices.text}</p>
+    <div class="xp-device-controls" aria-label="Contrôles du slider dispositifs">
+      <button type="button" data-device-prev aria-label="Dispositif précédent">←</button>
+      <button type="button" data-device-next aria-label="Dispositif suivant">→</button>
+    </div>
+    <div class="xp-device-viewport">
+      <div class="xp-device-track">
+        {[...tailoredDevices.cards, ...tailoredDevices.cards].map((card, index) => (
+          <article class="xp-device-card" aria-hidden={index >= tailoredDevices.cards.length ? 'true' : 'false'}>
+            <img src={card.image} alt="" width="1024" height="1536" loading="lazy" />
+            <div>
+              <h3>{card.title}</h3>
+              <p>{card.label}</p>
+            </div>
+            <span aria-hidden="true">→</span>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    document.querySelectorAll('[data-xp-card]').forEach((card) => {
+      if (prefersReducedMotion.matches || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        return;
+      }
+
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+        card.style.setProperty('--xp-card-x', `${x.toFixed(2)}%`);
+        card.style.setProperty('--xp-card-y', `${y.toFixed(2)}%`);
+      });
+
+      card.addEventListener('pointerleave', () => {
+        card.style.setProperty('--xp-card-x', '52%');
+        card.style.setProperty('--xp-card-y', '48%');
+      });
+    });
+
+    const slider = document.querySelector('[data-xp-device-slider]');
+    const track = slider?.querySelector('.xp-device-track');
+    const cards = track ? Array.from(track.children) : [];
+    const count = cards.length / 2;
+    const prev = slider?.querySelector('[data-device-prev]');
+    const next = slider?.querySelector('[data-device-next]');
+    let index = 0;
+    let timer = 0;
+
+    if (!slider || !track || !count || prefersReducedMotion.matches) {
+      return;
+    }
+
+    const getStep = () => {
+      const first = cards[0]?.getBoundingClientRect();
+      const second = cards[1]?.getBoundingClientRect();
+
+      return first && second ? second.left - first.left : 0;
+    };
+
+    const moveTo = (nextIndex, animated = true) => {
+      const step = getStep();
+
+      if (!step) {
+        return;
+      }
+
+      track.classList.toggle('is-resetting', !animated);
+      track.style.transform = `translate3d(${-nextIndex * step}px, 0, 0)`;
+      index = nextIndex;
+    };
+
+    const start = () => {
+      window.clearInterval(timer);
+      timer = window.setInterval(() => moveTo(index + 1), 3000);
+    };
+
+    track.addEventListener('transitionend', () => {
+      if (index >= count) {
+        moveTo(0, false);
+      }
+    });
+
+    prev?.addEventListener('click', () => {
+      const target = index <= 0 ? count - 1 : index - 1;
+      moveTo(target);
+      start();
+    });
+
+    next?.addEventListener('click', () => {
+      moveTo(index + 1);
+      start();
+    });
+
+    window.addEventListener('resize', () => moveTo(index, false));
+    start();
+  })();
+</script>

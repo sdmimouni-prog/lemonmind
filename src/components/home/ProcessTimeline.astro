@@ -1,0 +1,92 @@
+---
+import { processSteps } from '../../data/homepage';
+---
+<section class="lm-process" aria-labelledby="process-title" data-process-scene>
+  <div class="lm-shell lm-process__layout">
+    <div class="lm-section-heading lm-process__intro">
+      <p class="lm-eyebrow lm-eyebrow--red">Notre process</p>
+      <h2 id="process-title">Un accompagnement clair et efficace</h2>
+    </div>
+    <ol class="lm-process__steps" data-process-track>
+      {processSteps.map((step, index) => (
+        <li data-process-step data-process-index={index} style={`--process-order: ${index}`}>
+          <span class="lm-process__node" aria-hidden="true">
+            <img src={step.icon} alt="" width="24" height="24" loading="lazy" />
+          </span>
+          <span class="lm-process__pin" aria-hidden="true"></span>
+          <strong>{step.number}</strong>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const scene = document.querySelector('[data-process-scene]');
+
+    if (!scene) {
+      return;
+    }
+
+    const steps = Array.from(scene.querySelectorAll('[data-process-step]'));
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const clearActive = () => {
+      steps.forEach((step) => step.classList.remove('is-active', 'is-before-active'));
+    };
+
+    const setActive = (rawIndex) => {
+      const activeIndex = Number(rawIndex || '0');
+
+      steps.forEach((step, index) => {
+        step.classList.toggle('is-active', index === activeIndex);
+        step.classList.toggle('is-before-active', index < activeIndex);
+      });
+    };
+
+    const setPointer = (step, event) => {
+      const rect = step.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+      step.style.setProperty('--process-x', `${x.toFixed(2)}%`);
+      step.style.setProperty('--process-y', `${y.toFixed(2)}%`);
+    };
+
+    scene.classList.add('is-motion-ready');
+
+    if ('IntersectionObserver' in window && !prefersReducedMotion.matches) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.34 },
+      );
+
+      observer.observe(scene);
+    } else {
+      scene.classList.add('is-visible');
+    }
+
+    steps.forEach((step) => {
+      step.style.setProperty('--process-x', '50%');
+      step.style.setProperty('--process-y', '18%');
+
+      step.addEventListener('pointermove', (event) => setPointer(step, event));
+      step.addEventListener('pointerenter', () => setActive(step.getAttribute('data-process-index')));
+      step.addEventListener('pointerleave', () => {
+        step.style.setProperty('--process-x', '50%');
+        step.style.setProperty('--process-y', '18%');
+        clearActive();
+      });
+    });
+  })();
+</script>

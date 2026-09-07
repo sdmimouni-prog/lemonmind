@@ -1,0 +1,38 @@
+---
+import { strategyFaq } from '../../data/strategyConsulting';
+---
+<section class="sc-faq sc-section-light" aria-labelledby="sc-faq-title" data-sc-scene>
+  <div class="lm-shell sc-faq__grid">
+    <div>
+      <p class="lm-eyebrow" data-sc-line>{strategyFaq.eyebrow}</p>
+      <h2 id="sc-faq-title" data-sc-title>{strategyFaq.title}</h2>
+    </div>
+    <div class="sc-faq__list" data-sc-faq-list data-sc-reveal>
+      {strategyFaq.questions.map((item, index) => (
+        <article class="sc-faq-item">
+          <h3>
+            <button
+              type="button"
+              id={`sc-faq-question-${index + 1}`}
+              aria-expanded="false"
+              aria-controls={`sc-faq-answer-${index + 1}`}
+              data-sc-faq-button
+            >
+              <span>{item.question}</span>
+              <span aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div
+            id={`sc-faq-answer-${index + 1}`}
+            role="region"
+            aria-labelledby={`sc-faq-question-${index + 1}`}
+            data-sc-faq-panel
+            data-open="false"
+          >
+            <p>{item.answer}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

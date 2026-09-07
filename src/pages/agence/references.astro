@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import ReferencesCollaborations from '../../components/references/ReferencesCollaborations.astro';
+import ReferencesContribution from '../../components/references/ReferencesContribution.astro';
+import ReferencesFinalCta from '../../components/references/ReferencesFinalCta.astro';
+import ReferencesHero from '../../components/references/ReferencesHero.astro';
+import ReferencesInteractions from '../../components/references/ReferencesInteractions.astro';
+import ReferencesLogoWall from '../../components/references/ReferencesLogoWall.astro';
+import ReferencesSectors from '../../components/references/ReferencesSectors.astro';
+import { contact } from '../../data/homepage';
+import { references, referencesMeta } from '../../data/references';
+import '../../styles/references.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(referencesMeta.canonical, siteUrl).toString();
+const organizationId = `${siteUrl}#organization`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: 'Lemon Mind Digital',
+      url: siteUrl,
+      telephone: contact.phone,
+      email: contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Casablanca',
+        addressCountry: 'MA',
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+    },
+    {
+      '@type': 'CollectionPage',
+      '@id': `${pageUrl}#page`,
+      name: referencesMeta.title,
+      description: referencesMeta.description,
+      url: pageUrl,
+      inLanguage: 'fr-MA',
+      isPartOf: {
+        '@id': siteUrl,
+      },
+      about: {
+        '@id': organizationId,
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'L’agence',
+          item: new URL('/agence', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Références',
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      '@id': `${pageUrl}#references`,
+      itemListElement: references.map((reference, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: reference.name,
+        description: `${reference.sourceSector} — ${reference.mission}`,
+        url: new URL(`${referencesMeta.canonical}#${reference.id}`, siteUrl).toString(),
+      })),
+    },
+  ],
+};
+---
+<BaseLayout
+  title={referencesMeta.title}
+  description={referencesMeta.description}
+  canonical={referencesMeta.canonical}
+  ogImage={referencesMeta.ogImage}
+  schema={schema}
+  bodyClass="references-page"
+>
+  <Header ctaLabel="Réservez un appel" ctaHref={contact.bookingHref} />
+  <main>
+    <ReferencesHero />
+    <ReferencesLogoWall />
+    <ReferencesSectors />
+    <ReferencesCollaborations />
+    <ReferencesContribution />
+    <ReferencesFinalCta />
+  </main>
+  <ReferencesInteractions />
+  <Footer />
+</BaseLayout>
