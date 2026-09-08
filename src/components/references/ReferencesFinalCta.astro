@@ -1,11 +1,17 @@
 ---
 import { finalReferencesCta } from '../../data/references';
+
+const hasTitle = Boolean(finalReferencesCta.title);
 ---
-<section class="rf-final-cta" aria-labelledby="references-final-title" data-rf-scene>
+<section
+  class:list={['rf-final-cta', !hasTitle && 'rf-final-cta--no-title']}
+  aria-labelledby={hasTitle ? 'references-final-title' : 'references-final-eyebrow'}
+  data-rf-scene
+>
   <div class="lm-shell rf-final-cta__grid">
     <div class="rf-final-cta__copy">
-      <p class="lm-eyebrow" data-rf-reveal>{finalReferencesCta.eyebrow}</p>
-      <h2 id="references-final-title" data-rf-title>{finalReferencesCta.title}</h2>
+      <p id="references-final-eyebrow" class="lm-eyebrow" data-rf-reveal>{finalReferencesCta.eyebrow}</p>
+      {hasTitle && <h2 id="references-final-title" data-rf-title>{finalReferencesCta.title}</h2>}
     </div>
 
     <div class="rf-final-cta__actions" data-rf-reveal style="--rf-order: 1;">

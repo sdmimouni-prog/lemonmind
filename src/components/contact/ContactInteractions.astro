@@ -167,10 +167,6 @@
         errors.fullName = 'Indiquez votre nom complet.';
       }
 
-      if (getValue('company').length < 2) {
-        errors.company = 'Indiquez le nom de votre entreprise.';
-      }
-
       const email = getValue('email');
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errors.email = 'Indiquez un email professionnel valide.';
@@ -184,8 +180,8 @@
         errors.projectType = 'Sélectionnez un type de projet.';
       }
 
-      if (!getValue('objective')) {
-        errors.objective = 'Sélectionnez un objectif principal.';
+      if (getValue('message').length < 10) {
+        errors.message = 'Ajoutez quelques détails sur votre projet.';
       }
 
       const fileError = validateFile(briefInput?.files?.[0]);

@@ -1,0 +1,51 @@
+---
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  text?: string;
+  className?: string;
+  handNote?: string;
+}
+
+const {
+  eyebrow = 'Newsletter',
+  title = 'Recevez les idées qui méritent votre attention.',
+  text = 'Analyses, tendances et ressources exclusives, directement dans votre boîte mail.',
+  className = '',
+  handNote = 'Good brands.\nGrow together.',
+} = Astro.props;
+const titleId = className ? 'insights-detail-newsletter-title' : 'insights-newsletter-title';
+const handLines = handNote.split('\n');
+---
+<section class:list={['in-newsletter', className]} aria-labelledby={titleId} data-insights-scene>
+  <div class="lm-shell in-newsletter__grid">
+    <div class="in-newsletter__copy" data-insights-reveal>
+      <p class="in-section-label">{eyebrow}</p>
+      <h2 id={titleId}>{title}</h2>
+      <p>{text}</p>
+    </div>
+
+    <form class="in-newsletter-form" action="/api/newsletter" method="post" novalidate data-newsletter-form data-insights-reveal style="--in-order: 1;">
+      <div class="in-newsletter-form__honeypot" aria-hidden="true">
+        <label for="newsletter-website">Site web</label>
+        <input id="newsletter-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <label class="in-newsletter-field" for="newsletter-email">
+        <span>Adresse email</span>
+        <input id="newsletter-email" name="email" type="email" autocomplete="email" placeholder="Votre adresse email" required />
+      </label>
+      <button class="in-newsletter-submit" type="submit" data-newsletter-submit>
+        <span data-newsletter-submit-label>Je m’inscris</span>
+        <span aria-hidden="true">→</span>
+      </button>
+      <label class="in-newsletter-consent" for="newsletter-consent">
+        <input id="newsletter-consent" name="consent" type="checkbox" required />
+        <span>J’accepte de recevoir la newsletter et les actualités de Lemon Mind.</span>
+      </label>
+      <p class="in-newsletter-status" data-newsletter-status role="status" aria-live="polite"></p>
+    </form>
+
+    <p class="in-hand in-hand--newsletter" aria-hidden="true">{handLines.map((line) => <>{line}<br /></>)}</p>
+  </div>
+</section>

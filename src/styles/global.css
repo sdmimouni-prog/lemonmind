@@ -2052,3 +2052,43 @@ main {
     animation: none;
   }
 }
+
+main section:not([class*="hero"]) > .lm-shell > h2,
+main section:not([class*="hero"]) > .lm-shell > header > h2,
+main section:not([class*="hero"]) > .lm-shell > div > h2,
+main section:not([class*="hero"]) > .lm-shell > header > div > h2,
+main section:not([class*="hero"]) > .lm-shell > div > div > h2,
+main section:not([class*="hero"]) > h2,
+main section:not([class*="hero"]) > div > h2,
+main section:not([class*="hero"]) > header > h2 {
+  font-size: clamp(26px, 2.45vw, 38px) !important;
+  line-height: 1.15 !important;
+}
+
+@media (max-width: 768px) {
+  main section:not([class*="hero"]) > .lm-shell > h2,
+  main section:not([class*="hero"]) > .lm-shell > header > h2,
+  main section:not([class*="hero"]) > .lm-shell > div > h2,
+  main section:not([class*="hero"]) > .lm-shell > header > div > h2,
+  main section:not([class*="hero"]) > .lm-shell > div > div > h2,
+  main section:not([class*="hero"]) > h2,
+  main section:not([class*="hero"]) > div > h2,
+  main section:not([class*="hero"]) > header > h2 {
+    font-size: clamp(23px, 6vw, 32px) !important;
+    line-height: 1.17 !important;
+  }
+}
+
+@media (max-width: 430px) {
+  main section:not([class*="hero"]) > .lm-shell > h2,
+  main section:not([class*="hero"]) > .lm-shell > header > h2,
+  main section:not([class*="hero"]) > .lm-shell > div > h2,
+  main section:not([class*="hero"]) > .lm-shell > header > div > h2,
+  main section:not([class*="hero"]) > .lm-shell > div > div > h2,
+  main section:not([class*="hero"]) > h2,
+  main section:not([class*="hero"]) > div > h2,
+  main section:not([class*="hero"]) > header > h2 {
+    font-size: clamp(21px, 5.8vw, 27px) !important;
+    line-height: 1.18 !important;
+  }
+}

@@ -1,0 +1,133 @@
+---
+import ExpertiseIcon from '../../expertises/ExpertiseIcon.astro';
+import { insightAuthorsById, type InsightDetailArticle } from '../../../data/insights';
+
+interface Props {
+  article: InsightDetailArticle;
+}
+
+const { article } = Astro.props;
+const quoteAuthor = article.expertQuote ? insightAuthorsById.get(article.expertQuote.authorId) : null;
+---
+<article class="id-content" data-insight-main>
+  {article.sections.map((section) => (
+    <section id={section.id} class:list={['id-section', section.level === 3 && 'id-section--nested']} data-detail-section={section.id} data-detail-reveal>
+      {section.level === 2 ? <h2>{section.title}</h2> : <h3>{section.title}</h3>}
+
+      {section.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
+
+      {section.table && (
+        <figure class="id-table-block">
+          <figcaption>{section.table?.caption}</figcaption>
+          <div class="id-table-scroll" tabindex="0" aria-label={section.table?.caption}>
+            <table>
+              <thead>
+                <tr>
+                  {section.table?.columns.map((column) => <th scope="col">{column.label}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {section.table?.rows.map((row) => (
+                  <tr>
+                    {section.table?.columns.map((column, columnIndex) =>
+                      columnIndex === 0 ? <th scope="row">{row[column.key]}</th> : <td>{row[column.key]}</td>,
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </figure>
+      )}
+
+      {section.highlight && <p class="id-highlight">{section.highlight}</p>}
+
+      {section.list && (
+        <ul class="id-chip-list">
+          {section.list.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      )}
+
+      {section.callout && (
+        <aside class="id-checklist" aria-label={section.callout.title}>
+          <div>
+            <span class="id-icon id-icon--mint">
+              <ExpertiseIcon name="check" className="id-icon__svg" />
+            </span>
+            <h3>{section.callout.title}</h3>
+          </div>
+          <ul>
+            {section.callout.items.map((item) => (
+              <li>
+                <span aria-hidden="true">✓</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          {section.callout.cta && (
+            <a class="id-dark-link" href={section.callout.cta.href}>
+              {section.callout.cta.label}
+              <span aria-hidden="true">→</span>
+            </a>
+          )}
+        </aside>
+      )}
+
+      {section.links && (
+        <div class="id-link-row" aria-label="Liens internes">
+          {section.links.map((link) => (
+            <a href={link.href}>
+              {link.label}
+              <span aria-hidden="true">→</span>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
+  ))}
+
+  {article.expertQuote && quoteAuthor && (
+    <figure class="id-expert-quote" data-detail-reveal>
+      <img src={quoteAuthor.image} alt="" width="86" height="86" loading="lazy" decoding="async" />
+      <blockquote>{article.expertQuote.quote}</blockquote>
+      <figcaption>
+        <strong>{quoteAuthor.name}</strong>
+        <span>{quoteAuthor.role}</span>
+      </figcaption>
+    </figure>
+  )}
+
+  <section id="questions-frequentes" class="id-faq" aria-labelledby="faq-title" data-detail-section="questions-frequentes" data-detail-reveal>
+    <p class="in-section-label">FAQ</p>
+    <h2 id="faq-title">Questions fréquentes</h2>
+    <div class="id-faq__list">
+      {article.faq.map((item, index) => {
+        const panelId = `insight-faq-panel-${index}`;
+        const buttonId = `insight-faq-button-${index}`;
+        const isOpen = index === 0;
+
+        return (
+          <div class="id-faq__item">
+            <h3>
+              <button
+                id={buttonId}
+                type="button"
+                aria-expanded={isOpen ? 'true' : 'false'}
+                aria-controls={panelId}
+                data-detail-faq-button
+              >
+                <span>{item.question}</span>
+                <span aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div id={panelId} class="id-faq__panel" role="region" aria-labelledby={buttonId} hidden={!isOpen} data-detail-faq-panel>
+              <p>{item.answer}</p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+</article>

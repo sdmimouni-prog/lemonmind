@@ -1,0 +1,30 @@
+---
+import ExpertiseIcon from '../../expertises/ExpertiseIcon.astro';
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+const visibleMetrics = (realisation.metrics || []).filter((metric) =>
+  metric.validated || realisation.status === 'private-preview',
+);
+const shouldRender = visibleMetrics.length === 4;
+---
+{shouldRender && (
+  <section class="rd-metric-strip" aria-label="Indicateurs de la réalisation" data-rd-scene>
+    <div class="lm-shell rd-metric-strip__grid">
+      {visibleMetrics.map((metric) => (
+        <article class={metric.validated ? 'rd-metric' : 'rd-metric rd-metric--preview'}>
+          <span class="rd-metric__icon">
+            <ExpertiseIcon name={metric.icon} className="rd-icon" />
+          </span>
+          <strong>{metric.value}</strong>
+          <span>{metric.label}</span>
+          {!metric.validated && <em>Prévisualisation</em>}
+        </article>
+      ))}
+    </div>
+  </section>
+)}

@@ -1,0 +1,32 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { learningAndMonitoring } from '../../data/certifications-data';
+---
+<section class="cf-section cf-learning" aria-labelledby="certification-learning-title">
+  <div class="lm-shell cf-learning__grid">
+    <div class="cf-learning__mosaic" data-cf-reveal>
+      {learningAndMonitoring.images.map((image, index) => (
+        <figure class={`cf-learning__image cf-learning__image--${index + 1}`} data-cf-parallax>
+          <img src={image.src} alt={image.alt} width="640" height="420" decoding="async" />
+          {index === 2 && <figcaption class="cf-hand">{learningAndMonitoring.annotation}</figcaption>}
+        </figure>
+      ))}
+    </div>
+
+    <div class="cf-learning__copy" data-cf-reveal>
+      <p class="lm-eyebrow">{learningAndMonitoring.eyebrow}</p>
+      <h2 id="certification-learning-title">
+        {learningAndMonitoring.titleLines.map((line) => <span>{line}</span>)}
+      </h2>
+      <p>{learningAndMonitoring.text}</p>
+      <ul class="cf-learning__practices" aria-label="Pratiques de formation et de veille">
+        {learningAndMonitoring.practices.map((practice) => (
+          <li>
+            <ExpertiseIcon name={practice.icon} className="cf-learning__practice-icon" />
+            <span>{practice.label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

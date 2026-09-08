@@ -1,0 +1,60 @@
+---
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+const gallery = realisation.gallery;
+---
+{gallery?.items.length ? (
+  <section class="rd-section rd-gallery" aria-labelledby="realisation-gallery-title" data-rd-scene>
+    <div class="lm-shell">
+      <div class="rd-section-head rd-section-head--compact">
+        <div>
+          <p class="rd-label">{gallery.eyebrow}</p>
+          <h2 id="realisation-gallery-title">{gallery.title}</h2>
+        </div>
+        <a class="rd-inline-link" href="/realisations">
+          Voir toutes les réalisations
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="rd-gallery__grid">
+        {gallery.items.map((item, index) => {
+          const layout = item.layout || (index === 0 ? 'large' : index === 2 ? 'tall' : 'small');
+          return (
+            <a
+              class={`rd-gallery-item rd-gallery-item--${layout}`}
+              href={item.kind === 'video' ? item.poster || item.src : item.src}
+              data-rd-lightbox-trigger
+              data-kind={item.kind || 'image'}
+              data-src={item.src}
+              data-poster={item.poster || ''}
+              data-alt={item.alt}
+              data-caption={item.caption}
+              data-rd-reveal
+              style={`--rd-order: ${index};`}
+              aria-haspopup="dialog"
+            >
+              <img src={item.poster || item.src} alt={item.alt} width="900" height="640" loading="lazy" decoding="async" />
+              <span>{item.caption}</span>
+              {item.kind === 'video' && <em>Lire la vidéo</em>}
+            </a>
+          );
+        })}
+      </div>
+    </div>
+
+    <dialog class="rd-lightbox" data-rd-lightbox aria-label="Aperçu média">
+      <button type="button" class="rd-lightbox__close" data-rd-lightbox-close aria-label="Fermer l’aperçu">×</button>
+      <figure>
+        <img src="" alt="" data-rd-lightbox-image hidden />
+        <video data-rd-lightbox-video controls playsinline hidden></video>
+        <figcaption data-rd-lightbox-caption></figcaption>
+      </figure>
+    </dialog>
+  </section>
+) : null}

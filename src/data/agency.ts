@@ -18,7 +18,7 @@ export const agencyLinks = {
   contact: '/contact',
   team: '/agence/equipe',
   references: '/agence/references',
-  certifications: '/agence#certifications',
+  certifications: '/agence/certifications',
   ecosystem: '/nos-expertises#ecosysteme',
   realisations: '/realisations',
 };
@@ -186,8 +186,7 @@ const trustedReferenceNames = new Set([
 export const agencyTrust = {
   eyebrow: 'Ils nous font confiance',
   title: 'Des marques ambitieuses, dans tous les secteurs.',
-  text:
-    'Nous accompagnons des entreprises, institutions et organisations qui partagent notre vision d’un digital plus créatif, plus humain et plus performant.',
+  text: '',
   cta: 'Découvrir toutes nos références',
   certificationEyebrow: 'Nos certifications',
   certificationCta: 'Voir nos certifications',
@@ -197,7 +196,7 @@ export const agencyTrust = {
 };
 
 export const agencyFinalCta = {
-  eyebrow: 'Parlons de votre projet',
+  eyebrow: '',
   title: 'Vous cherchez une agence capable de penser, produire et activer ?',
   text:
     'Présentez-nous votre marque, votre ambition et vos enjeux. Nous construirons l’équipe et le dispositif adaptés à votre projet.',

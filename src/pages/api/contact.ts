@@ -3,15 +3,14 @@ import { acceptedBriefExtensions, contactDetails, maxBriefSize } from '../../dat
 
 export const prerender = false;
 
-const requiredFields = ['fullName', 'company', 'email', 'phone', 'projectType', 'objective'] as const;
+const requiredFields = ['fullName', 'email', 'phone', 'projectType', 'message'] as const;
 
 const labels: Record<(typeof requiredFields)[number], string> = {
   fullName: 'Nom et prénom',
-  company: 'Entreprise',
   email: 'Email professionnel',
   phone: 'Téléphone',
   projectType: 'Type de projet',
-  objective: 'Objectif principal',
+  message: 'Message',
 };
 
 const getText = (formData: FormData, key: string) => String(formData.get(key) || '').trim();
@@ -49,6 +48,11 @@ export const POST: APIRoute = async ({ request }) => {
     errors.phone = 'Indiquez un numéro de téléphone valide.';
   }
 
+  const message = getText(formData, 'message');
+  if (message && message.length < 10) {
+    errors.message = 'Ajoutez quelques détails sur votre projet.';
+  }
+
   const brief = formData.get('brief');
   if (brief instanceof File && brief.size > 0) {
     const extension = brief.name.split('.').pop()?.toLowerCase() || '';
@@ -66,23 +70,19 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ ok: false, message: 'Merci de corriger les champs indiqués.', errors }, 400);
   }
 
-  const subject = `Brief Lemon Mind - ${getText(formData, 'company')}`;
+  const subject = `Brief Lemon Mind - ${getText(formData, 'fullName')}`;
   const bodyLines = [
     'Bonjour Lemon Mind,',
     '',
     'Voici ma demande de projet :',
     '',
     `Nom : ${getText(formData, 'fullName')}`,
-    `Entreprise : ${getText(formData, 'company')}`,
     `Email : ${email}`,
     `Téléphone : ${phone}`,
     `Type de projet : ${getText(formData, 'projectType')}`,
-    `Objectif principal : ${getText(formData, 'objective')}`,
-    `Budget estimatif : ${getText(formData, 'budget') || 'À définir'}`,
-    `Date souhaitée : ${getText(formData, 'preferredDate') || 'À préciser'}`,
     '',
     'Message :',
-    getText(formData, 'message') || 'À préciser ensemble.',
+    message,
     '',
     brief instanceof File && brief.size > 0
       ? `Brief joint à ajouter manuellement dans l’email : ${brief.name}`

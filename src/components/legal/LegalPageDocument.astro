@@ -1,0 +1,191 @@
+---
+import Footer from '../Footer.astro';
+import Header from '../Header.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { contact } from '../../data/homepage';
+import { legalNavigation, legalOwner, type LegalPage } from '../../data/legal';
+import '../../styles/legal.css';
+
+interface Props {
+  page: LegalPage;
+}
+
+const { page } = Astro.props;
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(page.canonical, siteUrl).toString();
+const organizationId = `${siteUrl}#organization`;
+const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+}).format(new Date(page.updatedAt));
+
+const statusLabels: Record<LegalPage['status'], string> = {
+  draft: 'Brouillon',
+  'ready-for-legal-review': 'À valider juridiquement',
+  published: 'Publié',
+};
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: legalOwner.brand,
+      url: siteUrl,
+      telephone: legalOwner.phone,
+      email: legalOwner.email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Casablanca',
+        addressCountry: 'MA',
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${pageUrl}#page`,
+      name: page.shortTitle,
+      description: page.description,
+      url: pageUrl,
+      inLanguage: 'fr-MA',
+      dateModified: page.updatedAt,
+      isPartOf: {
+        '@id': siteUrl,
+      },
+      about: {
+        '@id': organizationId,
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: page.shortTitle,
+          item: pageUrl,
+        },
+      ],
+    },
+  ],
+};
+---
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  canonical={page.canonical}
+  schema={schema}
+  bodyClass="legal-page"
+>
+  <Header ctaLabel="Nous contacter" ctaHref={contact.contactHref} />
+  <main>
+    <section class="lg-hero">
+      <div class="lm-shell lg-hero__grid">
+        <div class="lg-hero__copy">
+          <nav class="lg-breadcrumb" aria-label="Fil d'Ariane">
+            <a href="/">Accueil</a>
+            <span aria-hidden="true">/</span>
+            <span>{page.shortTitle}</span>
+          </nav>
+          <p class="lg-eyebrow">{page.eyebrow}</p>
+          <h1 id="legal-title">{page.shortTitle}</h1>
+          <p class="lg-hero__intro">{page.intro}</p>
+        </div>
+
+        <aside class="lg-hero__meta" aria-label="Informations du document">
+          <p class="lg-chip">{statusLabels[page.status]}</p>
+          <dl>
+            <div>
+              <dt>Dernière mise à jour</dt>
+              <dd>{formattedDate}</dd>
+            </div>
+            <div>
+              <dt>Contact</dt>
+              <dd><a href={contact.emailHref}>{contact.email}</a></dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+
+      <nav class="lm-shell lg-hero__nav" aria-label="Documents légaux">
+        {legalNavigation.map((item) => (
+          <a
+            href={item.href}
+            class={item.href === page.canonical ? 'is-current' : undefined}
+            aria-current={item.href === page.canonical ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    <section class="lg-body" aria-labelledby="legal-title">
+      <div class="lm-shell lg-body__grid">
+        <article class="lg-content">
+          <div class="lg-alert">
+            <strong>Document préparé pour Lemon Mind Digital.</strong>
+            <span>
+              Les informations administratives non confirmées restent marquées comme éléments à compléter avant validation finale.
+            </span>
+          </div>
+
+          {page.sections.map((section, index) => (
+            <section class="lg-section" id={section.id}>
+              <p class="lg-section__number">{String(index + 1).padStart(2, '0')}</p>
+              <div class="lg-section__content">
+                <h2>{section.title}</h2>
+                {section.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
+                {section.items && (
+                  <ul>
+                    {section.items.map((item) => <li>{item}</li>)}
+                  </ul>
+                )}
+                {section.note && <p class="lg-note">{section.note}</p>}
+              </div>
+            </section>
+          ))}
+        </article>
+
+        <aside class="lg-sidebar">
+          <div class="lg-sidebar__panel">
+            <p class="lg-sidebar__label">Sommaire</p>
+            <nav aria-label={`Sommaire ${page.shortTitle}`}>
+              {page.sections.map((section, index) => (
+                <a href={`#${section.id}`}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  {section.title}
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div class="lg-sidebar__panel lg-contact-card">
+            <p class="lg-sidebar__label">Lemon Mind Digital</p>
+            <h2>Une question sur ces documents ?</h2>
+            <p>
+              Écrivez-nous pour toute demande liée au site, aux données personnelles ou aux documents légaux.
+            </p>
+            <a class="lm-button lm-button--yellow" href={contact.emailHref}>
+              Nous écrire
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

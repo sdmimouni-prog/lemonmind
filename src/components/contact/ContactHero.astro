@@ -59,12 +59,6 @@ import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
             <em id="fullName-error" data-error-for="fullName"></em>
           </label>
 
-          <label class="ct-field" for="company">
-            <span>Entreprise *</span>
-            <input id="company" name="company" type="text" autocomplete="organization" placeholder="Nom de votre entreprise" required />
-            <em id="company-error" data-error-for="company"></em>
-          </label>
-
           <label class="ct-field" for="email">
             <span>Email professionnel *</span>
             <input id="email" name="email" type="email" autocomplete="email" placeholder="vous@entreprise.com" required />
@@ -86,36 +80,15 @@ import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
             <em id="projectType-error" data-error-for="projectType"></em>
           </label>
 
-          <label class="ct-field" for="objective">
-            <span>Objectif principal *</span>
-            <select id="objective" name="objective" required>
-              <option value="">Sélectionner</option>
-              {contactForm.objectives.map((option) => <option value={option}>{option}</option>)}
-            </select>
-            <em id="objective-error" data-error-for="objective"></em>
-          </label>
-
-          <label class="ct-field" for="budget">
-            <span>Budget estimatif</span>
-            <select id="budget" name="budget">
-              <option value="">Sélectionner</option>
-              {contactForm.budgets.map((option) => <option value={option}>{option}</option>)}
-            </select>
-            <em id="budget-error" data-error-for="budget"></em>
-          </label>
-
-          <label class="ct-field" for="preferredDate">
-            <span>Date souhaitée</span>
-            <select id="preferredDate" name="preferredDate">
-              <option value="">Sélectionner</option>
-              {contactForm.dates.map((option) => <option value={option}>{option}</option>)}
-            </select>
-            <em id="preferredDate-error" data-error-for="preferredDate"></em>
-          </label>
-
           <label class="ct-field ct-field--wide" for="message">
-            <span>Votre message</span>
-            <textarea id="message" name="message" rows="4" placeholder="Parlez-nous de votre projet..."></textarea>
+            <span>Votre message *</span>
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              placeholder="Marque, objectif, timing, budget ou toute information utile..."
+              required
+            ></textarea>
             <em id="message-error" data-error-for="message"></em>
           </label>
         </div>

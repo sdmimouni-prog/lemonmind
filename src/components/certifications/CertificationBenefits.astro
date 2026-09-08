@@ -1,0 +1,27 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { certificationBenefits } from '../../data/certifications-data';
+---
+<section class="cf-section cf-benefits" aria-labelledby="certification-benefits-title">
+  <div class="lm-shell">
+    <div class="cf-section-head cf-section-head--split" data-cf-reveal>
+      <div>
+        <p class="lm-eyebrow">{certificationBenefits.eyebrow}</p>
+        <h2 id="certification-benefits-title">{certificationBenefits.title}</h2>
+      </div>
+      <p>{certificationBenefits.text}</p>
+    </div>
+
+    <div class="cf-benefits__grid">
+      {certificationBenefits.items.map((item, index) => (
+        <article class={`cf-benefit cf-benefit--${item.tone}`} data-cf-reveal style={`--cf-card-index: ${index};`}>
+          <span class="cf-icon">
+            <ExpertiseIcon name={item.icon} className="cf-icon__svg" />
+          </span>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

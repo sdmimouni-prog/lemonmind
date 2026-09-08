@@ -1,0 +1,54 @@
+---
+import type { InsightDetailArticle } from '../../../data/insights';
+
+interface Props {
+  article: InsightDetailArticle;
+  variant: 'desktop' | 'mobile';
+}
+
+const { article, variant } = Astro.props;
+const items = [
+  ...article.sections.map((section) => ({
+    id: section.id,
+    title: section.tocTitle || section.title,
+    level: section.level,
+  })),
+  {
+    id: 'questions-frequentes',
+    title: 'Questions fréquentes',
+    level: 2 as const,
+  },
+];
+const isMobile = variant === 'mobile';
+const listId = `insight-toc-${variant}`;
+---
+<div class:list={['id-toc', `id-toc--${variant}`]} data-detail-toc={variant}>
+  {isMobile ? (
+    <>
+      <button class="id-toc__trigger" type="button" aria-expanded="false" aria-controls={listId} data-detail-toc-button>
+        <span>Sommaire</span>
+        <span aria-hidden="true">+</span>
+      </button>
+      <nav id={listId} aria-label="Sommaire de l’article" hidden data-detail-toc-panel>
+        <ol>
+          {items.map((item) => (
+            <li class={`id-toc__item id-toc__item--level-${item.level}`}>
+              <a href={`#${item.id}`} data-detail-toc-link data-detail-toc-target={item.id}>{item.title}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </>
+  ) : (
+    <nav aria-label="Sommaire de l’article">
+      <h2>Sommaire</h2>
+      <ol>
+        {items.map((item) => (
+          <li class={`id-toc__item id-toc__item--level-${item.level}`}>
+            <a href={`#${item.id}`} data-detail-toc-link data-detail-toc-target={item.id}>{item.title}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )}
+</div>

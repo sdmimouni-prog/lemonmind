@@ -1,0 +1,29 @@
+---
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+const timeline = realisation.timeline;
+---
+{timeline?.steps.length ? (
+  <section class="rd-section rd-timeline" aria-labelledby="realisation-timeline-title" data-rd-scene>
+    <div class="lm-shell rd-timeline__grid">
+      <div data-rd-reveal>
+        <p class="rd-label">{timeline.eyebrow}</p>
+        <h2 id="realisation-timeline-title">{timeline.title}</h2>
+      </div>
+      <ol class="rd-timeline__steps">
+        {timeline.steps.map((step, index) => (
+          <li data-rd-reveal style={`--rd-order: ${index};`}>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+) : null}

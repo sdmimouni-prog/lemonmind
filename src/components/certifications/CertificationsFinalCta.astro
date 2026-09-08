@@ -1,0 +1,24 @@
+---
+import { certificationsFinalCta } from '../../data/certifications-data';
+---
+<section class="cf-final-cta" aria-labelledby="certifications-final-title">
+  <div class="lm-shell cf-final-cta__grid">
+    <div data-cf-reveal>
+      <p class="lm-eyebrow">{certificationsFinalCta.eyebrow}</p>
+      <h2 id="certifications-final-title">{certificationsFinalCta.title}</h2>
+    </div>
+    <div class="cf-final-cta__actions" data-cf-reveal>
+      <p>{certificationsFinalCta.text}</p>
+      <div class="cf-actions">
+        <a class="lm-button lm-button--dark" href="/contact">
+          {certificationsFinalCta.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button cf-button--ghost" href="/nos-expertises">
+          {certificationsFinalCta.secondaryCta}
+        </a>
+      </div>
+    </div>
+    <p class="cf-hand cf-final-cta__annotation" aria-hidden="true">{certificationsFinalCta.annotation}</p>
+  </div>
+</section>

@@ -27,7 +27,7 @@ export const agencyMenuItems = [
   { label: "L'agence", href: '/agence' },
   { label: "L'équipe", href: '/agence/equipe' },
   { label: 'Références', href: '/agence/references' },
-  { label: 'Certifications', href: '/agence#certifications' },
+  { label: 'Certifications', href: '/agence/certifications' },
   { label: 'Carrières', href: '/agence/carrieres' },
 ];
 
@@ -418,7 +418,7 @@ export const footerColumns = [
       { label: "L'agence", href: '/agence' },
       { label: "L'équipe", href: '/agence/equipe' },
       { label: 'Références', href: '/agence/references' },
-      { label: 'Certifications', href: '/agence#certifications' },
+      { label: 'Certifications', href: '/agence/certifications' },
       { label: 'Carrières', href: '/agence/carrieres' },
     ],
   },
@@ -436,7 +436,7 @@ export const footerColumns = [
     title: 'Ressources',
     links: [
       { label: 'Réalisations', href: '/realisations' },
-      { label: 'Blog', href: '/insights' },
+      { label: 'Insights', href: '/insights' },
       { label: 'FAQ', href: '/nos-expertises#faq' },
     ],
   },

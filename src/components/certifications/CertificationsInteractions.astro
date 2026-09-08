@@ -1,0 +1,82 @@
+<script is:inline>
+  (() => {
+    const page = document.querySelector('.certifications-page');
+
+    if (!page) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    page.classList.add('is-motion-ready');
+
+    const revealItems = Array.from(document.querySelectorAll('[data-cf-reveal]'));
+    const activate = (item) => item.classList.add('is-visible');
+
+    if ('IntersectionObserver' in window && !prefersReducedMotion) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              activate(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.14 },
+      );
+
+      revealItems.forEach((item) => observer.observe(item));
+    } else {
+      revealItems.forEach(activate);
+    }
+
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    const parallaxItems = Array.from(document.querySelectorAll('[data-cf-parallax]'));
+    const syncScroll = () => {
+      const viewportHeight = window.innerHeight || 1;
+
+      parallaxItems.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+        const progress = (rect.top + rect.height / 2 - viewportHeight / 2) / viewportHeight;
+        item.style.setProperty('--cf-scroll-y', `${Math.max(-1, Math.min(1, progress)) * -14}px`);
+      });
+    };
+
+    let ticking = false;
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) {
+          return;
+        }
+
+        ticking = true;
+        requestAnimationFrame(() => {
+          syncScroll();
+          ticking = false;
+        });
+      },
+      { passive: true },
+    );
+
+    document.addEventListener(
+      'pointermove',
+      (event) => {
+        if (window.innerWidth < 900) {
+          return;
+        }
+
+        const x = (event.clientX / window.innerWidth - 0.5) * 10;
+        const y = (event.clientY / window.innerHeight - 0.5) * 8;
+        page.style.setProperty('--cf-pointer-x', `${x}px`);
+        page.style.setProperty('--cf-pointer-y', `${y}px`);
+      },
+      { passive: true },
+    );
+
+    syncScroll();
+  })();
+</script>

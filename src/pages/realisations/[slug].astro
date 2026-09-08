@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import RealisationBrief from '../../components/realisations/detail/RealisationBrief.astro';
+import RealisationCreativeIdea from '../../components/realisations/detail/RealisationCreativeIdea.astro';
+import RealisationDeployments from '../../components/realisations/detail/RealisationDeployments.astro';
+import RealisationDetailHero from '../../components/realisations/detail/RealisationDetailHero.astro';
+import RealisationDetailInteractions from '../../components/realisations/detail/RealisationDetailInteractions.astro';
+import RealisationFaq from '../../components/realisations/detail/RealisationFaq.astro';
+import RealisationFinalCta from '../../components/realisations/detail/RealisationFinalCta.astro';
+import RealisationGallery from '../../components/realisations/detail/RealisationGallery.astro';
+import RealisationMetricStrip from '../../components/realisations/detail/RealisationMetricStrip.astro';
+import RealisationPreviewNotice from '../../components/realisations/detail/RealisationPreviewNotice.astro';
+import RealisationRelated from '../../components/realisations/detail/RealisationRelated.astro';
+import RealisationResults from '../../components/realisations/detail/RealisationResults.astro';
+import RealisationTimeline from '../../components/realisations/detail/RealisationTimeline.astro';
+import { contact } from '../../data/homepage';
+import {
+  getRealisationDetailBySlug,
+  getRelatedRealisations,
+  type RealisationDetail,
+} from '../../data/realisationDetails';
+import '../../styles/realisations.css';
+import '../../styles/realisation-detail.css';
+
+const realisation = getRealisationDetailBySlug(Astro.params.slug || '');
+
+if (!realisation) {
+  return Astro.redirect('/realisations', 302);
+}
+
+const typedRealisation = realisation as RealisationDetail;
+const relatedRealisations = getRelatedRealisations(typedRealisation);
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(typedRealisation.canonical, siteUrl).toString();
+const organizationId = `${siteUrl}#organization`;
+const isIndexable = typedRealisation.status === 'published';
+
+const schemaGraph: object[] = [
+  {
+    '@type': 'Organization',
+    '@id': organizationId,
+    name: 'Lemon Mind Digital',
+    url: siteUrl,
+    telephone: contact.phone,
+    email: contact.email,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Casablanca',
+      addressCountry: 'MA',
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'Maroc',
+    },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${pageUrl}#breadcrumb`,
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Accueil',
+        item: new URL('/', siteUrl).toString(),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Réalisations',
+        item: new URL('/realisations', siteUrl).toString(),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: typedRealisation.client,
+        item: pageUrl,
+      },
+    ],
+  },
+];
+
+if (isIndexable) {
+  schemaGraph.push(
+    {
+      '@type': 'CreativeWork',
+      '@id': `${pageUrl}#case-study`,
+      name: typedRealisation.title,
+      description: typedRealisation.metaDescription,
+      image: new URL(typedRealisation.ogImage, siteUrl).toString(),
+      url: pageUrl,
+      creator: {
+        '@id': organizationId,
+      },
+      about: typedRealisation.mission,
+      inLanguage: 'fr-MA',
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${pageUrl}#faq`,
+      mainEntity: (typedRealisation.faq || []).map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  );
+}
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': schemaGraph,
+};
+---
+<BaseLayout
+  title={typedRealisation.seoTitle}
+  description={typedRealisation.metaDescription}
+  canonical={typedRealisation.canonical}
+  ogImage={typedRealisation.ogImage}
+  ogType="article"
+  robots={isIndexable ? 'index,follow' : 'noindex,nofollow'}
+  schema={schema}
+  bodyClass="realisations-page realisation-detail-page"
+>
+  <Header ctaLabel="Parler de votre projet" ctaHref="/contact" />
+  <main>
+    <RealisationDetailHero realisation={typedRealisation} />
+    <RealisationPreviewNotice realisation={typedRealisation} />
+    <RealisationMetricStrip realisation={typedRealisation} />
+    <RealisationBrief realisation={typedRealisation} />
+    <RealisationDeployments realisation={typedRealisation} />
+    <RealisationGallery realisation={typedRealisation} />
+    <RealisationCreativeIdea realisation={typedRealisation} />
+    <RealisationTimeline realisation={typedRealisation} />
+    <RealisationResults realisation={typedRealisation} />
+    <RealisationRelated related={relatedRealisations} />
+    <RealisationFaq realisation={typedRealisation} />
+    <RealisationFinalCta />
+  </main>
+  <RealisationDetailInteractions />
+  <Footer />
+</BaseLayout>

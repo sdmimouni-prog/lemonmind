@@ -1,0 +1,66 @@
+---
+import ExpertiseIcon from '../../expertises/ExpertiseIcon.astro';
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+const results = realisation.results;
+const resultMetrics = (results?.metrics || []).filter((metric) =>
+  metric.validated || realisation.status === 'private-preview',
+);
+const validQuote = results?.quote?.validated ? results.quote : null;
+---
+{results && (
+  <section class="rd-results" aria-labelledby="realisation-results-title" data-rd-scene>
+    <div class="lm-shell rd-results__grid">
+      <div class="rd-results__copy" data-rd-reveal>
+        <p class="rd-label rd-label--outline">{results.eyebrow}</p>
+        <h2 id="realisation-results-title">{results.title}</h2>
+        <p>{results.text}</p>
+      </div>
+
+      <div class="rd-results__panel" data-rd-reveal style="--rd-order: 1;">
+        {resultMetrics.length ? (
+          <div class="rd-results__metrics">
+            {resultMetrics.map((metric) => (
+              <article>
+                <ExpertiseIcon name={metric.icon} className="rd-icon" />
+                <strong>{metric.value}</strong>
+                <span>{metric.label}</span>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="rd-results__empty">
+            <strong>Données chiffrées non publiées</strong>
+            <span>Aucun KPI n’est affiché sans validation.</span>
+          </div>
+        )}
+
+        {results.chartLabel && resultMetrics.length ? (
+          <div class="rd-results__chart" aria-label={results.chartLabel}>
+            {[24, 38, 32, 44, 58, 51, 64, 72, 86, 100].map((height) => (
+              <span style={`--rd-bar: ${height}%;`}></span>
+            ))}
+          </div>
+        ) : null}
+      </div>
+
+      {results.learnings.length ? (
+        <ul class="rd-results__learnings" data-rd-reveal style="--rd-order: 2;">
+          {results.learnings.map((learning) => <li>{learning}</li>)}
+        </ul>
+      ) : null}
+
+      {validQuote && (
+        <blockquote class="rd-results__quote" data-rd-reveal style="--rd-order: 3;">
+          <p>“{validQuote.text}”</p>
+          <cite>{validQuote.author} - {validQuote.role}</cite>
+        </blockquote>
+      )}
+    </div>
+  </section>
+)}

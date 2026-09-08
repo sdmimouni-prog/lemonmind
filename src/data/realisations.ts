@@ -74,39 +74,21 @@ export const projectsIntro = {
 
 export const realisationProjects = [
   {
-    title: 'Marque sportive',
-    subtitle: 'Lancement de collection',
-    image: '/assets/lemon/creative-presentation.webp',
-    categories: ['influence', 'production'],
+    title: 'UIR',
+    subtitle: 'Acquisition et visibilité digitale',
+    image: '/assets/lemon/projects/uir-campaign.webp',
+    href: '/realisations/uir-acquisition-leads',
+    categories: ['social-media', 'amplification'],
     tags: [
-      { label: 'Influence', tone: 'violet' },
-      { label: 'Production', tone: 'mint' },
+      { label: 'Stratégie', tone: 'violet' },
+      { label: 'Amplification', tone: 'blue' },
     ],
   },
   {
-    title: 'Marque FMCG',
-    subtitle: 'Campagne summer',
-    image: '/assets/lemon/projects/don-simon.webp',
-    categories: ['production', 'social-media'],
-    tags: [
-      { label: 'Production', tone: 'mint' },
-      { label: 'Social Media', tone: 'pink' },
-    ],
-  },
-  {
-    title: 'Marque mode',
-    subtitle: 'Programme always-on',
-    image: '/assets/lemon/influence-ai-beauty-creator.webp',
-    categories: ['influence', 'social-media'],
-    tags: [
-      { label: 'Influence', tone: 'violet' },
-      { label: 'Social Media', tone: 'pink' },
-    ],
-  },
-  {
-    title: 'Institution',
-    subtitle: 'Campagne de notoriété',
-    image: '/assets/lemon/projects/amana-tram.webp',
+    title: 'Amana',
+    subtitle: 'Campagne 360° & DOOH',
+    image: '/assets/lemon/projects/amana-social.webp',
+    href: '/realisations/amana-campagne-360-dooh',
     categories: ['production', 'amplification'],
     tags: [
       { label: 'Production', tone: 'mint' },
@@ -114,19 +96,41 @@ export const realisationProjects = [
     ],
   },
   {
-    title: 'Marque automobile',
-    subtitle: 'Lancement d’un nouveau modèle',
-    image: '',
-    categories: ['influence', 'production'],
+    title: 'Don Simon',
+    subtitle: 'Social media & influence',
+    image: '/assets/lemon/projects/don-simon.webp',
+    href: '/realisations/don-simon-social-media-influence',
+    categories: ['influence', 'production', 'social-media'],
     tags: [
       { label: 'Influence', tone: 'violet' },
       { label: 'Production', tone: 'mint' },
     ],
   },
   {
-    title: 'Réseau de restaurants',
-    subtitle: 'Campagne drive-to-store',
+    title: 'Moul Pounj',
+    subtitle: 'Média & conversion',
+    image: '/assets/lemon/projects/moul-pounj-world-cup.webp',
+    href: '/realisations/moul-pounj-strategie-media-conversion',
+    categories: ['ugc', 'amplification'],
+    tags: [
+      { label: 'UGC', tone: 'violet' },
+      { label: 'Amplification', tone: 'blue' },
+    ],
+  },
+  {
+    title: 'Ryad Al Andalous',
+    subtitle: 'Campagne immobilière',
     image: '/assets/lemon/projects/ryad-al-andalous.webp',
+    categories: ['social-media', 'amplification'],
+    tags: [
+      { label: 'Social Media', tone: 'pink' },
+      { label: 'Amplification', tone: 'blue' },
+    ],
+  },
+  {
+    title: 'TBS Education',
+    subtitle: 'Campagne formation',
+    image: '/assets/lemon/projects/tbs-casablanca.webp',
     categories: ['social-media', 'amplification'],
     tags: [
       { label: 'Social Media', tone: 'pink' },

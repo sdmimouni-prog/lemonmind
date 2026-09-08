@@ -6,7 +6,7 @@ import { agencyLinks, agencyTrust } from '../../data/agency';
     <div class="ag-trust__copy">
       <p class="lm-eyebrow" data-ag-line>{agencyTrust.eyebrow}</p>
       <h2 id="agency-trust-title" data-ag-title>{agencyTrust.title}</h2>
-      <p data-ag-reveal>{agencyTrust.text}</p>
+      {agencyTrust.text && <p data-ag-reveal>{agencyTrust.text}</p>}
       <a class="ag-text-link" href={agencyLinks.references} data-ag-reveal>
         {agencyTrust.cta}
         <span aria-hidden="true">→</span>

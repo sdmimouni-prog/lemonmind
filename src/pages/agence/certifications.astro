@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import CertificationBenefits from '../../components/certifications/CertificationBenefits.astro';
+import CertificationsFinalCta from '../../components/certifications/CertificationsFinalCta.astro';
+import CertificationsGrid from '../../components/certifications/CertificationsGrid.astro';
+import CertificationsHero from '../../components/certifications/CertificationsHero.astro';
+import CertificationsInteractions from '../../components/certifications/CertificationsInteractions.astro';
+import ExpertiseDomains from '../../components/certifications/ExpertiseDomains.astro';
+import LearningAndMonitoring from '../../components/certifications/LearningAndMonitoring.astro';
+import { certifications, certificationsMeta } from '../../data/certifications-data';
+import { contact } from '../../data/homepage';
+import '../../styles/certifications.css';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(certificationsMeta.canonical, siteUrl).toString();
+const organizationId = `${siteUrl}#organization`;
+const certificationsListId = `${pageUrl}#certifications`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: 'Lemon Mind Digital',
+      url: siteUrl,
+      telephone: contact.phone,
+      email: contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Casablanca',
+        addressCountry: 'MA',
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+    },
+    {
+      '@type': 'AboutPage',
+      '@id': `${pageUrl}#page`,
+      name: certificationsMeta.title,
+      description: certificationsMeta.description,
+      url: pageUrl,
+      inLanguage: 'fr-MA',
+      isPartOf: {
+        '@id': siteUrl,
+      },
+      about: {
+        '@id': organizationId,
+      },
+      mainEntity: {
+        '@id': certificationsListId,
+      },
+      relatedLink: [
+        new URL('/contact', siteUrl).toString(),
+        new URL('/nos-expertises', siteUrl).toString(),
+        new URL('/agence/references', siteUrl).toString(),
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'L’agence',
+          item: new URL('/agence', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Certifications',
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      '@id': certificationsListId,
+      name: 'Certifications et accréditations du groupe',
+      itemListElement: certifications.map((certification, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: certification.name,
+        description: `${certification.category} — ${certification.description}`,
+        url: new URL(`${certificationsMeta.canonical}#${certification.id}`, siteUrl).toString(),
+      })),
+    },
+  ],
+};
+---
+<BaseLayout
+  title={certificationsMeta.title}
+  description={certificationsMeta.description}
+  canonical={certificationsMeta.canonical}
+  ogImage={certificationsMeta.ogImage}
+  schema={schema}
+  bodyClass="certifications-page"
+>
+  <Header ctaLabel="Réservez un appel" ctaHref={contact.bookingHref} />
+  <main>
+    <CertificationsHero />
+    <CertificationsGrid />
+    <CertificationBenefits />
+    <ExpertiseDomains />
+    <LearningAndMonitoring />
+    <CertificationsFinalCta />
+  </main>
+  <CertificationsInteractions />
+  <Footer />
+</BaseLayout>

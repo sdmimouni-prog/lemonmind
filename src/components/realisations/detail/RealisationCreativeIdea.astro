@@ -1,0 +1,31 @@
+---
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+const idea = realisation.creativeIdea;
+---
+{idea && (
+  <section class="rd-idea" aria-labelledby="realisation-idea-title" data-rd-scene>
+    <div class="lm-shell rd-idea__grid">
+      <div class="rd-idea__copy" data-rd-reveal>
+        <p class="rd-label">{idea.eyebrow}</p>
+        <h2 id="realisation-idea-title">{idea.title}</h2>
+        <p>{idea.text}</p>
+      </div>
+      <p class="rd-hand rd-hand--idea" data-rd-reveal style="--rd-order: 1;">{idea.hand}</p>
+      <div class="rd-idea__pillars">
+        {idea.pillars.map((pillar, index) => (
+          <article class={`rd-pillar rd-tone--${pillar.tone}`} data-rd-reveal style={`--rd-order: ${index + 2};`}>
+            <span>{pillar.number}</span>
+            <h3>{pillar.title}</h3>
+            <p>{pillar.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

@@ -83,7 +83,7 @@ export const references: LemonReference[] = [
     logo: '/assets/lemon/richmedia-logos/uir.svg',
     logoAlt: 'Logo UIR',
     featured: true,
-    caseStudyUrl: '/realisations',
+    caseStudyUrl: '/realisations/uir-acquisition-leads',
     attribution: 'group',
   },
   {
@@ -143,7 +143,7 @@ export const references: LemonReference[] = [
     logo: '/assets/lemon/richmedia-logos/amana.png',
     logoAlt: 'Logo Amana',
     featured: true,
-    caseStudyUrl: '/realisations',
+    caseStudyUrl: '/realisations/amana-campagne-360-dooh',
     attribution: 'group',
   },
   {
@@ -155,7 +155,7 @@ export const references: LemonReference[] = [
     logo: '/assets/lemon/richmedia-logos/don-simon-normalized-display.png',
     logoAlt: 'Logo Don Simon',
     featured: true,
-    caseStudyUrl: '/realisations',
+    caseStudyUrl: '/realisations/don-simon-social-media-influence',
     attribution: 'group',
   },
   {
@@ -443,7 +443,7 @@ export const references: LemonReference[] = [
     logo: '/assets/lemon/richmedia-logos/moul-pounj-normalized-display.png',
     logoAlt: 'Logo Moul Pounj',
     featured: true,
-    caseStudyUrl: '/realisations',
+    caseStudyUrl: '/realisations/moul-pounj-strategie-media-conversion',
     attribution: 'group',
   },
   {
@@ -734,7 +734,7 @@ export const referencesTestimonials = [] as Array<{
 
 export const finalReferencesCta = {
   eyebrow: 'Votre marque pourrait être la prochaine',
-  title: 'Parlons de votre projet.',
+  title: '',
   text:
     'Présentez-nous vos enjeux, vos objectifs et vos ambitions. Nous construirons ensemble le dispositif adapté.',
   primaryCta: 'Parler de votre projet',

@@ -1,0 +1,59 @@
+---
+import InsightToc from './InsightToc.astro';
+import { insightCategories, type InsightDetailArticle } from '../../../data/insights';
+
+interface Props {
+  article: InsightDetailArticle;
+  relatedArticles: InsightDetailArticle[];
+}
+
+const { article, relatedArticles } = Astro.props;
+---
+<aside class="id-sidebar" aria-label="Compléments de l’article">
+  <InsightToc article={article} variant="desktop" />
+
+  <section class="id-sidebar-cta" aria-labelledby="sidebar-cta-title" data-detail-reveal>
+    <p class="in-section-label">Influence</p>
+    <h2 id="sidebar-cta-title">{article.sidebarCta.title}</h2>
+    <p>{article.sidebarCta.text}</p>
+    <a class="id-dark-link" href={article.sidebarCta.href}>
+      {article.sidebarCta.label}
+      <span aria-hidden="true">→</span>
+    </a>
+    <p class="in-hand id-sidebar-cta__note" aria-hidden="true">{article.sidebarCta.annotation}</p>
+  </section>
+
+  {article.downloadableResource && (
+    <section class="id-download" aria-labelledby="download-title" data-detail-reveal>
+      <p class="in-section-label">{article.downloadableResource.title}</p>
+      <h2 id="download-title">{article.downloadableResource.subtitle}</h2>
+      <p>{article.downloadableResource.text}</p>
+      <a href={article.downloadableResource.url}>
+        {article.downloadableResource.cta}
+        <span aria-hidden="true">↓</span>
+      </a>
+    </section>
+  )}
+
+  {relatedArticles.length > 0 && (
+    <section class="id-related" aria-labelledby="related-title" data-detail-reveal>
+      <h2 id="related-title">Articles associés</h2>
+      <div class="id-related__list">
+        {relatedArticles.map((related) => {
+          const category = insightCategories.find((item) => item.id === related.category);
+
+          return (
+            <a class="id-related-card" href={related.slug}>
+              <img src={related.image} alt={related.imageAlt} width="132" height="88" loading="lazy" decoding="async" />
+              <span>
+                <small class={`in-badge in-badge--${category?.tone || 'ink'}`}>{category?.shortLabel || related.category}</small>
+                <strong>{related.title}</strong>
+                {related.readingTime && <em>{related.readingTime}</em>}
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  )}
+</aside>

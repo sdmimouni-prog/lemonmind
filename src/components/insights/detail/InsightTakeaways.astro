@@ -1,0 +1,38 @@
+---
+import ExpertiseIcon from '../../expertises/ExpertiseIcon.astro';
+import type { InsightDetailArticle } from '../../../data/insights';
+
+interface Props {
+  article: InsightDetailArticle;
+}
+
+const { article } = Astro.props;
+---
+<section class="id-takeaways" aria-labelledby="takeaways-title" data-insights-scene data-detail-reveal>
+  <div class="lm-shell">
+    <div class="id-takeaways__card">
+      <div class="id-takeaways__intro" data-detail-reveal>
+        <span class="id-icon id-icon--violet">
+          <ExpertiseIcon name="bulb" className="id-icon__svg" />
+        </span>
+        <h2 id="takeaways-title">{article.keyTakeaways.title}</h2>
+        <p>{article.keyTakeaways.text}</p>
+      </div>
+
+      <ol class="id-takeaways__grid">
+        {article.keyTakeaways.factors.map((factor, index) => (
+          <li data-detail-reveal style={`--detail-order: ${index};`}>
+            <span class={`id-factor-number id-factor-number--${factor.tone}`}>{String(index + 1).padStart(2, '0')}</span>
+            <div>
+              <span class={`id-icon id-icon--${factor.tone}`}>
+                <ExpertiseIcon name={factor.icon} className="id-icon__svg" />
+              </span>
+              <h3>{factor.title}</h3>
+              <p>{factor.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>

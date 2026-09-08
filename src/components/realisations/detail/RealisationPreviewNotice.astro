@@ -1,0 +1,20 @@
+---
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+---
+{realisation.status === 'private-preview' && (
+  <section class="rd-preview-notice" aria-label="Avertissement de prévisualisation privée">
+    <div class="lm-shell">
+      <strong>Prévisualisation privée</strong>
+      <p>
+        Maison Nura et les chiffres associés sont fictifs. Cette page sert uniquement à valider le template,
+        reste en noindex et n’est pas exposée en production sauf activation explicite d’un flag privé.
+      </p>
+    </div>
+  </section>
+)}

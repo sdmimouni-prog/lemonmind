@@ -86,7 +86,6 @@ export const teamMembers: TeamMember[] = [
   member('youssef-amazouz', 'Youssef Amazouz', 'Graphiste finaliste', 'Design', 'creation-design', 'youssef.webp', 22),
   member('wail-el-asri', 'Wail El Asri', 'Graphiste finaliste', 'Design', 'creation-design', 'wail.webp', 23),
   member('ghita-mimouni', 'Ghita MIMOUNI', 'Junior Design Scout', 'Design', 'creation-design', 'ghita-mimouni.webp', 24),
-  member('marwane-jouay', 'Marwane Jouay', 'Réalisateur & monteur vidéo', 'Production', 'media-production', 'marwane.webp', 25),
 ];
 
 export const teamMembersById = new Map(teamMembers.map((profile) => [profile.id, profile]));
@@ -207,7 +206,7 @@ export const teamDepartments: TeamDepartment[] = [
     id: 'media-production',
     title: 'Média & production',
     description: 'Activation média, performance, réalisation vidéo, montage et production.',
-    memberIds: ['safwane-moustaine', 'marwane-jouay'],
+    memberIds: ['safwane-moustaine'],
     icon: 'camera',
     tone: 'blue',
   },

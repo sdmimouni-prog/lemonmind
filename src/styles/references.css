@@ -862,6 +862,11 @@
   align-items: center;
 }
 
+.rf-final-cta--no-title .rf-final-cta__grid {
+  grid-template-columns: minmax(260px, 0.5fr) minmax(520px, 1fr) 170px;
+  min-height: 178px;
+}
+
 .rf-final-cta .lm-eyebrow {
   display: inline-flex;
   width: fit-content;
@@ -1102,6 +1107,11 @@
   .rf-final-cta__grid {
     grid-template-columns: 1fr;
     gap: 26px;
+  }
+
+  .rf-final-cta--no-title .rf-final-cta__grid {
+    grid-template-columns: 1fr;
+    min-height: auto;
   }
 
   .rf-hand--final {

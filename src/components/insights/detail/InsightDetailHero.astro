@@ -1,0 +1,88 @@
+---
+import { insightCategories, formatInsightDate, type InsightAuthorProfile, type InsightDetailArticle } from '../../../data/insights';
+
+interface Props {
+  article: InsightDetailArticle;
+  author: InsightAuthorProfile;
+}
+
+const { article, author } = Astro.props;
+const category = insightCategories.find((item) => item.id === article.category);
+const publishedDate = formatInsightDate(article.publishedAt);
+const updatedDate = article.updatedAt !== article.publishedAt ? formatInsightDate(article.updatedAt) : null;
+const heroExcerpt = article.heroExcerpt || article.excerpt;
+const titleLines =
+  article.id === 'cout-campagne-influence-maroc'
+    ? [
+        { text: 'Combien coûte une', highlight: false },
+        { text: 'campagne d’influence', highlight: false },
+        { text: 'au Maroc en 2026 ?', highlight: true },
+      ]
+    : [{ text: article.title, highlight: false }];
+---
+<header class="id-hero" aria-labelledby="insight-title" data-insights-scene data-detail-reveal>
+  <div class="id-progress" aria-hidden="true">
+    <span data-reading-progress></span>
+  </div>
+
+  <div class="lm-shell id-hero__grid">
+    <div class="id-hero__copy">
+      <nav class="id-breadcrumb" aria-label="Fil d’Ariane" data-detail-reveal style="--detail-order: 0;">
+        <a href="/">Accueil</a>
+        <span aria-hidden="true">›</span>
+        <a href="/insights">Insights</a>
+        <span aria-hidden="true">›</span>
+        <a href={`/insights?categorie=${article.category}`}>{category?.shortLabel || article.category}</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page">{article.title}</span>
+      </nav>
+
+      <span class={`in-badge in-badge--${category?.tone || 'pink'} id-hero__badge`} data-detail-reveal style="--detail-order: 1;">
+        {category?.shortLabel || article.category}
+      </span>
+
+      <h1 id="insight-title" aria-label={article.title}>
+        {titleLines.map((line, index) => (
+          <span class:list={[line.highlight && 'is-highlight']} aria-hidden="true" data-detail-reveal style={`--detail-order: ${index + 2};`}>
+            {line.text}
+          </span>
+        ))}
+      </h1>
+
+      <p class="id-hero__excerpt" data-detail-reveal style="--detail-order: 5;">{heroExcerpt}</p>
+
+      <div class="id-hero__meta" data-detail-reveal style="--detail-order: 6;">
+        <a class="id-hero__author" href={author.authorUrl}>
+          <img src={author.image} alt="" width="54" height="54" loading="eager" decoding="async" />
+          <span>
+            <strong>{author.name}</strong>
+            <small>{author.role}</small>
+          </span>
+        </a>
+        {publishedDate && (
+          <span class="id-hero__meta-item">
+            <time datetime={article.publishedAt || undefined}>{publishedDate}</time>
+            {updatedDate && <small>Mis à jour le {updatedDate}</small>}
+          </span>
+        )}
+        {article.readingTime && <span class="id-hero__meta-item">{article.readingTime}</span>}
+      </div>
+    </div>
+
+    <figure class="id-hero__visual" data-detail-reveal style="--detail-order: 4;">
+      <img
+        src={article.coverImage}
+        alt={article.coverImageAlt}
+        width="1200"
+        height="760"
+        sizes="(max-width: 768px) 92vw, 680px"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+      <figcaption>{article.coverImageAlt}</figcaption>
+      <p class="in-hand id-hero__annotation" aria-hidden="true">{article.heroAnnotation}</p>
+      <p class="id-hero__location">{article.locationLabel}</p>
+    </figure>
+  </div>
+</header>

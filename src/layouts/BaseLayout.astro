@@ -6,6 +6,8 @@ interface Props {
   description: string;
   canonical?: string;
   ogImage?: string;
+  ogType?: string;
+  robots?: string;
   schema?: object;
   bodyClass?: string;
 }
@@ -15,6 +17,8 @@ const {
   description,
   canonical = Astro.url.pathname,
   ogImage = '/assets/lemon-mind-logo.png',
+  ogType = 'website',
+  robots,
   schema,
   bodyClass,
 } = Astro.props;
@@ -31,12 +35,13 @@ const fontUrl = 'https://fonts.googleapis.com/css2?family=Anton&family=Manrope:w
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {robots && <meta name="robots" content={robots} />}
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href={fontUrl} rel="stylesheet" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:locale" content="fr_MA" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

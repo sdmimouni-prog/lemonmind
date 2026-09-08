@@ -1,0 +1,80 @@
+---
+import { formatInsightDate, insightCategories, latestInsights } from '../../data/insights';
+import { teamMembersById } from '../../data/team';
+
+const categoryById = new Map(insightCategories.map((category) => [category.id, category]));
+---
+<section class="in-latest" id="derniers-insights" aria-labelledby="latest-insights-title" data-insights-scene>
+  <div class="lm-shell">
+    <div class="in-section-head">
+      <div>
+        <p class="in-section-label">Nos derniers insights</p>
+        <h2 id="latest-insights-title">Des analyses concrètes pour relever vos défis digitaux.</h2>
+      </div>
+      <a class="in-inline-link" href="#derniers-insights">
+        Voir tous les articles
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <p class="in-filter-status" data-insights-filter-status role="status" aria-live="polite">
+      Tous les sujets éditoriaux sont affichés.
+    </p>
+
+    <div class="in-article-grid" data-insights-grid>
+      {latestInsights.map((article, index) => {
+        const category = categoryById.get(article.category);
+        const isPublished = article.status === 'published';
+        const author = article.authorId ? teamMembersById.get(article.authorId) : null;
+        const publishedDate = formatInsightDate(article.publishedAt);
+
+        return (
+          <article
+            class="in-article-card"
+            data-insights-card
+            data-category={article.category}
+            data-status={article.status}
+            style={`--in-order: ${index};`}
+          >
+            <figure>
+              <img
+                src={article.image}
+                alt={article.imageAlt}
+                width="720"
+                height="380"
+                sizes="(max-width: 768px) 92vw, 420px"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class={`in-badge in-badge--${category?.tone || 'ink'}`}>{category?.shortLabel || article.category}</span>
+            </figure>
+            <div class="in-article-card__body">
+              <h3>{article.title}</h3>
+              <p>{article.excerpt}</p>
+              <div class="in-article-card__meta">
+                {author && <span>{author.name}</span>}
+                {article.publishedAt && <time datetime={article.publishedAt}>{publishedDate}</time>}
+                {article.readingTime && <span>{article.readingTime}</span>}
+                {!author && !article.publishedAt && !article.readingTime && <span>À paraître</span>}
+              </div>
+              <div class="in-card-actions">
+                {isPublished ? (
+                  <a href={article.slug} aria-label={`Lire l’article : ${article.title}`}>
+                    Lire l’article
+                    <span aria-hidden="true">→</span>
+                  </a>
+                ) : (
+                  <span class="in-card-actions__soon" aria-label={`Article à paraître : ${article.title}`}>À paraître</span>
+                )}
+                <a href={article.relatedExpertiseUrls[0]} aria-label={`Explorer l’expertise liée : ${category?.label || article.category}`}>
+                  Expertise
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>

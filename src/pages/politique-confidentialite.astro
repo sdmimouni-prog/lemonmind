@@ -1,0 +1,11 @@
+---
+import LegalPageDocument from '../components/legal/LegalPageDocument.astro';
+import { legalPagesById } from '../data/legal';
+
+const page = legalPagesById.get('politique-confidentialite');
+
+if (!page) {
+  throw new Error('Legal page missing: politique-confidentialite');
+}
+---
+<LegalPageDocument page={page} />

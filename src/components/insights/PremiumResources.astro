@@ -1,0 +1,49 @@
+---
+import { premiumResources } from '../../data/insights';
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+---
+<section class="in-resources" aria-labelledby="premium-resources-title" data-insights-scene>
+  <div class="lm-shell">
+    <div class="in-section-head in-section-head--dark">
+      <div>
+        <p class="in-section-label in-section-label--dark">Études, guides et ressources</p>
+        <h2 id="premium-resources-title">Des contenus premium pour aller plus loin.</h2>
+      </div>
+      <a class="in-inline-link in-inline-link--dark" href="/contact?objet=ressources-insights">
+        Voir toutes les ressources
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="in-resource-grid">
+      {premiumResources.map((resource, index) => {
+        const content = (
+          <>
+            <span class={`in-resource-card__icon in-resource-card__icon--${resource.tone}`} aria-hidden="true">
+              <ExpertiseIcon name={resource.icon} className="in-resource-icon" />
+            </span>
+            <span class="in-resource-card__copy">
+              <strong>{resource.title}</strong>
+              <span>{resource.description}</span>
+              {resource.resourceCount !== null ? (
+                <em>{resource.resourceCount} ressources</em>
+              ) : (
+                <em>Prochainement</em>
+              )}
+            </span>
+          </>
+        );
+
+        return resource.available && resource.url ? (
+          <a class="in-resource-card" href={resource.url} style={`--in-order: ${index};`} data-insights-reveal>
+            {content}
+          </a>
+        ) : (
+          <article class="in-resource-card" aria-label={`${resource.title} prochainement`} style={`--in-order: ${index};`} data-insights-reveal>
+            {content}
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>

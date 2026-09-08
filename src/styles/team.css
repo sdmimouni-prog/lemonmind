@@ -319,10 +319,6 @@
   object-position: 50% 10%;
 }
 
-.team-hero__portrait[data-team-profile="marwane-jouay"] img {
-  object-position: 50% 8%;
-}
-
 .team-hero__portrait::after {
   position: absolute;
   inset: 48% 0 0;

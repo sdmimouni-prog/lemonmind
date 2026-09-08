@@ -17,7 +17,13 @@ import { projectsIntro, realisationProjects } from '../../data/realisations';
     </div>
 
     <div class="rs-project-grid" data-rs-project-grid aria-live="polite">
-      {realisationProjects.map((project, index) => (
+      {realisationProjects.map((project, index) => {
+        const projectHref = project.href || '/contact';
+        const projectAriaLabel = project.href
+          ? `Voir la réalisation : ${project.title}`
+          : `Parler d’un projet similaire : ${project.title}`;
+
+        return (
         <article
           class="rs-project-card"
           data-rs-card
@@ -42,10 +48,11 @@ import { projectsIntro, realisationProjects } from '../../data/realisations';
                 {project.tags.map((tag) => <span class={`rs-tag rs-tag--${tag.tone}`}>{tag.label}</span>)}
               </div>
             </div>
-            <a href="#contact" aria-label={`Parler d’un projet similaire : ${project.title}`}>→</a>
+            <a href={projectHref} aria-label={projectAriaLabel}>→</a>
           </div>
         </article>
-      ))}
+        );
+      })}
     </div>
   </div>
 </section>

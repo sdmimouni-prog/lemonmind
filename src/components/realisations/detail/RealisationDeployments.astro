@@ -1,0 +1,40 @@
+---
+import ExpertiseIcon from '../../expertises/ExpertiseIcon.astro';
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+---
+{realisation.services?.length ? (
+  <section class="rd-section rd-deployments" aria-labelledby="realisation-services-title" data-rd-scene>
+    <div class="lm-shell">
+      <div class="rd-section-head">
+        <div>
+          <p class="rd-label">Ce que nous avons déployé</p>
+          <h2 id="realisation-services-title">Une expertise complète pour chaque étape.</h2>
+        </div>
+        <p>{realisation.attribution}</p>
+      </div>
+
+      <div class="rd-service-grid">
+        {realisation.services.map((service, index) => (
+          <article class={`rd-service-card rd-tone--${service.tone}`} data-rd-reveal style={`--rd-order: ${index};`}>
+            <figure>
+              <img src={service.image} alt="" width="520" height="320" loading="lazy" decoding="async" />
+            </figure>
+            <div class="rd-service-card__body">
+              <span class="rd-service-card__icon">
+                <ExpertiseIcon name={service.icon} className="rd-icon" />
+              </span>
+              <h3>{service.title}</h3>
+              <p>{service.text}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+) : null}

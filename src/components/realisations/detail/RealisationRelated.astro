@@ -1,0 +1,36 @@
+---
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  related: RealisationDetail[];
+}
+
+const { related } = Astro.props;
+---
+{related.length ? (
+  <section class="rd-section rd-related" aria-labelledby="realisation-related-title" data-rd-scene>
+    <div class="lm-shell">
+      <div class="rd-section-head rd-section-head--compact">
+        <div>
+          <p class="rd-label">Projets associés</p>
+          <h2 id="realisation-related-title">D’autres réalisations du groupe.</h2>
+        </div>
+        <a class="rd-inline-link" href="/realisations">
+          Voir toutes nos réalisations
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <div class="rd-related__grid">
+        {related.map((item, index) => (
+          <a class="rd-related-card" href={`/realisations/${item.slug}`} data-rd-reveal style={`--rd-order: ${index};`}>
+            <img src={item.hero.image} alt={item.hero.imageAlt} width="620" height="360" loading="lazy" decoding="async" />
+            <span>{item.sector}</span>
+            <h3>{item.listingTitle}</h3>
+            <p>{item.attribution}</p>
+            <em aria-hidden="true">→</em>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+) : null}

@@ -50,27 +50,6 @@ export const contactForm = {
     'Accompagnement global',
     'Autre besoin',
   ],
-  objectives: [
-    'Notoriété',
-    'Engagement',
-    'Acquisition',
-    'Lancement',
-    'Production de contenus',
-    'Activation locale',
-    'Stratégie globale',
-  ],
-  budgets: [
-    'À définir ensemble',
-    'Budget de lancement',
-    'Budget campagne',
-    'Dispositif complet',
-  ],
-  dates: [
-    'Dès que possible',
-    'Ce mois-ci',
-    'Le mois prochain',
-    'Date à préciser',
-  ],
 };
 
 export const contactNeeds = {

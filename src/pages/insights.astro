@@ -1,61 +1,120 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FeaturedInsight from '../components/insights/FeaturedInsight.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import InsightsExperts from '../components/insights/InsightsExperts.astro';
+import InsightsFilters from '../components/insights/InsightsFilters.astro';
+import InsightsGrid from '../components/insights/InsightsGrid.astro';
+import InsightsHero from '../components/insights/InsightsHero.astro';
+import InsightsInteractions from '../components/insights/InsightsInteractions.astro';
+import InsightsNewsletter from '../components/insights/InsightsNewsletter.astro';
+import PremiumResources from '../components/insights/PremiumResources.astro';
 import { contact } from '../data/homepage';
+import { insightArticles, insightsMeta, publishedInsights } from '../data/insights';
+import '../styles/insights.css';
 
-const title = 'Insights | Lemon Mind Digital';
-const description = 'Insights Lemon Mind Digital, contenus et ressources autour de l’influence, de la production et de la stratégie digitale au Maroc.';
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const pageUrl = new URL(insightsMeta.canonical, siteUrl).toString();
+const organizationId = `${siteUrl}#organization`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: 'Lemon Mind Digital',
+      url: siteUrl,
+      telephone: contact.phone,
+      email: contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Casablanca',
+        addressCountry: 'MA',
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Maroc',
+      },
+    },
+    {
+      '@type': 'CollectionPage',
+      '@id': `${pageUrl}#page`,
+      name: insightsMeta.title,
+      description: insightsMeta.description,
+      url: pageUrl,
+      inLanguage: 'fr-MA',
+      isPartOf: {
+        '@id': siteUrl,
+      },
+      about: {
+        '@id': organizationId,
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Accueil',
+          item: new URL('/', siteUrl).toString(),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Insights',
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      '@id': `${pageUrl}#editorial-plan`,
+      name: 'Sujets éditoriaux Insights Lemon Mind',
+      numberOfItems: insightArticles.length,
+      itemListElement: insightArticles.map((article) => ({
+        '@type': 'ListItem',
+        position: article.displayOrder,
+        name: article.title,
+        description: article.excerpt,
+      })),
+    },
+    {
+      '@type': 'ItemList',
+      '@id': `${pageUrl}#published-articles`,
+      name: 'Articles publiés Lemon Mind',
+      numberOfItems: publishedInsights.length,
+      itemListElement: publishedInsights.map((article, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: new URL(article.slug, siteUrl).toString(),
+        name: article.title,
+      })),
+    },
+  ],
+};
 ---
-<BaseLayout title={title} description={description} canonical="/insights" bodyClass="insights-page">
+<BaseLayout
+  title={insightsMeta.title}
+  description={insightsMeta.description}
+  canonical={insightsMeta.canonical}
+  ogImage={insightsMeta.ogImage}
+  schema={schema}
+  bodyClass="insights-page"
+>
   <Header ctaLabel="Réservez un appel" ctaHref={contact.bookingHref} />
-  <main class="insights-placeholder" aria-labelledby="insights-title">
-    <div class="lm-shell insights-placeholder__inner">
-      <p class="lm-eyebrow">Insights</p>
-      <h1 id="insights-title">Insights Lemon Mind</h1>
-      <p>Les contenus éditoriaux seront publiés prochainement.</p>
-      <a class="lm-button lm-button--yellow" href="/contact">
-        Parler de votre projet
-        <span aria-hidden="true">↗</span>
-      </a>
-    </div>
+  <main>
+    <InsightsHero />
+    <InsightsFilters />
+    <FeaturedInsight />
+    <InsightsGrid />
+    <PremiumResources />
+    <InsightsExperts />
+    <InsightsNewsletter />
   </main>
+  <InsightsInteractions />
   <Footer />
 </BaseLayout>
-
-<style>
-  .insights-page {
-    background: #050608;
-  }
-
-  .insights-placeholder {
-    min-height: 58vh;
-    padding: 170px 0 90px;
-    background:
-      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      radial-gradient(circle at 80% 12%, rgba(253, 199, 0, 0.2), transparent 28%),
-      #050608;
-    background-size: 64px 64px, 64px 64px, auto, auto;
-    color: #fff;
-  }
-
-  .insights-placeholder__inner {
-    display: grid;
-    max-width: 780px;
-    gap: 22px;
-  }
-
-  .insights-placeholder h1 {
-    color: #fff;
-    font-size: clamp(40px, 5vw, 72px);
-    line-height: 1.08;
-  }
-
-  .insights-placeholder p:not(.lm-eyebrow) {
-    max-width: 560px;
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 18px;
-    font-weight: 760;
-  }
-</style>

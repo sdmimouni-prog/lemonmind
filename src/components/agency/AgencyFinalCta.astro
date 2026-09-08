@@ -6,7 +6,7 @@ import { agencyFinalCta, agencyLinks } from '../../data/agency';
   <div class="ag-final__orb ag-final__orb--two" aria-hidden="true"></div>
   <div class="lm-shell ag-final__grid">
     <div>
-      <p class="lm-eyebrow" data-ag-line>{agencyFinalCta.eyebrow}</p>
+      {agencyFinalCta.eyebrow && <p class="lm-eyebrow" data-ag-line>{agencyFinalCta.eyebrow}</p>}
       <h2 id="agency-final-title" data-ag-title>{agencyFinalCta.title}</h2>
     </div>
     <div class="ag-final__content" data-ag-reveal>

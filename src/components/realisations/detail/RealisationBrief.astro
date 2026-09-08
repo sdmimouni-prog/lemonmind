@@ -1,0 +1,39 @@
+---
+import ExpertiseIcon from '../../expertises/ExpertiseIcon.astro';
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+---
+{(realisation.challenge || realisation.response) && (
+  <section class="rd-section rd-brief" aria-labelledby="realisation-brief-title" data-rd-scene>
+    <div class="lm-shell rd-brief__grid">
+      {realisation.challenge && (
+        <article class="rd-brief__block" data-rd-reveal>
+          <p class="rd-label">Le défi</p>
+          <h2 id="realisation-brief-title">{realisation.challenge.title}</h2>
+          {realisation.challenge.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </article>
+      )}
+
+      {realisation.response && (
+        <article class="rd-brief__block rd-brief__block--response" data-rd-reveal style="--rd-order: 1;">
+          <p class="rd-label rd-label--muted">Notre réponse</p>
+          <h2>{realisation.response.title}</h2>
+          <p>{realisation.response.intro}</p>
+          <ul>
+            {realisation.response.bullets.map((bullet) => (
+              <li>
+                <span aria-hidden="true"><ExpertiseIcon name="check" className="rd-check-icon" /></span>
+                {bullet}
+              </li>
+            ))}
+          </ul>
+        </article>
+      )}
+    </div>
+  </section>
+)}

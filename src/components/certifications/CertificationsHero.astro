@@ -1,0 +1,53 @@
+---
+import ExpertiseIcon from '../expertises/ExpertiseIcon.astro';
+import { certificationsHero } from '../../data/certifications-data';
+---
+<section class="cf-hero" aria-labelledby="certifications-hero-title">
+  <span class="cf-hero__glow cf-hero__glow--violet" aria-hidden="true"></span>
+  <span class="cf-hero__glow cf-hero__glow--yellow" aria-hidden="true"></span>
+  <div class="lm-shell cf-hero__grid">
+    <div class="cf-hero__copy" data-cf-reveal>
+      <p class="lm-eyebrow lm-eyebrow--yellow">{certificationsHero.eyebrow}</p>
+      <h1 id="certifications-hero-title">
+        {certificationsHero.titleLines.map((line, index) => (
+          <span class={line.highlight ? 'is-highlight' : undefined}>
+            {line.text}{index < certificationsHero.titleLines.length - 1 ? ' ' : ''}
+          </span>
+        ))}
+      </h1>
+      <p class="cf-hero__text">{certificationsHero.text}</p>
+      <div class="cf-actions">
+        <a class="lm-button lm-button--yellow" href="/contact">
+          {certificationsHero.primaryCta}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href="/nos-expertises">
+          {certificationsHero.secondaryCta}
+        </a>
+      </div>
+      <ul class="cf-hero__reassurance" aria-label="Garanties Lemon Mind">
+        {certificationsHero.reassurance.map((item) => (
+          <li>
+            <ExpertiseIcon name={item.icon} className="cf-hero__reassurance-icon" />
+            <span>{item.label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <figure class="cf-hero__visual" data-cf-reveal data-cf-parallax>
+      <img
+        src={certificationsHero.image}
+        alt={certificationsHero.imageAlt}
+        width="980"
+        height="660"
+        decoding="async"
+      />
+      <p class="cf-hero__wall-note" aria-hidden="true">{certificationsHero.wallNote}</p>
+      <figcaption>
+        <span>{certificationsHero.caption}</span>
+      </figcaption>
+      <p class="cf-hand cf-hero__annotation">{certificationsHero.annotation}</p>
+    </figure>
+  </div>
+</section>

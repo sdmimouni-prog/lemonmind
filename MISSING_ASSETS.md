@@ -9,6 +9,12 @@ Cette liste suit `docs/ASSET_MANIFEST.md` et évite d'inventer des logos, profil
 - Liste officielle des certifications réellement obtenues par Lemon Mind avec badges sources.
 - Routes ou contenus dédiés pour `Références` et `Certifications` si ces liens doivent devenir des pages séparées.
 
+## Page Certifications & Partenaires
+
+- Logos officiels Google Ads Certified, Google Analytics Certified, HubSpot Certified, IAB Rich Media Certified, Meta Blueprint Certified et Semrush Certified.
+- Liens publics ou preuves de vérification associés à chaque certification, si disponibles.
+- Confirmation juridique/brand guidelines pour l’usage public des badges partenaires sur le site Lemon Mind.
+
 ## Page L'Équipe
 
 - Vraie photographie collective Lemon Mind pour le hero, si elle doit remplacer la mosaïque de portraits officiels.

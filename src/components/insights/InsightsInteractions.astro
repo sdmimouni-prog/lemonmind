@@ -1,0 +1,183 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const scenes = Array.from(document.querySelectorAll('[data-insights-scene]'));
+
+    scenes.forEach((scene) => {
+      scene.classList.add('is-motion-ready');
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+        scene.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              scene.classList.add('is-visible');
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '8% 0px 8% 0px' },
+      );
+
+      observer.observe(scene);
+    });
+
+    window.setTimeout(() => {
+      scenes.forEach((scene) => scene.classList.add('is-visible'));
+    }, 1400);
+
+    if (canHover && !prefersReducedMotion.matches) {
+      document.querySelectorAll('[data-insights-parallax]').forEach((scene) => {
+        scene.addEventListener('pointermove', (event) => {
+          const rect = scene.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          scene.style.setProperty('--in-mx', x.toFixed(3));
+          scene.style.setProperty('--in-my', y.toFixed(3));
+        });
+
+        scene.addEventListener('pointerleave', () => {
+          scene.style.setProperty('--in-mx', '0');
+          scene.style.setProperty('--in-my', '0');
+        });
+      });
+    }
+
+    const filterButtons = Array.from(document.querySelectorAll('[data-insights-filter]'));
+    const cards = Array.from(document.querySelectorAll('[data-insights-card]'));
+    const status = document.querySelector('[data-insights-filter-status]');
+
+    const applyFilter = (filter) => {
+      let visibleCount = 0;
+
+      filterButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', button.getAttribute('data-insights-filter') === filter ? 'true' : 'false');
+      });
+
+      cards.forEach((card, index) => {
+        const matches = filter === 'all' || card.getAttribute('data-category') === filter;
+        card.toggleAttribute('hidden', !matches);
+        card.classList.remove('is-filtered-in');
+
+        if (matches) {
+          visibleCount += 1;
+          card.style.setProperty('--in-order', String(index % 9));
+          window.requestAnimationFrame(() => card.classList.add('is-filtered-in'));
+        }
+      });
+
+      if (status) {
+        status.textContent =
+          filter === 'all'
+            ? 'Tous les sujets éditoriaux sont affichés.'
+            : `${visibleCount} sujet${visibleCount > 1 ? 's' : ''} affiché${visibleCount > 1 ? 's' : ''}.`;
+      }
+    };
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        applyFilter(button.getAttribute('data-insights-filter') || 'all');
+      });
+
+      button.addEventListener('keydown', (event) => {
+        const currentIndex = filterButtons.indexOf(button);
+        const lastIndex = filterButtons.length - 1;
+        let nextIndex = currentIndex;
+
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+          nextIndex = currentIndex === lastIndex ? 0 : currentIndex + 1;
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+          nextIndex = currentIndex === 0 ? lastIndex : currentIndex - 1;
+        } else if (event.key === 'Home') {
+          nextIndex = 0;
+        } else if (event.key === 'End') {
+          nextIndex = lastIndex;
+        } else {
+          return;
+        }
+
+        event.preventDefault();
+        const nextButton = filterButtons[nextIndex];
+        nextButton?.focus();
+        nextButton?.click();
+      });
+    });
+
+    applyFilter('all');
+
+    const newsletterForm = document.querySelector('[data-newsletter-form]');
+    if (!newsletterForm) {
+      return;
+    }
+
+    const emailInput = newsletterForm.querySelector('input[name="email"]');
+    const consentInput = newsletterForm.querySelector('input[name="consent"]');
+    const statusNode = newsletterForm.querySelector('[data-newsletter-status]');
+    const submitButton = newsletterForm.querySelector('[data-newsletter-submit]');
+    const submitLabel = newsletterForm.querySelector('[data-newsletter-submit-label]');
+
+    const setStatus = (message, type = 'info') => {
+      if (!statusNode) {
+        return;
+      }
+
+      statusNode.textContent = message;
+      statusNode.setAttribute('data-state', type);
+    };
+
+    newsletterForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = String(emailInput?.value || '').trim();
+      const hasConsent = Boolean(consentInput?.checked);
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setStatus('Indiquez une adresse email valide.', 'error');
+        emailInput?.focus();
+        return;
+      }
+
+      if (!hasConsent) {
+        setStatus('Le consentement est obligatoire pour recevoir la newsletter.', 'error');
+        consentInput?.focus();
+        return;
+      }
+
+      submitButton?.setAttribute('disabled', 'true');
+      submitButton?.setAttribute('aria-busy', 'true');
+      if (submitLabel) {
+        submitLabel.textContent = 'Inscription...';
+      }
+      setStatus('Inscription en cours...', 'info');
+
+      try {
+        const response = await fetch(newsletterForm.action, {
+          method: 'POST',
+          body: new FormData(newsletterForm),
+          headers: { accept: 'application/json' },
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || !result.ok) {
+          throw new Error(result.message || 'L’inscription n’a pas pu être finalisée.');
+        }
+
+        newsletterForm.reset();
+        setStatus(result.message || 'Merci, votre inscription à la newsletter est confirmée.', 'success');
+      } catch (error) {
+        setStatus(error instanceof Error ? error.message : 'Une erreur est survenue. Réessayez dans un instant.', 'error');
+      } finally {
+        submitButton?.removeAttribute('disabled');
+        submitButton?.removeAttribute('aria-busy');
+        if (submitLabel) {
+          submitLabel.textContent = 'Je m’inscris';
+        }
+      }
+    });
+  })();
+</script>

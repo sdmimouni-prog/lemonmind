@@ -1,0 +1,27 @@
+---
+import type { InsightAuthorProfile } from '../../../data/insights';
+
+interface Props {
+  author: InsightAuthorProfile;
+}
+
+const { author } = Astro.props;
+---
+<section class="id-author-box" aria-labelledby="author-box-title" data-insights-scene data-detail-reveal>
+  <div class="id-author-box__media">
+    <img src={author.image} alt={author.imageAlt} width="172" height="172" loading="lazy" decoding="async" />
+  </div>
+  <div class="id-author-box__copy">
+    <p class="in-section-label">À propos de l’auteur</p>
+    <h2 id="author-box-title">{author.name}</h2>
+    <p class="id-author-box__role">{author.role}</p>
+    <p>{author.bio}</p>
+    <ul aria-label="Sujets d’expertise">
+      {author.topics.map((topic) => <li>{topic}</li>)}
+    </ul>
+  </div>
+  <a class="in-inline-link" href={author.authorUrl}>
+    Voir tous ses articles
+    <span aria-hidden="true">→</span>
+  </a>
+</section>

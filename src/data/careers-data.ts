@@ -224,7 +224,7 @@ export const spontaneousApplication = {
   annotation: 'Great minds grow together.',
   formTitle: 'Votre candidature',
   statusIdle: 'Les champs marqués d’un astérisque sont obligatoires.',
-  privacyHref: '/contact?objet=politique-confidentialite',
+  privacyHref: '/politique-confidentialite',
   privacyLabel: 'politique de confidentialité',
   submitLabel: 'Envoyer ma candidature',
   acceptedExtensions: ['pdf', 'doc', 'docx'],

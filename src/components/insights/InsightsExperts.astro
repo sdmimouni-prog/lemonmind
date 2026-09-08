@@ -1,0 +1,36 @@
+---
+import { insightExperts } from '../../data/insights';
+---
+<section class="in-experts" aria-labelledby="insights-experts-title" data-insights-scene>
+  <div class="lm-shell">
+    <div class="in-section-head">
+      <div>
+        <p class="in-section-label">Nos experts</p>
+        <h2 id="insights-experts-title">Des analyses écrites par celles et ceux qui pilotent les campagnes.</h2>
+      </div>
+      <a class="in-inline-link" href="/agence/equipe">
+        Découvrir toute l’équipe
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <p class="in-experts__intro">
+      Nos contenus s’appuient sur l’expérience de professionnels qui accompagnent quotidiennement les marques en stratégie,
+      influence, création, social media, production et performance.
+    </p>
+
+    <div class="in-expert-grid">
+      {insightExperts.map((expert, index) => (
+        <a class="in-expert-card" href={expert.authorUrl} style={`--in-order: ${index};`} data-insights-reveal>
+          <img src={expert.image} alt={expert.imageAlt} width="180" height="180" loading="eager" decoding="async" />
+          <span>
+            <strong>{expert.name}</strong>
+            <small>{expert.role}</small>
+            <span class="in-expert-card__topics">
+              {expert.topics.map((topic) => <em>{topic}</em>)}
+            </span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

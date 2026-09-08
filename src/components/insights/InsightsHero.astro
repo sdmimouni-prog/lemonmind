@@ -1,0 +1,58 @@
+---
+import { insightsHero } from '../../data/insights';
+---
+<section class="in-hero" aria-labelledby="insights-title" data-insights-scene data-insights-parallax>
+  <div class="in-hero__halo in-hero__halo--violet" aria-hidden="true"></div>
+  <div class="in-hero__halo in-hero__halo--yellow" aria-hidden="true"></div>
+
+  <div class="lm-shell in-hero__grid">
+    <div class="in-hero__copy">
+      <p class="in-eyebrow" data-insights-reveal>{insightsHero.eyebrow}</p>
+      <h1 id="insights-title" aria-label={insightsHero.title}>
+        {insightsHero.titleLines.map((line, index) => (
+          <span
+            class:list={[line.highlight && 'is-highlight']}
+            style={`--in-order: ${index};`}
+            data-insights-title-line
+          >
+            {line.text}
+          </span>
+        ))}
+      </h1>
+      <p class="in-hero__text" data-insights-reveal style="--in-order: 3;">{insightsHero.text}</p>
+      <a class="lm-button lm-button--yellow in-hero__cta" href="#derniers-insights" data-insights-reveal style="--in-order: 4;">
+        {insightsHero.cta}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="in-hero__visual" aria-label="Scène éditoriale Lemon Mind" data-insights-depth>
+      <figure class="in-hero__photo">
+        <img
+          src={insightsHero.image}
+          alt={insightsHero.imageAlt}
+          width="1280"
+          height="720"
+          sizes="(max-width: 768px) 92vw, 720px"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+      <div class="in-hero__idea-card" aria-hidden="true">
+        <span>Good</span>
+        <span>Ideas</span>
+        <span>Better</span>
+        <strong>Brands</strong>
+      </div>
+      <ul class="in-hero__stack" aria-hidden="true">
+        <li>Strategy</li>
+        <li>Content</li>
+        <li>Influence</li>
+        <li>Performance</li>
+      </ul>
+      <p class="in-hand in-hand--hero">{insightsHero.annotation}</p>
+      <p class="in-hero__location">{insightsHero.location}</p>
+    </div>
+  </div>
+</section>

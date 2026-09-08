@@ -1,0 +1,73 @@
+---
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+---
+<section class="rd-hero" aria-labelledby="realisation-detail-title" data-rd-scene>
+  <div class="rd-hero__texture" aria-hidden="true"></div>
+  <div class="lm-shell rd-hero__grid">
+    <div class="rd-hero__copy" data-rd-reveal>
+      <nav class="rd-breadcrumb" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a>
+        <span aria-hidden="true">›</span>
+        <a href="/realisations">Réalisations</a>
+        <span aria-hidden="true">›</span>
+        <span>{realisation.client}</span>
+      </nav>
+
+      {realisation.status === 'private-preview' && (
+        <p class="rd-preview-pill">Prévisualisation privée - non publiée</p>
+      )}
+
+      <p class="rd-label rd-label--dark">{realisation.hero.eyebrow}</p>
+      <h1 id="realisation-detail-title">{realisation.hero.title}</h1>
+      <p class="rd-hero__intro">{realisation.intro}</p>
+
+      <dl class="rd-hero__meta">
+        {realisation.meta.map((item) => (
+          <div>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="rd-actions">
+        <a class="lm-button lm-button--yellow" href="/contact">
+          Parler de votre projet
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="lm-button lm-button--dark" href="/realisations">
+          Voir d’autres réalisations
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="rd-hero__visual" data-rd-reveal style="--rd-order: 1;">
+      <figure class="rd-hero__main">
+        <img src={realisation.hero.image} alt={realisation.hero.imageAlt} width="1200" height="900" loading="eager" decoding="async" />
+      </figure>
+
+      {realisation.hero.phoneImage && (
+        <figure class="rd-hero__phone">
+          <img src={realisation.hero.phoneImage} alt={realisation.hero.phoneAlt || ''} width="420" height="620" loading="eager" decoding="async" />
+          <figcaption>{realisation.client}</figcaption>
+        </figure>
+      )}
+
+      {realisation.hero.cardImage && (
+        <figure class="rd-hero__card">
+          <img src={realisation.hero.cardImage} alt={realisation.hero.cardAlt || ''} width="640" height="420" loading="eager" decoding="async" />
+        </figure>
+      )}
+
+      <p class="rd-hand rd-hand--hero-primary">{realisation.hero.handPrimary}</p>
+      <p class="rd-hand rd-hand--hero-secondary">{realisation.hero.handSecondary}</p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,45 @@
+---
+import { featuredInsight, insightCategories } from '../../data/insights';
+
+const category = insightCategories.find((item) => item.id === featuredInsight.category);
+const isPublished = featuredInsight.status === 'published';
+---
+<section class="in-featured" aria-labelledby="featured-insight-title" data-insights-scene>
+  <div class="lm-shell in-featured__grid">
+    <div class="in-featured__copy" data-insights-reveal>
+      <p class="in-section-label">Article à la une</p>
+      <h2 id="featured-insight-title">{featuredInsight.title}</h2>
+      <p>{featuredInsight.excerpt}</p>
+      {isPublished ? (
+        <a class="lm-button lm-button--yellow in-button-light" href={featuredInsight.slug}>
+          Lire l’analyse
+          <span aria-hidden="true">→</span>
+        </a>
+      ) : (
+        <button class="lm-button lm-button--yellow in-button-light" type="button" aria-disabled="true" disabled>
+          Lire l’analyse
+          <span aria-hidden="true">→</span>
+        </button>
+      )}
+    </div>
+
+    <article class="in-featured-card" data-insights-reveal style="--in-order: 1;">
+      <figure>
+        <img
+          src={featuredInsight.image}
+          alt={featuredInsight.imageAlt}
+          width="1280"
+          height="720"
+          sizes="(max-width: 768px) 92vw, 820px"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+      <span class={`in-badge in-badge--${category?.tone || 'pink'}`}>{category?.shortLabel || featuredInsight.category}</span>
+      <p class="in-hand in-hand--featured">Real people.<br />Real impact.</p>
+      <div class="in-featured-card__meta">
+        <span>À paraître</span>
+      </div>
+    </article>
+  </div>
+</section>

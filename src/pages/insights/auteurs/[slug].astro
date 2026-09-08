@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import { contact } from '../../../data/homepage';
+import { allInsightAuthors } from '../../../data/insights';
+import '../../../styles/insights.css';
+
+export const prerender = true;
+
+export const getStaticPaths = () =>
+  allInsightAuthors.map((author) => ({
+    params: { slug: author.id },
+    props: { author },
+  }));
+
+const { author } = Astro.props;
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://lemonmind.agency';
+const authorUrl = new URL(`/insights/auteurs/${author.id}`, siteUrl).toString();
+const title = `${author.name} | Auteur Insights Lemon Mind`;
+const description = `Profil auteur de ${author.name}, ${author.role}, dans les Insights Lemon Mind Digital.`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  name: title,
+  description,
+  url: authorUrl,
+  mainEntity: {
+    '@type': 'Person',
+    name: author.name,
+    jobTitle: author.role,
+    image: new URL(author.image, siteUrl).toString(),
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Lemon Mind Digital',
+      url: siteUrl,
+    },
+  },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={`/insights/auteurs/${author.id}`}
+  ogImage={author.image}
+  schema={schema}
+  bodyClass="insights-page insights-author-page"
+>
+  <Header ctaLabel="Réservez un appel" ctaHref={contact.bookingHref} />
+  <main class="in-author" aria-labelledby="author-title">
+    <div class="lm-shell in-author__grid">
+      <figure>
+        <img src={author.image} alt={author.imageAlt} width="420" height="420" loading="eager" decoding="async" />
+      </figure>
+      <div>
+        <p class="in-eyebrow">Auteur Insights</p>
+        <h1 id="author-title">{author.name}</h1>
+        <p>{author.role}</p>
+        <p class="in-author__bio">{author.bio}</p>
+        <ul class="in-author__topics" aria-label="Sujets d’expertise">
+          {author.topics.map((topic) => <li>{topic}</li>)}
+        </ul>
+        <a class="lm-button lm-button--yellow in-button-light" href="/agence/equipe">
+          Découvrir toute l’équipe
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,11 @@
+---
+import LegalPageDocument from '../components/legal/LegalPageDocument.astro';
+import { legalPagesById } from '../data/legal';
+
+const page = legalPagesById.get('mentions-legales');
+
+if (!page) {
+  throw new Error('Legal page missing: mentions-legales');
+}
+---
+<LegalPageDocument page={page} />

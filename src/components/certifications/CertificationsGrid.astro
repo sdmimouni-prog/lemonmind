@@ -1,0 +1,61 @@
+---
+import { certifications, certificationsIntro, missingCertificationLogos } from '../../data/certifications-data';
+---
+<section class="cf-section cf-certifications" aria-labelledby="certifications-grid-title">
+  <div class="lm-shell">
+    <div class="cf-section-head cf-section-head--split" data-cf-reveal>
+      <div>
+        <p class="lm-eyebrow">{certificationsIntro.eyebrow}</p>
+        <h2 id="certifications-grid-title">
+          {certificationsIntro.titleLines.map((line) => <span>{line}</span>)}
+        </h2>
+      </div>
+      <div class="cf-section-head__side">
+        <p>{certificationsIntro.text}</p>
+        <p class="cf-attribution">{certificationsIntro.attribution}</p>
+        <p class="cf-hand cf-certifications__annotation">{certificationsIntro.annotation}</p>
+      </div>
+    </div>
+
+    <div class="cf-certifications__grid">
+      {certifications.map((certification, index) => (
+        <article
+          class={`cf-cert-card cf-cert-card--${certification.tone}`}
+          id={certification.id}
+          data-cf-reveal
+          style={`--cf-card-index: ${index};`}
+        >
+          <div class="cf-cert-card__logo" aria-label={certification.logoAlt}>
+            {certification.logo ? (
+              <img
+                src={certification.logo}
+                alt={certification.logoAlt}
+                width="180"
+                height="82"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span>{certification.issuer}</span>
+            )}
+          </div>
+          <h3>{certification.name}</h3>
+          <p>{certification.description}</p>
+          <div class="cf-cert-card__meta">
+            <span>{certification.category}</span>
+            <span>{certification.attribution}</span>
+          </div>
+          <a href={certification.relatedUrl} aria-label={`Voir l’expertise liée à ${certification.name}`}>
+            Champ d’application
+            <span aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <p class="cf-certifications__note" data-cf-reveal>
+      Logos officiels à fournir :
+      <span>{missingCertificationLogos.join(', ')}</span>.
+    </p>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+---
+import { insightCategories } from '../../data/insights';
+---
+<section class="in-filter-strip" aria-label="Filtres thématiques Insights">
+  <div class="lm-shell in-filters" role="group" aria-label="Filtrer les articles par thème">
+    {insightCategories.map((category, index) => (
+      <button
+        type="button"
+        class="in-filter-button"
+        data-insights-filter={category.id}
+        aria-pressed={index === 0 ? 'true' : 'false'}
+        style={`--in-order: ${index};`}
+      >
+        {category.shortLabel}
+      </button>
+    ))}
+  </div>
+</section>

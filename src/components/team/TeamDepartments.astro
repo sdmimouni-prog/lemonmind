@@ -19,6 +19,7 @@ import { teamDepartments, teamMembersById } from '../../data/team';
         const profiles = department.memberIds.map((id) => teamMembersById.get(id)).filter(Boolean);
         const visibleProfiles = profiles.slice(0, 4);
         const hiddenCount = Math.max(profiles.length - visibleProfiles.length, 0);
+        const profileCountLabel = profiles.length > 1 ? `${profiles.length} profils` : `${profiles.length} profil`;
 
         return (
           <button
@@ -32,7 +33,7 @@ import { teamDepartments, teamMembersById } from '../../data/team';
             <span class="team-department-card__icon" aria-hidden="true">
               <ExpertiseIcon name={department.icon} className="team-icon__svg" />
             </span>
-            <span class="team-department-card__count">{profiles.length} profils</span>
+            <span class="team-department-card__count">{profileCountLabel}</span>
             <span class="team-department-card__title">{department.title}</span>
             <span class="team-department-card__text">{department.description}</span>
             <span class="team-avatar-stack" aria-hidden="true">

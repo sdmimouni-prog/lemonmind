@@ -1,0 +1,33 @@
+---
+import type { RealisationDetail } from '../../../data/realisationDetails';
+
+interface Props {
+  realisation: RealisationDetail;
+}
+
+const { realisation } = Astro.props;
+const faq = realisation.faq || [];
+---
+{faq.length ? (
+  <section class="rd-section rd-faq" aria-labelledby="realisation-faq-title" data-rd-scene>
+    <div class="lm-shell rd-faq__grid">
+      <div data-rd-reveal>
+        <p class="rd-label">FAQ</p>
+        <h2 id="realisation-faq-title">Vos questions, nos réponses.</h2>
+      </div>
+      <div class="rd-faq__items" data-rd-faq data-rd-reveal style="--rd-order: 1;">
+        {faq.map((item) => (
+          <details>
+            <summary>
+              <span>{item.question}</span>
+              <em aria-hidden="true">+</em>
+            </summary>
+            <div>
+              <p>{item.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+) : null}

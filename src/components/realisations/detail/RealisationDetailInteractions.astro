@@ -1,0 +1,110 @@
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const revealNodes = Array.from(document.querySelectorAll('[data-rd-reveal]'));
+
+    if (!('IntersectionObserver' in window) || prefersReducedMotion.matches) {
+      revealNodes.forEach((node) => node.classList.add('is-rd-visible'));
+    } else {
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-rd-visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '8% 0px 6% 0px' },
+      );
+
+      revealNodes.forEach((node) => revealObserver.observe(node));
+    }
+
+    const dialog = document.querySelector('[data-rd-lightbox]');
+    const image = dialog?.querySelector('[data-rd-lightbox-image]');
+    const video = dialog?.querySelector('[data-rd-lightbox-video]');
+    const caption = dialog?.querySelector('[data-rd-lightbox-caption]');
+    const closeButton = dialog?.querySelector('[data-rd-lightbox-close]');
+
+    const closeLightbox = () => {
+      if (!dialog) {
+        return;
+      }
+
+      if (video) {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+        video.setAttribute('hidden', '');
+      }
+
+      if (image) {
+        image.setAttribute('hidden', '');
+        image.setAttribute('src', '');
+      }
+
+      dialog.close();
+    };
+
+    document.querySelectorAll('[data-rd-lightbox-trigger]').forEach((trigger) => {
+      trigger.addEventListener('click', (event) => {
+        if (!dialog || !image || !video || !caption || typeof dialog.showModal !== 'function') {
+          return;
+        }
+
+        event.preventDefault();
+
+        const kind = trigger.getAttribute('data-kind') || 'image';
+        const src = trigger.getAttribute('data-src') || trigger.getAttribute('href') || '';
+        const poster = trigger.getAttribute('data-poster') || '';
+        const alt = trigger.getAttribute('data-alt') || '';
+        const text = trigger.getAttribute('data-caption') || '';
+
+        caption.textContent = text;
+
+        if (kind === 'video') {
+          image.setAttribute('hidden', '');
+          video.setAttribute('src', src);
+          if (poster) {
+            video.setAttribute('poster', poster);
+          }
+          video.removeAttribute('hidden');
+        } else {
+          video.setAttribute('hidden', '');
+          image.setAttribute('src', src);
+          image.setAttribute('alt', alt);
+          image.removeAttribute('hidden');
+        }
+
+        dialog.showModal();
+      });
+    });
+
+    closeButton?.addEventListener('click', closeLightbox);
+    dialog?.addEventListener('click', (event) => {
+      if (event.target === dialog) {
+        closeLightbox();
+      }
+    });
+    dialog?.addEventListener('close', () => {
+      if (video) {
+        video.pause();
+      }
+    });
+
+    document.querySelectorAll('[data-rd-faq] details').forEach((details) => {
+      details.addEventListener('toggle', () => {
+        if (!details.open) {
+          return;
+        }
+
+        document.querySelectorAll('[data-rd-faq] details').forEach((other) => {
+          if (other !== details) {
+            other.removeAttribute('open');
+          }
+        });
+      });
+    });
+  })();
+</script>
